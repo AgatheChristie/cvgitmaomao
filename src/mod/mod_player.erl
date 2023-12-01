@@ -470,7 +470,10 @@ handle_cast({'SOCKET_CHILD_LOST', N}, PlayerState) ->
 		player = NewStatus			   
 	},
 	{noreply, NewPlayerState};
-
+%% todo
+%%  0 stop_all()
+%%  2 clear_online_player()
+%%  7 kick_all()
 %% 停止角色进程(Reason 为停止原因)
 handle_cast({stop, Reason}, PlayerState) ->
 	?DEBUG("玩家进程退出 Reason:~p end",[Reason]),

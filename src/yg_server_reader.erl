@@ -305,6 +305,7 @@ do_lost_child(_Socket,Client,Cmd,Reason,Location) ->
 
 %%退出游戏
 do_lost(_Socket, Client, Cmd, Reason, Location) ->
+	?DEBUG("Cmd:~p Location:~p end",[Cmd, Location]),
 	case lists:member(Location, [3, 4, 5]) of
 		true -> 
 			no_log;

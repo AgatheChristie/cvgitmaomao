@@ -5,6 +5,63 @@
 %%% Description: 公共定义
 %%%------------------------------------------------
 
+
+
+
+%%#   +K $POLL  是否启用操作系统的poll机制
+%%
+%%#    -smp $SMP   是否支持对称多处理
+%%
+%%#    -hidden    隐藏节点
+%%############################################################################################
+%%#    +e $ERL_MAX_ETS_TABLES  设置ETS最大数量   erlang:system_info(ets_count). erlang:system_info(ets_limit).
+%%#    Sets the maximum number of ETS tables.
+%%
+%%#    +P $ERL_PROCESSES   设置此系统同时存在的最大进程数 erlang:system_info(process_count). erlang:system_info(process_limit).
+%%#    Sets the maximum number of simultaneously existing processes
+%%#    for this system if a Number is passed as value.
+%%
+%%#    +Q ERL_MAX_PORTS   设置此系统同时打开的端口数量限制  erlang:system_info(port_count). erlang:system_info(port_limit).
+%%#    Sets the maximum number of simultaneously existing ports
+%%#    for this system if a Number is passed as value.
+%%
+%%#    +t 10485760   设置虚拟机可以处理的最大原子数   erlang:system_info(atom_count). erlang:system_info(atom_limit).
+%%#    Sets the maximum number of atoms the virtual machine can handle.
+%%
+%%############################################################################################
+%%#  +zdbbl 8192 端口buffer大小
+%%#  Sets the distribution buffer busy limit (dist_buf_busy_limit) in kilobytes
+%%
+%%#  +sbwt none|very_short|short|medium|long|very_long  调度器休眠机制
+%%#  +swt very_hight | medium | low                     cpu唤醒时机
+%%#  +swct very_eager|eager|medium|lazy|very_lazy       cpu频繁唤醒，增加cpu利用率
+%%
+%%# sbwt 设置调度程序忙等待阈值   Sets scheduler busy wait    threshold
+%%# swt  设置调度程序唤醒阈值     Sets scheduler wakeup       threshold
+%%# swct 设置调度程序唤醒清理阈值 Sets scheduler wake cleanup threshold
+%%
+%%
+%%#  +sbt db 绑定调度器，让cpu负载均衡，避免大量跃迁
+%%
+%%#  +hms 8192  将进程的默认堆大小设置为Size
+%%#  Sets the default                heap size of processes to the size Size
+%%
+%%#  +hmbs 8192   将进程的默认二进制虚拟堆大小设置为大小size
+%%#  Sets the default binary virtual heap size of processes to the size Size.
+%%
+%%#  +fnu[{w|i|e}]
+%%# 虚拟机使用文件名,就像使用UTF-8(或其他特定于系统的Unicode编码)对文件名进行编码一样
+%%#  The virtual machine works with filenames as if
+%%#  they are encoded using UTF-8 (or some other system-specific Unicode encoding).
+
+
+
+
+
+
+
+
+
 -include_lib("kernel/include/logger.hrl").
 
 -define(ALL_SERVER_PLAYERS, 10000).
@@ -43,8 +100,30 @@
 -define(FL_POLICY_REQ, <<"<polic">>).
 -define(FL_POLICY_FILE, <<"<cross-domain-policy><allow-access-from domain='*' to-ports='*' /></cross-domain-policy>">>).
 
+
+%% socket监听参数
+%% {packet, 0}, {packet, 0}表示erlang系统会把TCP数据原封不动地直接传送给应用程序
+%% {reuseaddr, true} 允许本地重复使用端口号
+%% {nodelay, true} 意味着很少的数据也会被马上被发送出去
+%% {delay_send, true} 如果打开了delay_send,每个port会维护一个发送队列,数据不是立即发送,而是存到发送队列里,等socket可写的时候再发送,
+%% 相当于是ERTS自己实现的组包机制.
+%% 对于网络使用繁重但实时性要求没那么高的应用情景来说,设置true会节省网络的占用频度。开启选项会增加一点点消息延迟，换来吞吐量的大量提升。
+%% {active, false} 如果socket客户端断开后,其port不会关闭;而{active,true}与{active,once}则会关闭port
+%% {backlog, 1024} socket的缓冲区长度,系统默认的缓冲区大小为8*1024(使用小的缓冲区,刷新速度快)
+%% {exit_on_close, false} 设置为flase时代表socket被close之后还能将缓冲区中的数据发送出去
+%% {send_timeout, 8000} 设置一个时间去等待操作系统发送数据,如果底层在这个时间段后还没发出数据,那么就会返回{error,timeout}
 %%tcp_server监听参数
--define(TCP_OPTIONS, [binary, {packet, 0}, {active, false}, {reuseaddr, true}, {nodelay, false}, {delay_send, true}, {send_timeout, 5000}, {keepalive, true}, {exit_on_close, true}]).
+-define(TCP_OPTIONS, [
+    binary,
+    {packet, 0},
+    {active, false},
+    {reuseaddr, true},
+    {nodelay, false},
+    {delay_send, true},
+    {send_timeout, 5000},
+    {keepalive, true},
+    {exit_on_close, true}]
+).
 -define(RECV_TIMEOUT, 5000).
 
 %%ets read-write 属性
