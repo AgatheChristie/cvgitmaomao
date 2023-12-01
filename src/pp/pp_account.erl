@@ -15,7 +15,8 @@ handle(10000, [], Data) ->
 	Ret =
     	try is_bad_pass(Data) of
         	true ->  true;
-        	_ -> 
+        	_ ->
+		        ?DEBUG("is_bad_pass false:~p end",[qqqq]),
 				case config:get_strict_md5(server) of
 					1 -> false;
 					_ -> true
@@ -108,7 +109,7 @@ get_player_id(Sn, Accid)->
 			{true, Accid, Id,  Nickname};
         []->
 			Ret = misc:get_http_content(config:get_guest_account_url(server)),
-			if Ret =:= "" andalso Sn /= 9999  ->
+			if Ret =:= "" andalso Sn =/= 9999  ->
 				   	{true, 0, 0,  <<>>};
 			   Sn == 9999 ->
 					Realm = 100,
@@ -163,8 +164,8 @@ validate_name([Sn, Name]) ->
 
 %% 角色名合法性检测:长度
 validate_name(len, [Sn, Name]) ->
-    case asn1rt:utf8_binary_to_list(list_to_binary(Name)) of
-        {ok, CharList} ->
+    case unicode:characters_to_list(list_to_binary(Name)) of
+        CharList when is_list(CharList) ->
             Len = string_width(CharList),   
             case Len < 11 andalso Len > 1 of
                 true ->

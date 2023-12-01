@@ -18,8 +18,8 @@ start(_Type, _Args) ->
 	[Port, Node_id, _Acceptor_num, _Max_connections] = config:get_tcp_listener(gateway),
 	[Ip] = config:get_tcp_listener_ip(gateway),
 
-	Log_level = config:get_log_level(gateway), 
-	loglevel:set(tool:to_integer(Log_level)),	
+	_Log_level = config:get_log_level(gateway),
+	%%loglevel:set(tool:to_integer(Log_level)),
 	
 	yg:init_db(gateway),
 	%%gateway启动5秒后将所有玩家的在线标志为0

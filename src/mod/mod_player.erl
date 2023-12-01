@@ -36,11 +36,14 @@ init([PlayerId, _AccountId, Socket]) ->
 			delete_etswhen_init(PlayerId),
 %% 			lib_login_prize:init_holiday_info(PlayerId),
 			PlayerState = #player_state{},
+			?DEBUG("qqqq:~p end",[qqqq]),
 			[NewPlayerState, Player] = 
 				case lib_war:is_war_server() of
 					true->
+						?DEBUG("is_war_server:~p end",[true]),
 						load_player_info_war_server(PlayerState, PlayerId, Socket);
 					false->
+						?DEBUG("is_war_server:~p end",[false]),
 						%% 检查目标状态(30秒后检查)
 						erlang:send_after(30 * 1000, self(), {'TARGET_STATE'}),	
 						%%检查师徒指引(10S)
@@ -49,8 +52,10 @@ init([PlayerId, _AccountId, Socket]) ->
 						erlang:send_after(10*1000,self(),{'CHECK_VIP_STATE'}),
 						load_player_info(PlayerState, PlayerId, Socket)
 				end,
+			?DEBUG("qqqq:~p end",[qqqq]),
 			%% 检查防沉迷信息
 			check_idcard_status(Player),
+			?DEBUG("qqqq:~p end",[qqqq]),
 			%% 5秒后检查重复登陆
 			erlang:send_after(10 * 1000, self(), 'CHECK_DUPLICATE_LOGIN'),
 			%% 心跳包时间检测
@@ -60,8 +65,10 @@ init([PlayerId, _AccountId, Socket]) ->
 			%% 添加一个在线
 			mod_online_count:add_online_num(),
 			misc:write_monitor_pid(self(), ?MODULE, {PlayerId}),
+			?DEBUG("NewPlayerState:~p end",[NewPlayerState]),
     		{ok, NewPlayerState};
 		_ ->
+			?DEBUG("stop:~p end",[stop]),
 			{stop, normal, {}}
 	end.
 
@@ -466,6 +473,7 @@ handle_cast({'SOCKET_CHILD_LOST', N}, PlayerState) ->
 
 %% 停止角色进程(Reason 为停止原因)
 handle_cast({stop, Reason}, PlayerState) ->
+	?DEBUG("玩家进程退出 Reason:~p end",[Reason]),
 	Status = PlayerState#player_state.player,
 	{ok, BinData} = pt_10:write(10007, Reason),
 	lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
@@ -4478,6 +4486,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	%% 开启socket管理进程
 	Socket_gn = mod_socket:get_socket_group_name(Player#player.sn, Player#player.accid),
 	mod_socket:stop(Socket_gn),
+	?DEBUG("qqqq:~p end",[qqqq]),
 	Pid_socket = mod_socket:start([Socket_gn, Socket, Player#player.id, Pid]),
     %% 打开广播信息进程
 	Pid_send = lists:map(fun(_N)-> 
@@ -4496,7 +4505,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	{LTime, NPTitle, ZxtHonor, NewPlayerState} = lib_player:get_other_player_data(PlayerState, Player, LastLoginTime),%%获取最近的记录玩家在线的时间和玩家成就称号列表
 	%%玩家登陆首先把当前节点的有可能残留的活跃度数据清除
 	lib_activity:player_logout(PlayerId),
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%% 创建物品模块PID
 	{ok, Pid_goods} = mod_goods:start(PlayerId, Player#player.cell_num, Pid_send),
 	%% 初始化在线玩家物品buff表   ----由物品模块转移到此
@@ -4515,7 +4524,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	%% 2 装备加成的一级属性
 	[E_forza,E_physique,E_wit,E_agile,E_speed] = 
 		goods_util:get_equip_player_attribute(Player#player.id,GoodsStatus#goods_status.equip_suit),
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%% 3  灵兽加成的一级属性
 	[Pet_forza, Pet_agile, Pet_wit, Pet_physique] = lib_pet:get_out_pet_attribute(Player),
 	
@@ -4537,7 +4546,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 						Meridian->Meridian
 					end,
 	{ok,[MerHp,MerDef,MerMp,MerHit,MerCrit,MerShun,MerAtt,MerTen,LgHp,LgMp,LgAtt]} = lib_meridian:get_meridian_att_current(PlayerId,MeridianInfo),
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%% 8 原始 二级属性 (在player中skip)
 	
 	%% 9 装备二级属性加成
@@ -4567,6 +4576,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 				%%获取角色氏族功勋
 				{GAlliance, GFeats, GuildSkills} = lib_guild_weal:get_guild_h_skills_info(GuildId, PlayerId)
 		end,
+	?DEBUG("qqqq:~p end",[qqqq]),
 	AchPrearls = gen_server:call(Pid_goods, {'GET_ACH_PEARLS_INFO'}),
 	%%初始化end
 	%%%%%%%%%%%
@@ -4585,8 +4595,8 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	MountMultAttributeList = data_mount:get_prop_mount(Mount), 
 	%% 获取禁言信息
 	[Stop_begin_time, Stop_chat_minutes] = lib_player:get_donttalk_status(PlayerId),
-	put(donttalk, [Stop_begin_time, Stop_chat_minutes]), 
-	
+	put(donttalk, [Stop_begin_time, Stop_chat_minutes]),
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%% 挂机设置信息
 	HookConfig = lib_hook:init_hook_config(PlayerId, Player#player.scene),
 	%% 装备强化信息和套装信息
@@ -4624,7 +4634,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
             Player#player.anti_water,
             Player#player.anti_thunder,
             Player#player.anti_soil
-        ],	
+        ],
 
 		%%two_attribute = [Hp1, Mp1, MaxAtt1, MinAtt1, Def1, Hit1, Dodge1, Crit1, Anti_wind1,Anti_fire1,Anti_water1,Anti_thunder1,Anti_soil1],
 		%% 3 灵兽加成的一级属性			   
@@ -4677,7 +4687,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 		g_alliance = GAlliance,	%%联盟中的氏族Id
 		pet_batt_skill = Pet_batt_skill	% 灵兽战斗功技能
 	},
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	Llast_login_time = Player#player.last_login_time,
 	
 	DelayerPlayer = Player#player{
@@ -4747,6 +4757,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 			hook_quality_list = HookConfig#hook_config.quality_list
 		}
     },
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%%加载玩家封神争霸功勋(可给玩家增加属性，要在计算属性之前加载)
 	Player3 = lib_war2:init_war_honor(Player2),
 	%% 初始化角色装备数值 统一接口，数据要一致
@@ -4766,7 +4777,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	spawn(fun() ->
 		lib_mount_arena:rank_by_login(Mount,NewPlayer)
 	end),
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%%
 	%% 以下数据使用spawn_link 初始化的，必须不存在数据初始化顺序依赖，不写玩家进程字典。 
 	%%
@@ -4812,6 +4823,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 		%% 上线通知仇人
 		lib_relationship:notice_enemy_online(PlayerId, 1, NewPlayer#player.nickname)
 	end),
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%%上线通知氏族群聊面板
 	if NewPlayer#player.guild_id > 0 ->
 		   gen_server:cast(mod_guild:get_mod_guild_pid(),{'MEMBER_ONLINE_FLAG',1,NewPlayer#player.guild_id,NewPlayer#player.id});
@@ -4844,7 +4856,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 	Status6 = lib_task:check_carry_mark(Status5),
 	%% 加载或进入场景
 	MyStatus = lib_scene:init_player_scene(Status6),
-
+	?DEBUG("qqqq:~p end",[qqqq]),
 	%%初始化封神贴数据
 	spawn_link(fun()->
 		lib_hero_card:init_hero_card(PlayerId)
@@ -4886,7 +4898,7 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 		true ->
 			skip
 	end,
-	
+	?DEBUG("qqqq:~p end",[qqqq]),
 	spawn_link(fun()->
 		lib_vip:init_vip_info(PlayerId,MyStatus#player.vip)
 	end),
@@ -4913,7 +4925,8 @@ load_player_info(PlayerState, PlayerId, Socket) ->
 		last_bless_time = LastBlessTime,
 		bottle_exp = B_exp, 
 		bottle_spr = B_spr
-	}, 
+	},
+	?DEBUG("qqqq:~p end",[qqqq]),
 	[RetPlayerState, MyStatus].
 
 load_player_info_war_server(PlayerState, PlayerId, Socket) ->
@@ -5554,6 +5567,7 @@ delete_etswhen_init(PlayerId)->
 
 	
 delete_player_ets(PlayerId) ->
+	?DEBUG("delete_player_ets:~p end",[PlayerId]),
 	%%清除玩家ets数据
 	ets:delete(?ETS_ONLINE, PlayerId),
 	%%清除任务模块 

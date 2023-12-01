@@ -224,7 +224,10 @@ login_process(Socket,N) ->
 add_exp(Status, _Exp, _Spirit, 13) when Status#player.lv < 10 ->
 	Status;
 add_exp(Status, Exp, Spirit, FromWhere) ->
-	[RetExp, RetSpirit,NewStatus1] = 
+	?DEBUG("FromWhere:~p end",[FromWhere]),
+	?DEBUG("Exp:~p end",[Exp]),
+	?DEBUG("Spirit:~p end",[Spirit]),
+	[RetExp, RetSpirit,NewStatus1] =
         case FromWhere of
             1 ->				
 				%% 道具buff的加成系数

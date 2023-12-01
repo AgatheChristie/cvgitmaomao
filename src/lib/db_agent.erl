@@ -1404,7 +1404,7 @@ update_guild_table(ValueList, GuildId) ->
 	?DB_MODULE:update(guild, ValueList, [{id, GuildId}]).
 
 %% 查询视图格式 [{tab1,[f1,f2]},{tab2,[f3,f4]},{tab3,[f5,f6,f7]}],[{tab1,[id,1]},{tab1,[age,30]}]，[{tab1.f1,tab2.f2},{tab2.f3,tab3.f5}]
-%% 加载所有氏族成员
+%% 加载所有氏族成员 todo
 load_all_guild_member(GuildId) ->
 	case ?DB_MODULE =:= db_mysql of
 		true ->
@@ -1412,11 +1412,11 @@ load_all_guild_member(GuildId) ->
 		_ ->
 			?DB_MODULE:select_all_from_multtable([{guild_member,[id,guild_id,guild_name,player_id,player_name,donate_funds,donate_total,donate_lasttime,donate_total_lastday,donate_total_lastweek,create_time,title,remark,honor,guild_depart_name,guild_depart_id,kill_foe,die_count,get_flags,magic_nut,feats,feats_all,f_uptime,gr,unions,tax_time]},
 												 {player,[sex,jobs,lv,guild_position,last_login_time,online_flag,career,culture,vip]}],
-												[{guild_member,[guild_id,GuildId]}],[{guild_member.player_id,player.id}],[],[])
+												[{guild_member,[guild_id,GuildId]}],[],[],[])
 	end.
 
 
-%% 加载所有氏族申请
+%% 加载所有氏族申请 todo
 load_all_guild_apply(GuildId) ->
 	case ?DB_MODULE =:= db_mysql of
 		true ->
@@ -1424,7 +1424,7 @@ load_all_guild_apply(GuildId) ->
 		_ ->
 			?DB_MODULE:select_all_from_multtable([{guild_apply,[id,guild_id,player_id,create_time]},
 											 {player,[nickname,sex,jobs,lv,career,online_flag,vip]}],
-											[{guild_apply,[guild_id,GuildId]}],[{guild_apply.player_id,player.id}],[],[])
+											[{guild_apply,[guild_id,GuildId]}],[],[],[])
 	end.
 
 
@@ -1550,16 +1550,16 @@ guild_apply_insert(PlayerId, GuildId, CreateTime) ->
 			{mongo, Ret}
 	end.
 
-%% 获取新的氏族信息
+%% 获取新的氏族信息 todo
 guild_apply_select_new(PlayerId, GuildId) ->
 	case ?DB_MODULE =:= db_mysql of
 		true -> %%mysql数据库
 			?DB_MODULE:select_row(view_guild_apply, "*",
 								 [{player_id, PlayerId}, {guild_id, GuildId}]);
 		_ -> %%mongo数据库
-			?DB_MODULE:	select_row_from_multtable([{guild_apply,[id,guild_id,player_id,create_time]},
+			?DB_MODULE:select_row_from_multtable([{guild_apply,[id,guild_id,player_id,create_time]},
 											 {player,[nickname,sex,jobs,lv,career]}],
-											[{guild_apply,[guild_id,GuildId]},{guild_apply,[player_id, PlayerId]}, {guild_id, GuildId}],[{guild_apply.player_id,player.id}],[],[])
+											[{guild_apply,[guild_id,GuildId]},{guild_apply,[player_id, PlayerId]}, {guild_id, GuildId}],[],[],[])
 	end.
 
 
@@ -1615,7 +1615,7 @@ guild_update_member_num(GuildId) ->
 								  [{member_num, 1, add}], 
 								  [{id, GuildId}]).
 
-%% 获取氏族最新成员数
+%% 获取氏族最新成员数 todo
 guild_member_select_new(PlayerId, GuildId) ->
 	case ?DB_MODULE =:= db_mysql of
 		true -> %%mysql数据库
@@ -1624,7 +1624,7 @@ guild_member_select_new(PlayerId, GuildId) ->
 		%%	?DEBUG("PlayerId:~p,GuildId:~p", [PlayerId, GuildId]),
 			?DB_MODULE:select_row_from_multtable([{guild_member,[id,guild_id,guild_name,player_id,player_name,donate_funds,donate_total,donate_lasttime,donate_total_lastday,donate_total_lastweek,create_time,title,remark,honor,guild_depart_name,guild_depart_id,kill_foe,die_count,get_flags,magic_nut,feats,feats_all,f_uptime,gr,unions,tax_time]},
 											 {player,[sex,jobs,lv,guild_position,last_login_time,online_flag,career,culture,vip]}],
-											[{guild_member,[player_id, PlayerId]}, {guild_member,[guild_id, GuildId]}],[{guild_member.player_id,player.id}],[],[])
+											[{guild_member,[player_id, PlayerId]}, {guild_member,[guild_id, GuildId]}],[],[],[])
 	end.
 
 

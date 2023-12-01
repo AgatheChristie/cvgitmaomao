@@ -9,7 +9,7 @@
 -include("common.hrl").
 -include("record.hrl").
 -define(TCP_TIMEOUT, 1000). % 解析协议超时时间
--define(HEART_TIMEOUT, 60*1000). % 心跳包超时时间
+-define(HEART_TIMEOUT, 6000*1000). % 心跳包超时时间
 -define(HEART_TIMEOUT_TIME, 1).  % 心跳包超时次数
 -define(HEADER_LENGTH, 6). % 消息头长度
 
@@ -55,6 +55,7 @@ login_parse_packet(Socket, Client) ->
         %%登陆处理
         {inet_async, Socket, Ref, {ok, <<Len:32, Cmd:16>>}} ->
             BodyLen = Len - ?HEADER_LENGTH,
+	        ?DEBUG("Len:~p Cmd:~p end",[Len,Cmd]),
             case BodyLen > 0 of
                 true ->
                     Ref1 = async_recv(Socket, BodyLen, ?TCP_TIMEOUT),
@@ -121,7 +122,8 @@ login_parse_packet(Socket, Client) ->
 																						  player_id = Id,
 																						  socketN = 1
 																					});										
-                                                {error, _Reason} ->
+                                                {error, Reason} ->
+	                                                ?DEBUG("Reason:~p end",[Reason]),
                                                     %%告诉玩家登陆失败
                                                     {ok, BinData} = pt_10:write(10004, 0),
                                                     lib_send:send_one(Socket, BinData),
@@ -211,6 +213,7 @@ do_parse_packet(Socket, Client) ->
     Ref = async_recv(Socket, ?HEADER_LENGTH, ?HEART_TIMEOUT),
     receive
         {inet_async, Socket, Ref, {ok, <<Len:32, Cmd:16>>}} ->
+	        ?DEBUG("Len:~p Cmd:~p end",[Len,Cmd]),
             BodyLen = Len - ?HEADER_LENGTH,
 			RecvData = 
             	case BodyLen > 0 of
@@ -276,6 +279,7 @@ do_parse_packet(Socket, Client) ->
 
 %%登录断开连接
 login_lost(Socket, Client, Location, Reason) ->
+	?DEBUG("Location:~p Reason:~p end",[Location, Reason]),
 	case lists:member(Location, [2,11,12]) of
 		true -> no_log;
 		_ ->
@@ -296,6 +300,7 @@ do_lost_child(_Socket,Client,Cmd,Reason,Location) ->
 			 end
 	end,
 	gen_server:cast(Client#client.player_pid, {'SOCKET_CHILD_LOST', Client#client.socketN}),
+	?DEBUG("Reason:~p end",[Reason]),
 	exit({unexpected_message, Reason}).
 
 %%退出游戏
@@ -324,7 +329,9 @@ routing(_Client, Cmd, Binary) ->
 %% 	   true ->skip
 %% 	end,
 %% 	disp_read(2, Cmd, Client, Binary, Module),
-    Module:read(Cmd, Binary).
+    DD = Module:read(Cmd, Binary),
+	?DEBUG("read:~p end",[DD]),
+	DD.
 
 %% 接受信息
 async_recv(Sock, Length, Timeout) when is_port(Sock) ->

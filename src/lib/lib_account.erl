@@ -120,12 +120,15 @@ create_role(AccId, AccName, Sn, Name, _Realm, Career, Sex, _Type) ->
 							  Coin, Cash, Gold, Hp, Mp, Spirit, AttArea, AttSpeed,
 							  Speed, CellNum, StoreNum, RealmHonor) of
 		{mongo, Id} ->
+			?DEBUG("mongo id:~p end",[Id]),
 			%% 初始挂机设置
 			spawn(fun()-> db_agent:init_hook_config(Id) end),
 			lib_task:first_task(Id),
 			{true, Id};
         1 ->
+	        ?DEBUG("mysql id:~p end",[qqq]),
             Id = lib_player:get_role_id_by_name(Name),
+	        ?DEBUG("mysql id:~p end",[Id]),
 			%% 赋第一个任务给玩家
 			lib_task:first_task(Id),
             {true, Id};

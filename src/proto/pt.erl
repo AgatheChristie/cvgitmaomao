@@ -49,7 +49,8 @@ pack(Cmd, Data) ->
 	%% 15017 所有物品信息
 	%% 30000 任务列表
 	%% 12011 九宫格附近玩家
-	PackCmd = [12002,15010,15017,30000],
+	%%PackCmd = [12002,15010,15017,30000],
+	PackCmd = [],
 	case lists:member(Cmd, PackCmd) of
 	   true ->
 		   NewData = zlib:compress(Data),

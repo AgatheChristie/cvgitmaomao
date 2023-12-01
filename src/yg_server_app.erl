@@ -16,8 +16,8 @@ start(normal, []) ->
 	init_ets(Tabs),	
 	[Port, Node_id, _Acceptor_num, _Max_connections] = config:get_tcp_listener(server),
 	[Ip] = config:get_tcp_listener_ip(server),
-	Log_level = config:get_log_level(server),
-	loglevel:set(tool:to_integer(Log_level)),	
+	_Log_level = config:get_log_level(server),
+	%%loglevel:set(tool:to_integer(Log_level)),
     {ok, SupPid} = yg_server_sup:start_link(),
 	yg_timer:start(yg_server_sup),
     yg_server:start(
