@@ -1105,7 +1105,8 @@ castle_rush_fight(Der, Aer, AerSkillId) ->
             end;	
 		false ->
 			lib_battle:battle_fail(16, Aer, 2)
-	end.
+	end.
+
 
 %% 神魔乱斗
 warfare_fight(Aer, Der, SceneId, SkillId) ->
