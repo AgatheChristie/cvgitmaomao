@@ -9,7 +9,7 @@
 -include("common.hrl").
 -include("record.hrl").
 -define(TCP_TIMEOUT, 1000). % 解析协议超时时间
--define(HEART_TIMEOUT, 6000*1000). % 心跳包超时时间
+-define(HEART_TIMEOUT, 60000*1000). % 心跳包超时时间
 -define(HEART_TIMEOUT_TIME, 1).  % 心跳包超时次数
 -define(HEADER_LENGTH, 6). % 消息头长度
 
@@ -306,6 +306,7 @@ do_lost_child(_Socket,Client,Cmd,Reason,Location) ->
 %%退出游戏
 do_lost(_Socket, Client, Cmd, Reason, Location) ->
 	?DEBUG("Cmd:~p Location:~p end",[Cmd, Location]),
+	?DEBUG("Reason:~p end",[Reason]),
 	case lists:member(Location, [3, 4, 5]) of
 		true -> 
 			no_log;

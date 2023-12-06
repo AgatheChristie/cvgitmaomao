@@ -514,6 +514,7 @@ get_sky_award(PlayerId, GuildId) ->
 					
 	
 %%系统公告
+send_skyrush_notice(_, _) -> ok;
 send_skyrush_notice(Type, Param) ->
 	case Type of
 		1 ->

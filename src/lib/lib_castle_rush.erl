@@ -543,7 +543,7 @@ castle_rush_boss_die_handle(Player) ->
 	PlayerList = ets:select(?ETS_ONLINE_SCENE, MS),
 	{ok, BinData47007} = pt_47:write(47007, 2),
 	{ok, BinData47008} = pt_47:write(47008, TopHarmGuildName),
-	Msg = io_lib:format("<font color='#FEDB4F'>~s</font> 氏族给予了龙柱最后一击，获得了巨大的伤害积分。", [Player#player.guild_name]),
+	Msg = util:format(?T("<font color='#FEDB4F'>~s</font> 氏族给予了龙柱最后一击，获得了巨大的伤害积分。"), [Player#player.guild_name]),
 	{ok, MsgBinData} = pt_11:write(11080, 2, Msg),
 	Fun = fun(P)->
 		%% 攻城战回合重新开始转移玩家位置

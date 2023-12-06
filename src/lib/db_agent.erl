@@ -5169,7 +5169,11 @@ count_player_leave(TodaySec) ->
 	%% 新玩家
 	[New] = ?DB_MODULE:select_count(player, [{reg_time, ">=", StartTime}, {reg_time, "<", EndTime}]),
 	%% 流失率
-	LeaveRate = round((Leave / RegNum) * 10000) / 100,
+	LeaveRate =
+	case RegNum > 0 of
+		true -> round((Leave / RegNum) * 10000) / 100;
+		false -> round((Leave / 1) * 10000) / 100
+		end,
 	%% 昨天注册人数
 	YesStartTime = StartTime - 86400,
 	YesEndTime = EndTime - 86400,

@@ -2903,16 +2903,16 @@ get_guild_post_title(GuildPosition) ->
             lib_guild_inner:string_to_binary_and_len("");
         1 ->
 %% 			?DEBUG("22222", []),
-            lib_guild_inner:string_to_binary_and_len("族长");
+            lib_guild_inner:string_to_binary_and_len(?T("族长"));
         Value when Value =:= 2 orelse Value =:= 3 ->
 %% 			?DEBUG("33333", []),
-            lib_guild_inner:string_to_binary_and_len("长老");
+            lib_guild_inner:string_to_binary_and_len(?T("长老"));
         Value when Value =:= 4 orelse Value =:= 5 orelse Value =:= 6 orelse Value =:= 7 ->
 %% 			?DEBUG("4444", []),
-            lib_guild_inner:string_to_binary_and_len("堂主");
+            lib_guild_inner:string_to_binary_and_len(?T("堂主"));
         _ ->
 %% 			?DEBUG("55555", []),
-            lib_guild_inner:string_to_binary_and_len("弟子")
+            lib_guild_inner:string_to_binary_and_len(?T("弟子"))
     end.
 
 %%根据充值元宝数算得玩家积分

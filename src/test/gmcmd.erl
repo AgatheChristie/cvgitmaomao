@@ -21,7 +21,7 @@
 %% Local Functions
 %%
 cmd(Status,Data) ->
-%% ?DEBUG("cmd_~p ~n",[Data]),
+ ?DEBUG("cmd_~p ~n",[Data]),
 	case config:get_can_gmcmd(server) of
 		1 ->  do_cmd(Status,Data);
 		_ ->  no_cmd

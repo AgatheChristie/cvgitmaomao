@@ -151,7 +151,7 @@
  %%偷菜信息
 -define(ETS_MANOR_STEAL, ets_manor_steal).
 
-
+-define(T(TEXT), <<(TEXT)/utf8>>).
 
 %% ---------------------------------
 %% Logging mechanism

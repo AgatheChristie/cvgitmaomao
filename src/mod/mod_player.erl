@@ -65,7 +65,7 @@ init([PlayerId, _AccountId, Socket]) ->
             %% 添加一个在线
             mod_online_count:add_online_num(),
             misc:write_monitor_pid(self(), ?MODULE, {PlayerId}),
-            ?DEBUG("NewPlayerState:~p end", [NewPlayerState]),
+            %% ?DEBUG("NewPlayerState:~p end", [NewPlayerState]),
             {ok, NewPlayerState};
         _ ->
             ?DEBUG("stop:~p end", [stop]),
@@ -471,7 +471,7 @@ handle_cast({'SOCKET_CHILD_LOST', N}, PlayerState) ->
     },
     {noreply, NewPlayerState};
 %% todo
-%%  0 stop_all()
+%%  0 stop_all(),或者是 mod_login:logout(Client#client.player_pid, 0)
 %%  2 clear_online_player()
 %%  7 kick_all()
 %% 停止角色进程(Reason 为停止原因)

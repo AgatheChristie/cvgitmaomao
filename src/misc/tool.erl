@@ -58,11 +58,17 @@ to_binary(Msg) when is_binary(Msg) ->
 to_binary(Msg) when is_atom(Msg) ->
 	list_to_binary(atom_to_list(Msg));
 	%%atom_to_binary(Msg, utf8);
-to_binary(Msg) when is_list(Msg) -> 
+to_binary(Msg) when is_list(Msg) ->
 	list_to_binary(Msg);
-to_binary(Msg) when is_integer(Msg) -> 
+%%	case is_string(Msg) of
+%%		yes ->
+%%			list_to_binary(Msg);
+%%		_ ->
+%%			unicode:characters_to_binary(Msg)
+%%	end;
+to_binary(Msg) when is_integer(Msg) ->
 	list_to_binary(integer_to_list(Msg));
-to_binary(Msg) when is_float(Msg) -> 
+to_binary(Msg) when is_float(Msg) ->
 	list_to_binary(f2s(Msg));
 to_binary(_Msg) ->
     throw(other_value).

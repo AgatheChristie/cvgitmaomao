@@ -469,6 +469,24 @@ reload(Type,Data)->
 	lists:map(fun(N)->rpc:call(N,application,set_env,[server,Type,Data]) end,nodes()).
 
 
+format(Format) ->
+	format(Format, []).
+
+format(Format, Args) when is_binary(Format) ->
+	format_ex(binary_to_list(Format), Args, []);
+format(Format, Args) when is_list(Format) ->
+	format_ex(Format, Args, []).
+
+format_ex([], _Args, Res) -> list_to_binary(lists:reverse(Res));
+format_ex([$~, $w | T], [A | Args], Res) when is_integer(A) ->
+	format_ex(T, Args, [integer_to_list(A) | Res]);
+format_ex([$~, $w | T], [A | Args], Res) when is_atom(A) ->
+	format_ex(T, Args, [atom_to_list(A) | Res]);
+format_ex([$~, $s | T], [A | Args], Res) ->
+	format_ex(T, Args, [A | Res]);
+format_ex([C | T], Args, Res) ->
+	format_ex(T, Args, [C | Res]).
+
 escape_uri(S) when is_list(S) ->
     escape_uri(unicode:characters_to_binary(S));
 escape_uri(<<C:8, Cs/binary>>) when C >= $a, C =< $z ->

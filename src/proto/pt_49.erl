@@ -98,12 +98,12 @@ write(49003, ColiseumList) ->
 	F = fun(C) ->
 		#ets_coliseum_rank{
 			player_id = PlayerId,
-			nickname = Nickname,
+			nickname = _Nickname,
 			lv = Lv,
 			battle = Battle,
 			trend = Trend		   
 		} = C,
-		NewName = tool:to_binary(Nickname),
+		NewName = tool:to_binary("awdawd"++tool:to_list(PlayerId)),
   		NL = byte_size(NewName),  
 		<<PlayerId:32, NL:16, NewName/binary, Lv:8, Battle:32, Trend:8>>
     end,

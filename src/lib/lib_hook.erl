@@ -330,9 +330,9 @@ is_open_hooking_scene()->
 
 opening_msg(Type)->
 	case Type of
-		1-> Content = "<font color='#FEDB4F'>亲爱的玩家，今天的挂机区开始开放，海量经验等你拿～</font>";
-		2-> 
-			Content = "<font color='#FEDB4F'>今天的挂机区已经结束开放，请各位亲爱的玩家明天再来～</font>";
+		1-> Content = util:format(?T("<font color='#36d626'>亲爱的玩家，今天的挂机区开始开放，海量经验等你拿～</font>"));
+		2->
+			Content = util:format(?T("<font color='#FEDB4F'>今天的挂机区已经结束开放，请各位亲爱的玩家明天再来～</font>"));
 		_-> Content = []
 	end,
 	case Content of

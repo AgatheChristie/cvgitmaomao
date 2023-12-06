@@ -459,7 +459,7 @@ handle_info({'LOTUS_BLOOM', Count}, State) ->
 					%%广播(把工作付给VIP温泉做)
 					case Num >= 1 andalso SceneId =:= ?SPRING_SCENE_VIPTOP_ID of
 						true ->
-							Msg = io_lib:format("哇！<font color='#FFFFFF'>温泉</font>里的<font color='#FF9DCC'>七彩莲花</font>刷新了哦，亲。采集莲花可以获得丰厚的奖励哦，亲。",[]),
+							Msg = util:format(?T("哇！<font color='#FFFFFF'>温泉</font>里的<font color='#FF9DCC'>七彩莲花</font>刷新了哦，亲。采集莲花可以获得丰厚的奖励哦，亲。")),
 							spawn(fun()->lib_chat:broadcast_sys_msg(2, Msg) end);
 						false ->
 							skip

@@ -323,11 +323,11 @@ sys_broadcast_spring(Type) ->
 	case Type of
 		1 ->%%开启
 %% 			?DEBUG("11111111111", []),
-			NewMsg = "亲爱的玩家,现在是<font color='#FEDB4F'>温泉</font>开放时间,泡温泉可以获得大量的经验和灵力哦^_^",
+			NewMsg = ?T("亲爱的玩家,现在是<font color='#FEDB4F'>温泉</font>开放时间,泡温泉可以获得大量的经验和灵力哦^_^"),
 			lib_chat:broadcast_sys_msg(1, NewMsg);
 		0 ->%%关闭
 %% 			?DEBUG("222222222222222222222", []),
-			NewMsg = "亲爱的玩家,请注意，<font color='#FEDB4F'>温泉</font>将在<font color='#FEDB4F'>10</font>秒后关闭",
+			NewMsg = ?T("亲爱的玩家,请注意，<font color='#FEDB4F'>温泉</font>将在<font color='#FEDB4F'>10</font>秒后关闭"),
 			lib_chat:broadcast_sys_msg(1, NewMsg)
 	end.
 

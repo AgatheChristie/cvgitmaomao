@@ -1415,7 +1415,7 @@ use_pet_egg(PlayerStatus,GoodsStatus,GoodsTypeId,Bind) ->
 	GoodsTypeInfo = goods_util:get_goods_type(GoodsTypeId),
 	{ok,NewGoodsStatus} = lib_goods:give_goods({GoodsTypeId, 1 ,Bind}, GoodsStatus),
 	GoodsName = GoodsTypeInfo#ets_base_goods.goods_name,
-	Msg = io_lib:format("只见神兽瞬影遁失，只留下【<font color='#00FF33'>~s</font>】来不及带走！",[GoodsName]),
+	Msg = util:format(?T("只见神兽瞬影遁失，只留下【<font color='#00FF33'>~s</font>】来不及带走！"),[GoodsName]),
 	{ok, BinData1} = pt_11:write(11080, 2, Msg),
 	lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData1),
 	%%spawn(fun()->lib_chat:broadcast_sys_msg(2, Msg)end),

@@ -170,7 +170,7 @@ handle_info('ARENA_INTERVAL', State) ->
 				if 
 					%% 报名开始
 					NowSec >= ArenaJoinTime andalso NowSec - ArenaJoinTime < ARENA_INTERVAL ->
-	?WARNING_MSG("ARENA_SUP_PROC_START: Time ~p~n State ~p~n", [NowSec, State]),
+	                  ?WARNING_MSG("ARENA_SUP_PROC_START: Time ~p~n State ~p~n", [NowSec, State]),
 						lib_arena:start_arena_timer(NowSec, self()),
 						{#state{}, ARENA_INTERVAL};
 		   			true->

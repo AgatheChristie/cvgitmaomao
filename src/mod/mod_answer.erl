@@ -559,19 +559,19 @@ broadcast_business_time(Result, Timestamp)->
 broadcast_sys_msg(NowSec)->
 	if  
 		(NowSec >= ?CARRY_BC_START_THREE) andalso (NowSec - ?CARRY_BC_START_THREE) =< 10 ->
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在3分钟后开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在3分钟后开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= ?CARRY_BC_START_ONE) andalso (NowSec - ?CARRY_BC_START_ONE) =< 10 ->
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在1分钟后开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在1分钟后开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= ?CARRY_BC_START) andalso (NowSec - ?CARRY_BC_START) =< 10 ->
 			broadcast_carry_time(1500),
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= ?CARRY_BC_END_THREE) andalso (NowSec - ?CARRY_BC_END_THREE) =< 10 ->
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在3分钟后关闭！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在3分钟后关闭！</font>"));
 		(NowSec >= ?CARRY_BC_END_ONE) andalso (NowSec - ?CARRY_BC_END_ONE) =< 10 ->
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在1分钟后关闭！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动将会在1分钟后关闭！</font>"));
 		(NowSec >= ?CARRY_BC_END) andalso (NowSec - ?CARRY_BC_END) < 10 ->
 			broadcast_carry_time(0),
-			Msg = "<font color='#FEDB4F'>全体部落国运三倍运镖活动已经结束,感谢大家的参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落国运三倍运镖活动已经结束,感谢大家的参与！</font>"));
 		true->Msg=[]
 	end,
 	case Msg of

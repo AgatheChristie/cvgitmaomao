@@ -194,8 +194,8 @@ send_sys_msg(Player,OtherPlayerStatus,OtherId,Type) ->
 		Sex1 == Sex2 ->
 			if
 				Type == 2 ->
-					Content1 = io_lib:format("【你看到[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]一身威风凛凛的装备，顷刻间敬仰之情如滔滔江水连绵不断。】",[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
-					Content2 = io_lib:format("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]看到你一身威风凛凛的装备，顷刻间敬仰之情如滔滔江水连绵不断。】",[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
+					Content1 = util:format(?T("【你看到[<a href='event:1,~w, ~s, ~w, ~w'><font color='#FEDB4F'><u>~s</u></font></a>]一身威风凛凛的装备，顷刻间敬仰之情如滔滔江水连绵不断。】"),[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
+					Content2 = util:format(?T("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]看到你一身威风凛凛的装备，顷刻间敬仰之情如滔滔江水连绵不断。】"),[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
 					%%发送系统消息
 					{ok, BinData} = pt_11:write(11080, 2, Content1),
 					lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData),
@@ -207,8 +207,8 @@ send_sys_msg(Player,OtherPlayerStatus,OtherId,Type) ->
 							lib_send:send_to_sid(OtherPlayerStatus#player.other#player_other.pid_send, BinData1)
 					end;
 				Type == 3 ->
-					Content1 = io_lib:format("【你用鄙夷的目光扫视[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，面上流露不屑的神态。】",[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
-					Content2 = io_lib:format("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用鄙夷的目光扫视你，面上流露不屑的神态。】",[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
+					Content1 = util:format(?T("【你用鄙夷的目光扫视[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，面上流露不屑的神态。】"),[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
+					Content2 = util:format(?T("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用鄙夷的目光扫视你，面上流露不屑的神态。】"),[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
 					%%发送系统消息
 					{ok, BinData} = pt_11:write(11080, 2, Content1),
 					lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData),
@@ -226,8 +226,8 @@ send_sys_msg(Player,OtherPlayerStatus,OtherId,Type) ->
 		true ->
 			if
 				Type == 2 ->
-					Content1 = io_lib:format("【你用含情脉脉的眼光看着[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，暗暗露出仰慕之情。】",[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
-					Content2 = io_lib:format("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用含情脉脉的眼光看着你，暗暗露出仰慕之情。】",[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
+					Content1 = util:format(?T("【你用含情脉脉的眼光看着[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，暗暗露出仰慕之情。】"),[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
+					Content2 = util:format(?T("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用含情脉脉的眼光看着你，暗暗露出仰慕之情。】"),[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
 					%%发送系统消息
 					{ok, BinData} = pt_11:write(11080, 2, Content1),
 					lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData),
@@ -239,8 +239,8 @@ send_sys_msg(Player,OtherPlayerStatus,OtherId,Type) ->
 							lib_send:send_to_sid(OtherPlayerStatus#player.other#player_other.pid_send, BinData1)
 					end;
 				Type == 3 ->
-					Content1 = io_lib:format("【你用鄙夷的目光扫视[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，面上流露不屑的神态。】",[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
-					Content2 = io_lib:format("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用鄙夷的目光扫视你，面上流露不屑的神态。】",[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
+					Content1 = util:format(?T("【你用鄙夷的目光扫视[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]，面上流露不屑的神态。】"),[OtherId,tool:to_list(OtherNickname),Career2,Sex2,tool:to_list(OtherNickname)]),
+					Content2 = util:format(?T("【[<a href='event:1,~p, ~s, ~p, ~p'><font color='#FEDB4F'><u>~s</u></font></a>]用鄙夷的目光扫视你，面上流露不屑的神态。】"),[Player#player.id,tool:to_list(Nickname),Career1,Sex1,tool:to_list(Nickname)]),
 					%%发送系统消息
 					{ok, BinData} = pt_11:write(11080, 2, Content1),
 					lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData),

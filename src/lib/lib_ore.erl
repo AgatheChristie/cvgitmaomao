@@ -117,10 +117,10 @@ broadcast_goods_info(Nickname,Goods_id,Pidsend) ->
 broadcast_msg(Type,Value) ->
 	case Type of
 		1 ->
-			Msg = io_lib:format("各位玩家注意 <font color='#FEDB4F'>天降彩石</font>活动将于<font color='#FEDB4F'> ~p </font>分钟后开始，请注意参加。",[Value]),
+			Msg = util:format(?T("各位玩家注意 <font color='#FEDB4F'>天降彩石</font>活动将于<font color='#FEDB4F'> ~p </font>分钟后开始，请注意参加。"),[Value]),
 			lib_chat:broadcast_sys_msg(2, Msg);
 		2 ->
-			Msg = io_lib:format("天降彩石活动开始了！赶快寻找降落地点，为了宝石奋斗吧！",[]),
+			Msg = ?T("天降彩石活动开始了！赶快寻找降落地点，为了宝石奋斗吧！"),
 			lib_chat:broadcast_sys_msg(2, Msg);
 		3 ->
 			[Nickname,Goods_id,GoodsName,Color] = Value,
@@ -135,7 +135,7 @@ broadcast_msg(Type,Value) ->
 			Msg = io_lib:format("玩家<font color='~s'>~s</font>在天降彩石活动中人品大爆发，采到了  <a href='event:2,~p,0,1'><font color='~s'><u>~s</u></font></a> 矿石",[NameColor,Nickname,Goods_id,Color,GoodsName]),
 			lib_chat:broadcast_sys_msg(2, Msg);
 		4 ->
-			Msg = io_lib:format("天降彩石活动已结束。",[]),
+			Msg = ?T("天降彩石活动已结束。"),
 			lib_chat:broadcast_sys_msg(2, Msg);
 		5 ->
 			[GoodsName,Pidsend] = Value ,
@@ -144,7 +144,7 @@ broadcast_msg(Type,Value) ->
 			lib_send:send_to_sid(Pidsend,Bin);
 		6 ->[SceneID] = Value,
 			SceneName = get_scene_name(SceneID),
-			Msg = io_lib:format("彩石降落在<font color='#FEDB4F'>~s</font>地区，大家快去寻找彩石踪迹吧！",[SceneName]),
+			Msg = util:format(?T("彩石降落在<font color='#FEDB4F'>~s</font>地区，大家快去寻找彩石踪迹吧！"),[SceneName]),
 			lib_chat:broadcast_sys_msg(2, Msg);
 		_ ->
 			skip
