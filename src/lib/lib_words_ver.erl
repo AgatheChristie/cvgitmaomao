@@ -18,13 +18,13 @@
 %% -----------------------------------------------------------------
 %% 敏感词处理
 %% -----------------------------------------------------------------
-
-words_filter(Words_for_filter) -> 
-	Words_List = data_words:get_words_verlist(),
-	binary:bin_to_list(lists:foldl(fun(Kword, Words_for_filter0)->
-										   re:replace(Words_for_filter0,Kword,"*",[global,caseless,{return, binary}])
-								   end,
-								   Words_for_filter,Words_List)).
+words_filter([Words_for_filter]) -> Words_for_filter.
+%%words_filter(Words_for_filter) ->
+%%	Words_List = data_words:get_words_verlist(),
+%%	binary:bin_to_list(lists:foldl(fun(Kword, Words_for_filter0)->
+%%										   re:replace(Words_for_filter0,Kword,"*",[global,caseless,{return, binary}])
+%%								   end,
+%%								   Words_for_filter,Words_List)).
 
 words_ver(Words_for_ver) ->
 	Words_List = data_words:get_words_verlist(),

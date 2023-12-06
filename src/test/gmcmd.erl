@@ -21,7 +21,6 @@
 %% Local Functions
 %%
 cmd(Status,Data) ->
- ?DEBUG("cmd_~p ~n",[Data]),
 	case config:get_can_gmcmd(server) of
 		1 ->  do_cmd(Status,Data);
 		_ ->  no_cmd
@@ -30,7 +29,8 @@ cmd(Status,Data) ->
 do_cmd(Status,Data) ->
 	 %% -------------------- 测试命令 ----------------
     case string:tokens(Data, " ") of
-        ["-加物品1",Id,Num] ->
+        ["-GMAddItem1",Id,Num] ->
+	     
             GoodsTypeInfo = goods_util:get_ets_info(?ETS_BASE_GOODS, list_to_integer(Id)),
 			if is_record(GoodsTypeInfo,ets_base_goods) ->
 				   NewInfo = goods_util:get_new_goods(GoodsTypeInfo),

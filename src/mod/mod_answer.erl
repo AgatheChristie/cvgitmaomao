@@ -384,19 +384,19 @@ broadcast_msg(NowSec)->
 			lib_answer:init_answer(),      %% 创建答题ets
 			load_base_answer(?ANSWER_SUM),%%初始化答题数据
 			broadcast_answer_time(1,120),
-			Msg = "<font color='#FEDB4F'>本服答题活动将会在2分钟后开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>本服答题活动将会在2分钟后开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= ANSWER_JOIN_START) andalso (NowSec - ANSWER_JOIN_START) < 10 ->
 			broadcast_answer_time(2,60),
-			Msg = "<font color='#FEDB4F'>本服答题活动开始报名,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>本服答题活动开始报名,欢迎诸神共同参与！</font>"));
 		(NowSec >= ANSWER_START) andalso (NowSec - ANSWER_START) < 10 ->
 			broadcast_answer_time(8,15*60),
 			show(1),
 			erlang:send_after(0, self(), {'send_answer',1,0}),%%推送答题1信息,
-			Msg = "<font color='#FEDB4F'>本服答题活动正在进行中,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>本服答题活动正在进行中,欢迎诸神共同参与！</font>"));
 		(NowSec >= ANSWER_END) andalso (NowSec - ANSWER_END_FINISH) < 10 ->
 			broadcast_answer_time(4,5),
 			send_answer_result(),%%活动结束，显示答对题数，分数，经验，灵力,答题60*5秒后删除答题基础数据
-			Msg = "<font color='#FEDB4F'>本服答题活动已经结束,感谢大家的参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>本服答题活动已经结束,感谢大家的参与！</font>"));
 		true->
 			Msg = []
 	end,
@@ -588,13 +588,13 @@ broadcast_business_msg(NowSec) ->
 	BUSINESS_DOUBLE_END_TIME = ?BUSINESS_DOUBLE_END_TIME,
 	if 
 		(NowSec >= BUSINESS_DOUBLE_BROAD_TIME) andalso ((NowSec - BUSINESS_DOUBLE_BROAD_TIME) =< 10) ->
-			Msg = "<font color='#FEDB4F'>全体部落跑商双倍活动将会在3分钟后开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落跑商双倍活动将会在3分钟后开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= BUSINESS_DOUBLE_START_TIME) andalso ((NowSec - BUSINESS_DOUBLE_START_TIME) =< 10) ->
 			broadcast_business_time(1, BUSINESS_DOUBLE_END_TIME - NowSec),
-			Msg = "<font color='#FEDB4F'>全体部落跑商双倍活动开启,欢迎诸神共同参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落跑商双倍活动开启,欢迎诸神共同参与！</font>"));
 		(NowSec >= BUSINESS_DOUBLE_END_TIME) andalso ((NowSec - BUSINESS_DOUBLE_END_TIME) =< 10) ->
 			broadcast_business_time(0, 0),
-			Msg = "<font color='#FEDB4F'>全体部落跑商双倍活动已经结束,感谢大家的参与！</font>";
+			Msg = util:format(?T("<font color='#FEDB4F'>全体部落跑商双倍活动已经结束,感谢大家的参与！</font>"));
 		true->
 			Msg = []
 	end,

@@ -455,7 +455,6 @@ write(15006, [GoodsInfo, AttributeList]) ->
 
 %%查询玩家物品列表
 write(15010, [Location, CellNum, Coin, Bcoin, Cash, Gold, CanSellBcoinNum, CanSellCoinNum, GoodsList]) ->
-    ?DEBUG("GoodsList:~p end",[GoodsList]),
     ListNum = length(GoodsList),
     F = fun(GoodsInfo) ->
         GoodsId = GoodsInfo#goods.id,

@@ -338,9 +338,15 @@ routing(_Client, Cmd, Binary) ->
 %% 接受信息
 async_recv(Sock, Length, Timeout) when is_port(Sock) ->
     case prim_inet:async_recv(Sock, Length, Timeout) of
-        {error, Reason} -> 	throw({Reason});
-        {ok, Res}       ->  Res; 
-        Res             ->	Res
+        {error, Reason} ->
+	        ?DEBUG("Reason:~p end",[Reason]),
+	        throw({Reason});
+        {ok, Res}       ->
+	        ?DEBUG("Res:~p end",[Res]),
+	        Res;
+        Res             ->
+	        ?DEBUG("Res:~p end",[Res]),
+	        Res
     end.
 
 %% disp_read(Location, Cmd, Client, Binary, Module) ->
