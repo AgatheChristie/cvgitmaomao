@@ -113,7 +113,7 @@ do_cmd(Status,Data) ->
 			gen_server:cast(Status2#player.other#player_other.pid, {'SET_PLAYER', Status2}),
 			lib_player:send_player_attribute(Status2, 1),
 			is_cmd;
-		["-加铜币1",Num] ->
+		["-GMAddCoin1",Num] ->
 			N1=abs(list_to_integer(Num)),
 			(catch db_agent:test_update_player_info([{coin,N1,add},{coin_sum,N1,add}],[{id,Status#player.id}])),
 			Coin=Status#player.coin + N1,
@@ -122,7 +122,7 @@ do_cmd(Status,Data) ->
 			gen_server:cast(Status3#player.other#player_other.pid, {'SET_PLAYER', Status3}),
 			lib_player:send_player_attribute2(Status3, 3),
 			is_cmd;
-		["-加金币1",Num] ->
+		["-GMAddGold1",Num] ->
 			N2=abs(list_to_integer(Num)),
 			(catch db_agent:test_update_player_info([{gold,N2,add}],[{id,Status#player.id}])),
 			Gold=Status#player.gold + N2,
@@ -130,7 +130,7 @@ do_cmd(Status,Data) ->
 			gen_server:cast(Status4#player.other#player_other.pid, {'SET_PLAYER', Status4}),
 			lib_player:send_player_attribute2(Status4, 3),
 			is_cmd;
-		["-加绑定铜1",Num] ->
+		["-GMAddBCoin1",Num] ->
 			N3=abs(list_to_integer(Num)),
 			(catch db_agent:test_update_player_info([{bcoin,N3,add},{coin_sum,N3,add}],[{id,Status#player.id}])),
 			Bcoin=Status#player.bcoin + N3,
@@ -139,7 +139,7 @@ do_cmd(Status,Data) ->
 			gen_server:cast(Status5#player.other#player_other.pid, {'SET_PLAYER', Status5}),
 			lib_player:send_player_attribute2(Status5, 3),
 			is_cmd;
-		["-加礼券1",Num] ->
+		["-GMAddCash1",Num] ->
 			N2=abs(list_to_integer(Num)),
 			(catch db_agent:test_update_player_info([{cash,N2,add}],[{id,Status#player.id}])),
 			Cash=Status#player.cash + N2,
@@ -147,15 +147,15 @@ do_cmd(Status,Data) ->
 			gen_server:cast(Status4#player.other#player_other.pid, {'SET_PLAYER', Status4}),
 			lib_player:send_player_attribute2(Status4, 3),
 			is_cmd;
-		["-加礼金1",Num] ->
-			N4=abs(list_to_integer(Num)),
-			(catch db_agent:test_update_player_info([{cash,N4,add}],[{id,Status#player.id}])),
-			Cash = Status#player.cash + N4,
-			Status6=Status#player{cash = Cash},
-			gen_server:cast(Status6#player.other#player_other.pid, {'SET_PLAYER', Status6}),
-			lib_player:send_player_attribute2(Status6, 3),
-			is_cmd;
-		["-设财产1",Num] ->
+%%		["-GMAddCoin1",Num] ->
+%%			N4=abs(list_to_integer(Num)),
+%%			(catch db_agent:test_update_player_info([{cash,N4,add}],[{id,Status#player.id}])),
+%%			Cash = Status#player.cash + N4,
+%%			Status6=Status#player{cash = Cash},
+%%			gen_server:cast(Status6#player.other#player_other.pid, {'SET_PLAYER', Status6}),
+%%			lib_player:send_player_attribute2(Status6, 3),
+%%			is_cmd;
+		["-GMSetCoin1",Num] ->
 			N=abs(list_to_integer(Num)),
 			(catch db_agent:test_update_player_info([{cash,N},{gold,N},{coin,N},{bcion,N}],[{id,Status#player.id}])),
 			Status1=Status#player{gold=N,coin=N,bcoin=N,cash=N},

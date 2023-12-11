@@ -49,10 +49,13 @@
 %% internal
 -export([start_link/0, init/1, handle_call/3, handle_cast/2,
          handle_info/2, terminate/2, code_change/3]).
--define(WARNING_MSG(Format, Args),
-    logger:warning_msg(?MODULE,?LINE,Format, Args)).
+
+
+%%-define(WARNING_MSG(Format, Args),
+%%    logger:warning_msg(?MODULE,?LINE,Format, Args)).
 
 -include("emongo.hrl").
+-include("common.hrl").
 
 -record(state, {oid_index, hashed_hostn}).
 
@@ -149,7 +152,7 @@ find_all(PoolId, Collection, Selector, Options) ->
 
 find_all_seq(Collection, Selector, Options) ->
     [Fun0,Fun1] = fold_all_seq(fun(I, A) -> [I | A] end, [], Collection, Selector, Options),
-    
+
     [Fun0,
      fun(Pid, Database, ReqId) ->
              lists:reverse(Fun1(Pid, Database, ReqId))
@@ -168,11 +171,11 @@ fold_all_seq(F, Value, Collection, Selector, Options) ->
     [fun(_, _, _) -> ok end,
      fun(Pid, Database, ReqId) ->
              Packet = emongo_packet:do_query(Database, Collection, ReqId, Query),
-             
+
              Resp = emongo_server:send_recv(Pid, ReqId, Packet, Timeout),
-             
+
              NewValue = fold_documents(F, Value, Resp),
-                            
+
              fold_more(F, NewValue, Collection, Resp#response{documents=[]}, Timeout)
      end].
 
@@ -272,9 +275,18 @@ count(PoolId, Collection, Selector) ->
     Query = #emo_query{q=Q, limit=1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[[{<<"n">>,Count}|_]]} ->
+        #response{documents=[QCC]} = T ->
+            ?DEBUG("count T:~p end",[T]),
+            Count =
+                case lists:keyfind(<<"n">>,1,QCC) of
+                    {_,TmpNum} ->
+                        TmpNum;
+                    false ->
+                        0
+                end,
             round(Count);
-        _ ->
+        _E ->
+            ?DEBUG("count _E:~p end",[_E]),
             undefined
     end.
 
@@ -288,29 +300,42 @@ distinct(PoolId, Collection, Key, Selector) ->
     Query = #emo_query{q=Q, limit=1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[[{<<"values">>, {array, Vals}} | _]]} ->
+        #response{documents=[[{<<"values">>, {array, Vals}} | _]]} = T ->
+            ?DEBUG("distinct T:~p end",[T]),
             Vals;
-        _ ->
+        _E ->
+            ?DEBUG("distinct _E:~p end",[_E]),
             undefined
     end.
 
 findAndModify(PoolId, Collection, Name, Key) ->
-	Key1 = tool:to_binary(Key),	
+    ?DEBUG("Key:~p end",[Key]),
+    ?DEBUG("Collection:~p end",[Collection]),
+    ?DEBUG("Name:~p end",[Name]),
+	Key1 = tool:to_binary(Key),
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
     Q = [{<<"findandmodify">>, Collection}, {<<"ns">>, Database},
-         {<<"update">>, [{"$inc", [{Key1,1}]}]},		 
+         {<<"update">>, [{"$inc", [{Key1,1}]}]},
 		 {<<"query">>,[{"name", Name}]},
 		 {<<"new">>, true},
 		 {<<"upsert">>, true}],
     Query = #emo_query{q=Q, limit=1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[[{<<"value">>, Record} | _]]} ->
-            case lists:keyfind(Key1, 1, Record) of
-				{Key1, Val} -> Val;
-				_-> undefined
-			end;
-        _ ->
+        #response{documents=[QCC]} = T ->
+            ?DEBUG("T:~p end",[T]),
+                case lists:keyfind(<<"value">>,1,QCC) of
+                    {_,Record} ->
+                        case lists:keyfind(Key1, 1, Record) of
+                            {Key1, Val} -> Val;
+                            _-> undefined
+                        end;
+                    false ->
+                        undefined
+                end;
+      %%  #response{documents=[[{<<"value">>, Record} | _]]}  = T->
+        _E ->
+            ?DEBUG("findAndModify _E:~p end",[_E]),
             undefined
     end.
 
