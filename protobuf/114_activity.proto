@@ -1,0 +1,54 @@
+import "common.proto";
+// ##model_begin##活动模块##model_end##
+
+// ##begin##活动信息##end##
+message activity_info_c2s {
+}
+// ##begin##活动信息##end##
+message activity_info_s2c {
+    repeated p_activity_group           activity_groups = 1;         // 活动组图标信息
+    repeated p_activity_info            activitys = 2;               // 活动信息
+}
+
+// ##begin##活动信息增加##end##
+message activity_add_s2c {
+    repeated p_activity_info            add_activitys = 1;           // 活动信息
+    repeated p_activity_group           activity_groups = 2;         // 新增活动组图标信息
+}
+
+// ##begin##活动信息更新##end##
+message activity_update_s2c {
+    repeated p_activity_info            update_activitys = 1;        // 活动信息
+    repeated p_activity_group           activity_groups = 2;         // 新增活动组图标信息
+}
+
+// ##begin##活动子项信息更新##end##
+message activity_term_update_s2c {
+    optional uint32                     activity_id = 1;             // 活动id
+    repeated p_term_info                term_infos = 2;              // 子项列表信息
+}
+
+// ##begin##活动信息全服通知更新##end##
+message activity_update_all_s2c {
+    optional uint32                     activity_id = 1;             // 活动id
+    optional uint32                     term_id = 2;                 // 子项id
+    optional uint32                     server_receive_times = 3;    // 全服已领取次数
+}
+
+// ##begin##活动信息删除##end##
+message activity_delete_s2c {
+    repeated uint32                     activity_ids = 1;            // 活动id列表
+}
+
+// ##begin##领取奖励##end##
+message activity_award_c2s {
+    optional uint32                     activity_id = 1;             // 活动id
+    optional uint32                     term_id = 2;                 // 子项id
+    optional uint32                     times = 3;                   // 领取次数
+}
+// ##begin##领取奖励##end##
+message activity_award_s2c {
+    optional uint32                     activity_id = 1;             // 活动id
+    optional uint32                     term_id = 2;                 // 子项id
+    repeated p_item_public              activity_rewards = 3;        // 活动奖励展示
+}

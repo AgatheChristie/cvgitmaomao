@@ -1,0 +1,40 @@
+import "common.proto";
+// ##model_begin##投票模块##model_end##
+// ##begin##投票信息##end##
+message vote_info_c2s {
+}
+// ##begin##投票信息##end##
+message vote_info_s2c {
+    repeated p_vote_info                vote_infos = 1;                 // 投票信息
+}
+
+// ##begin##发起投票##end##
+message vote_start_c2s {
+	optional uint32                     vote_id = 1;                    // 投票id
+}
+
+// ##begin##发起投票##end##
+message vote_start_s2c {
+    optional uint32                     vote_id = 1;                    // 投票id
+}
+
+// ##begin##投票##end##
+message vote_select_c2s {
+    optional uint32                     only_id = 1;                    // 唯一id
+    optional uint32                     select_id = 2;                  // 选择id
+}
+
+// ##begin##投票##end##
+message vote_select_s2c {
+}
+
+// ##begin##投票信息更新##end##
+message vote_update_s2c {
+    optional p_vote_info                vote_info = 1;                 // 投票信息
+}
+
+// ##begin##投票信息删除##end##
+message vote_delete_s2c {
+    optional uint32                     only_id = 1;                    // 唯一id
+}
+

@@ -1,0 +1,36 @@
+import "common.proto";
+// ##model_begin##网络模块##model_end##
+// ##begin##心跳##end##
+message net_heart_c2s {
+}
+
+// ##begin##心跳##end##
+message net_heart_s2c {
+    optional uint64                      now_ms = 1;                     // 当前时间毫秒
+}
+
+// ##begin##登陆前期信息##end##
+message net_before_c2s {
+}
+
+// ##begin##登陆前期信息##end##
+message net_before_s2c {
+    optional uint32                      open_time = 1;                  // 开服时间
+    optional uint32                      merge_time = 2;                 // 合服时间 0代表没有合服
+}
+
+// ##begin##登陆##end##
+message net_niu_role_login_c2s {
+    optional uint32                      sn = 1;
+    optional uint32                      acc_id = 2;
+    optional string                      acc_name = 3;
+    optional uint32                      ts_tamp = 4;
+    optional string                      ticket = 5;
+}
+
+// ##begin##登陆##end##
+message net_niu_role_login_s2c {
+    optional uint32                      is_success = 1;
+    optional uint32                      now_sec = 2;
+}
+

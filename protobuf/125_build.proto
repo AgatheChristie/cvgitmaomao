@@ -1,0 +1,25 @@
+import "common.proto";
+// ##model_begin##城建模块##model_end##
+// ##begin##城建信息##end##
+message build_info_c2s {
+}
+// ##begin##城建信息##end##
+message build_info_s2c {
+    repeated p_build_info                   build_infos = 1;             // 建筑信息
+}
+
+// ##begin##城建升级##end##
+message build_upgrade_c2s {
+    optional uint32                         group_id = 1;                // 建筑组id
+    optional uint32                         flag = 2;                    // 普通升级-0;立即升级-1;
+    optional uint32                         queue_pos = 3;               // 队列位置
+}
+// ##begin##城建升级##end##
+message build_upgrade_s2c {
+}
+
+
+// ##begin##城建升级更新##end##
+message build_update_upgrade_s2c {
+    repeated p_build_info                   build_infos = 1;             // 建筑信息
+}

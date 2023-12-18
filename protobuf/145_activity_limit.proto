@@ -1,0 +1,42 @@
+import "common.proto";
+// ##model_begin##个人限时活动模块##model_end##
+// ##begin##个人限时活动信息##end##
+message activity_limit_info_c2s {
+}
+// ##begin##个人限时活动信息##end##
+message activity_limit_info_s2c {
+    repeated p_activity_limit           activity_infos = 1;            // 限时活动组信息
+}
+
+// ##begin##购买活动礼包##end##
+message activity_limit_buy_c2s {
+    optional uint32                     activity_id = 1;                // 活动id
+    optional uint32                     term_id = 2;                    // 子项id
+}
+// ##begin##购买活动礼包##end##
+message activity_limit_buy_s2c {
+}
+
+// ##begin##个人限时活动增加##end##
+message activity_limit_add_s2c {
+    repeated p_activity_limit           activity_infos = 1;           // 限时活动组信息
+}
+
+// ##begin##个人限时活动删除##end##
+message activity_limit_del_s2c {
+    repeated uint32                     del_activity_ids = 1;         // 活动id
+}
+
+// ##begin##个人限时活动更新##end##
+message activity_limit_update_s2c {
+    repeated p_activity_limit           activity_infos = 1;           // 限时活动组信息
+}
+
+// ##begin##领取活动礼包##end##
+message activity_limit_receive_c2s {
+    optional uint32                     activity_id = 1;                // 活动id
+    optional uint32                     term_id = 2;                    // 子项id
+}
+// ##begin##领取活动礼包##end##
+message activity_limit_receive_s2c {
+}

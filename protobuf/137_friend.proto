@@ -1,0 +1,80 @@
+import "common.proto";
+// ##model_begin##好友模块##model_end##
+// ##begin##好友信息##end##
+message friend_info_c2s {
+	optional uint32                   type = 1;                  // 类型
+}
+// ##begin##好友信息##end##
+message friend_info_s2c {
+	optional uint32                   type = 1;                  // 类型
+	repeated p_friend_info            friend_infos = 2;          // 好友信息
+}
+
+// ##begin##删除好友##end##
+message friend_abandon_c2s {
+	optional uint32                   type = 1;                  // 类型 1.好友列表 2.黑名单列表 3.收到申请列表 4.发送申请列表
+	repeated uint32                   abandon_ids = 2;           // 删除id列表
+}
+// ##begin##删除好友##end##
+message friend_abandon_s2c {
+}
+
+// ##begin##好友信息删除##end##
+message friend_delete_s2c {
+	optional uint32                   type = 1;                  // 类型 1.好友列表 2.黑名单列表 3.收到申请列表 4.发送申请列表
+	repeated uint32                   friend_ids = 2;            // 好友id列表
+}
+
+// ##begin##好友信息查找##end##
+message friend_search_c2s {
+	optional string                   search_name = 1;           // 搜索玩家名
+}
+// ##begin##好友信息查找##end##
+message friend_search_s2c {
+	repeated p_friend_info            friend_infos = 1;          // 好友信息
+}
+
+// ##begin##同意好友申请##end##
+message friend_agree_apply_c2s {
+	repeated uint32                   agree_ids = 1;             // 同意id列表
+}
+// ##begin##同意好友申请##end##
+message friend_agree_apply_s2c {
+}
+
+// ##begin##拒绝好友申请##end##
+message friend_reject_apply_c2s {
+	repeated uint32                   reject_ids = 1;            // 拒绝id列表
+}
+// ##begin##拒绝好友申请##end##
+message friend_reject_apply_s2c {
+}
+
+// ##begin##拉黑好友##end##
+message friend_black_c2s {
+	repeated uint32                   black_ids = 1;             // 黑名单id列表
+}
+// ##begin##拉黑好友##end##
+message friend_black_s2c {
+}
+
+// ##begin##申请好友##end##
+message friend_apply_c2s {
+	repeated uint32                   apply_ids = 1;             // 好友id列表
+}
+// ##begin##申请好友##end##
+message friend_apply_s2c {
+}
+
+// ##begin##更新好友状态##end##
+message friend_update_status_s2c {
+	optional uint32                   role_id = 1;               // 变更者id
+	optional uint32                   status = 2;                // 状态
+	optional uint32                   logout_sec = 3;            // 离线时间戳
+}
+
+// ##begin##好友信息增加##end##
+message friend_add_s2c {
+	optional uint32                   type = 1;                  // 类型 1.好友列表 2.黑名单列表 3.收到申请列表 4.发送申请列表
+	repeated p_friend_info            friend_infos = 2;          // 好友信息
+}

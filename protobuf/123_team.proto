@@ -1,0 +1,116 @@
+import "common.proto";
+// ##model_begin##队伍模块##model_end##
+// ##begin##队伍信息##end##
+message team_info_c2s {
+}
+// ##begin##队伍信息##end##
+message team_info_s2c {
+    repeated p_team_info              teams = 1;                 // 队伍信息
+}
+
+// ##begin##队伍更新##end##
+message team_update_s2c {
+    repeated p_team_info              teams = 1;                 // 队伍信息
+}
+
+// ##begin##队伍状态更新##end##
+message team_status_update_s2c {
+    repeated p_team_status            status_infos = 1;          // 队伍状态信息
+}
+
+// ##begin##队伍速度更新##end##
+message team_speed_update_s2c {
+    repeated p_team_speed             team_speeds = 1;           // 队伍速度信息
+}
+
+// ##begin##队伍删除##end##
+message team_delete_s2c {
+    repeated uint32                   team_ids = 1;              // 队伍id列表
+}
+
+// ##begin##队伍位置更新##end##
+message team_pos_update_s2c {
+    optional uint32                   team_id = 1;               // 队伍id
+    repeated p_team_actor             team_actors = 2;           // 队伍武将信息
+    optional uint32                   ms_actor_id = 3;           // 主将技武将id
+}
+
+// ##begin##队伍位置删除##end##
+message team_pos_delete_s2c {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   team_pos = 2;              // 队伍位置
+    optional uint32                   ms_actor_id = 3;           // 主将技武将id
+}
+
+// ##begin##上阵武将##end##
+message team_actor_up_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   team_pos = 2;              // 队伍位置
+    optional uint32                   only_id = 3;               // 武将唯一ID
+}
+// ##begin##上阵武将##end##
+message team_actor_up_s2c{
+}
+
+// ##begin##下阵武将##end##
+message team_actor_down_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   team_pos = 2;              // 队伍位置
+}
+// ##begin##下阵武将##end##
+message team_actor_down_s2c{
+}
+
+// ##begin##替换武将##end##
+message team_actor_replace_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   team_pos = 2;              // 队伍位置
+    optional uint32                   only_id = 3;               // 新的武将唯一ID
+    optional uint32                   old_only_id = 4;           // 旧的武将唯一ID
+}
+// ##begin##替换武将##end##
+message team_actor_replace_s2c{
+}
+
+// ##begin##互换武将##end##
+message team_actor_exchange_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   team_pos = 2;              // 队伍位置
+    optional uint32                   exchange_team_id = 3;      // 换的队伍id
+    optional uint32                   exchange_pos = 4;          // 换的队伍位置
+}
+// ##begin##互换武将##end##
+message team_actor_exchange_s2c{
+}
+
+
+// ##begin##队伍进入恢复状态##end##
+message team_restore_status_update_s2c{
+    repeated p_team_restore_status    restore_statuss = 1;       // 队伍恢复
+}
+
+// ##begin##队伍退出恢复状态##end##
+message team_restore_status_delete_s2c{
+    repeated p_team_restore_status    restore_statuss = 1;       // 队伍恢复
+}
+
+// ##begin##队伍士气更新##end##
+message team_update_shiqi_s2c {
+    repeated p_team_shiqi             team_shiqis = 1;           // 队伍士气
+}
+
+// ##begin##主将技武将替换##end##
+message team_major_skill_actor_replace_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   actor_id = 3;              // 新的武将技武将id
+}
+// ##begin##主将技武将替换##end##
+message team_major_skill_actor_replace_s2c{
+}
+
+
+
+
+
+
+

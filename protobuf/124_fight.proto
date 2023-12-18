@@ -1,0 +1,29 @@
+import "common.proto";
+// ##model_begin##战斗##model_end##
+// ##begin##心跳##end##
+message fight_net_heart_c2s {
+}
+// ##begin##心跳##end##
+message fight_net_heart_s2c {
+}
+
+// ##begin##单场战斗操作##end##
+message fight_single_fight_operation_c2s {
+    optional string                      battle_id = 1;                     // 战役唯一标识
+    repeated p_fight_self                fight_selfs = 2;                   // 自定义信息
+    optional uint32                      fight_times = 3;                   // 第几次战斗
+    optional uint32                      is_skip_fight = 4;                 // 是否跳过战斗 0.否 1.是
+    repeated p_hand_info                 hand_infos = 5;                    // 手操信息
+    optional uint32                      total_frame = 6;                   // 战斗总帧数
+    optional uint32                      start_sec = 7;                     // 战役开始时间(随机数种子)
+}
+// ##begin##单场战斗操作##end##
+message fight_single_fight_operation_s2c {
+    optional string                      battle_id = 1;                     // 战役唯一标识
+}
+
+// ##begin##战斗战报统计##end##
+message fight_report_summary_s2c{
+    optional string                      battle_id = 1;                     // 战役唯一标识
+    repeated p_report_summary            report_summarys = 2;               // 战报统计
+}

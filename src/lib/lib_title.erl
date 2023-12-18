@@ -695,7 +695,7 @@ db_insert_server_titles(Table, Fields, Values) ->
 	db_agent:db_insert_server_titles(Table, Fields, Values).
 
 change_db_server_titles(TNum, NIds) ->
-	?DEBUG("TNum:~p NIds:~p end",[TNum, NIds]),
+	%% ?DEBUG("TNum:~p NIds:~p end",[TNum, NIds]),
 	%%删除旧数据
 	WhereList = [{type, TNum}],
 	db_delete_server_titles(server_titles, WhereList),

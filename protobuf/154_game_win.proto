@@ -1,0 +1,18 @@
+import "common.proto";
+// ##model_begin##游戏结算发奖模块##model_end##
+// ##begin##游戏结算发奖信息##end##
+message game_win_info_c2s {
+}
+// ##begin##游戏结算发奖信息##end##
+message game_win_info_s2c {
+	optional uint32                   game_win_type = 1;        // 玩家国家达成的目标类型
+	repeated uint32                   award_ids = 2;            // 玩家获得的奖励列表
+}
+
+// ##begin##游戏结算目标更新##end##
+message game_win_type_update_s2c {
+	optional uint32                   game_win_type = 1;        // 玩家国家达成的目标类型
+	repeated uint32                   award_ids = 2;            // 玩家获得的奖励列表
+}
+
+

@@ -1,0 +1,21 @@
+import "common.proto";
+// ##model_begin##特权信息##model_end##
+// ##begin##特权信息##end##
+message privilege_info_c2s {
+
+}
+// ##begin##特权信息##end##
+message privilege_info_s2c {
+  repeated p_privilege_info            privilege_infos = 1;     // 特权信息
+}
+
+
+// ##begin##特权信息增加##end##
+message privilege_add_s2c {
+  repeated p_privilege_info            privilege_infos = 1;     // 特权信息
+}
+
+// ##begin##特权信息删除##end##
+message privilege_del_s2c {
+  repeated uint32                      privilege_ids = 1;       // 特权id
+}

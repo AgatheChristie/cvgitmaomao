@@ -1,0 +1,18 @@
+import "common.proto";
+// ##model_begin##排行榜模块##model_end##
+// ##begin##排行榜信息##end##
+message rank_info_c2s {
+    optional uint32                 rank_type = 1;                      // 榜单类型
+    optional uint32                 page_id = 2;                        // 第几页
+}
+// ##begin##排行榜信息##end##
+message rank_info_s2c {
+    optional uint32                 rank_type = 1;                      // 榜单id
+    repeated p_rank_info            rank_infos = 2;                     // 个人排行榜信息
+    optional uint32                 my_rank_id = 3;                     // 我的排名
+    repeated uint32                 rank_values = 4;                    // 榜单值
+    optional uint32                 page_id = 5;                        // 第几页
+    optional uint32                 total_page = 6;                     // 总页数
+    repeated p_rank_camp_info       rank_camp_infos =7;                 // 国家排行榜信息
+    optional uint32                 award_sec = 8;                      // 发奖时间
+}

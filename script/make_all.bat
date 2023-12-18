@@ -9,5 +9,7 @@ cd ..
 
 erl -make
 
+copy tools\protobuf\protobuf_pb.beam ebin
+
 pause
 

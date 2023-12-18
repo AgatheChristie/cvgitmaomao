@@ -1,0 +1,32 @@
+import "common.proto";
+// ##model_begin##酒馆比武模块##model_end##
+// ##begin##酒馆比武信息##end##
+message tavern_info_c2s {
+
+}
+// ##begin##酒馆比武信息##end##
+message tavern_info_s2c {
+	repeated p_tavern_info                 tavern_infos = 1;            // 关卡信息
+}
+
+// ##begin##酒馆比武开始挑战##end##
+message tavern_start_c2s {
+	optional uint32                        tavern_id = 1;               // 酒馆id
+	optional uint32                        tavern_group_id = 2;         // 酒馆武将组id
+	optional uint32                        tavern_actor_id = 3;         // 酒馆武将id
+	optional uint32                        star = 4;                    // 星级
+	optional uint32                        actor_only_id = 5;           // 发起挑战的武将onlyid
+}
+// ##begin##酒馆比武开始挑战##end##
+message tavern_start_s2c {
+}
+
+
+// ##begin##酒馆比武组挑战##end##
+message tavern_actor_update_s2c {
+	optional uint32                        tavern_id = 1;               // 酒馆id
+	optional uint32                        tavern_group_id = 2;         // 酒馆武将组id
+	optional uint32                        tavern_actor_id = 3;         // 酒馆武将id
+	optional uint32                        star = 4;                    // 当前已通关星级
+}
+

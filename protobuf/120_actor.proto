@@ -1,0 +1,409 @@
+import "common.proto";
+// ##model_begin##武将模块##model_end##
+// ##begin##武将信息##end##
+message actor_info_c2s {
+}
+// ##begin##武将信息##end##
+message actor_info_s2c {
+    repeated p_actor_info              actors = 1;               // 武将信息
+}
+
+// ##begin##更新武将信息##end##
+message actor_update_s2c {
+    repeated p_actor_info              actors = 1;               // 武将信息
+    optional uint32                    source_type = 2;          // 获得来源
+}
+
+// ##begin##更新武将队伍信息##end##
+message actor_team_update_s2c {
+    repeated p_actor_team              team_actors = 1;          // 武将队伍信息
+}
+
+// ##begin##增加武将特殊状态信息##end##
+message actor_add_special_status_s2c {
+    repeated p_add_special_status      asp_statuss = 1;          // 增加武将特殊状态信息
+}
+
+// ##begin##删除武将特殊状态信息##end##
+message actor_del_special_status_s2c {
+    repeated p_del_special_status      dsp_statuss = 1;          // 删除武将特殊状态信息
+}
+
+// ##begin##武将详细信息##end##
+message actor_detail_info_c2s {
+    optional uint32                    only_id = 1;              // 武将唯一id
+}
+// ##begin##武将详细信息##end##
+message actor_detail_info_s2c {
+    repeated p_actor_info              actors = 1;               // 武将信息
+}
+
+// ##begin##更新武将属性点##end##
+message actor_update_point_s2c {
+    repeated p_actor_point             p_actor_points = 1;       // 武将属性点
+}
+
+// ##begin##武将进阶##end##
+message actor_star_c2s {
+    optional uint32                    only_id = 1;              // 需要进阶武将唯一id
+    repeated uint32                    use_only_id = 2;          // 消耗武将唯一id
+}
+// ##begin##武将进阶##end##
+message actor_star_s2c {
+}
+
+// ##begin##武将更新进阶##end##
+message actor_update_star_s2c {
+    repeated p_actor_star               actor_stars = 1;         // 武将进阶
+}
+
+// ##begin##武将洗点##end##
+message actor_reset_point_c2s {
+    optional uint32                    only_id = 1;              // 需要进阶武将唯一id
+}
+// ##begin##武将洗点##end##
+message actor_reset_point_s2c {
+}
+
+// ##begin##删除武将##end##
+message actor_del_s2c {
+    repeated uint32                    only_ids = 1;             // 删除武将唯一id
+}
+
+// ##begin##武将属性点加点##end##
+message actor_attr_add_point_c2s {
+    optional uint32                    only_id = 1;              // 武将唯一id
+    repeated p_attr_point              attr_points = 2;          // 属性加点信息
+}
+
+// ##begin##武将属性点加点##end##
+message actor_attr_add_point_s2c {
+}
+
+// ##begin##武将等级更新##end##
+message actor_update_level_s2c {
+    repeated p_actor_level             level_infos = 1;          // 武将等级信息
+}
+
+// ##begin##武将经验更新##end##
+message actor_update_exp_s2c {
+    repeated p_actor_exp               exp_infos = 1;            // 武将经验信息
+}
+
+// ##begin##武将更新已使用点数##end##
+message actor_update_use_point_s2c {
+    optional uint32                    only_id = 1;              // 武将唯一id
+    optional uint32                    use_point = 2;            // 已使用加点数
+}
+
+// ##begin##使用经验书##end##
+message actor_use_exp_item_c2s {
+    optional uint32                    only_id = 1;               // 武将唯一id
+    repeated p_item_public             use_items = 2;             // 所使用的道具
+}
+
+// ##begin##使用经验书##end##
+message actor_use_exp_item_s2c {
+}
+
+// ##begin##更新武将实力##end##
+message actor_update_value_s2c {
+    repeated p_actor_value             actor_values = 1;          // 武将实力
+}
+
+// ==========================================================================================
+// 技能信息
+//
+// ==========================================================================================
+// ##begin##查看武将技能信息##end##
+message actor_skill_info_c2s {
+    optional uint32                    only_id = 1 ;             // 0所有武将技能信息 1表示单个武将技能信息
+}
+// ##begin##查看武将技能信息##end##
+message actor_skill_info_s2c {
+    repeated p_actor_skill_info        skill_infos = 1;          // 武将技能信息
+}
+
+// ##begin##武将技能激活##end##
+message actor_skill_active_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+}
+// ##begin##武将技能激活##end##
+message actor_skill_active_s2c {
+}
+
+// ##begin##武将普通技能升级##end##
+message actor_skill_level_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+}
+// ##begin##武将普通技能升级##end##
+message actor_skill_level_s2c {
+}
+
+// ##begin##更新武将普通技能##end##
+message actor_update_skill_s2c {
+    repeated p_actor_skill_info        skill_infos = 1;          // 武将技能信息
+}
+
+// ##begin##重置武将普通技能##end##
+message actor_reset_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+}
+// ##begin##重置武将普通技能##end##
+message actor_reset_skill_s2c {
+}
+
+// ##begin##武将穿戴普通技能##end##
+message actor_wear_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+}
+// ##begin##武将穿戴普通技能##end##
+message actor_wear_skill_s2c {
+}
+
+// ##begin##武将脱下普通技能##end##
+message actor_take_off_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+}
+// ##begin##武将穿戴普通技能##end##
+message actor_take_off_skill_s2c {
+}
+
+// ##begin##武将替换普通技能##end##
+message actor_replace_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    skill_id = 2;             // 技能id
+    optional uint32                    replace_skill_id = 3;     // 替换技能id
+}
+// ##begin##武将穿戴普通技能##end##
+message actor_replace_skill_s2c {
+}
+
+// ##begin##查看武将必杀技信息##end##
+message actor_unique_skill_info_c2s {
+    optional uint32                    only_id = 1 ;             // 0所有武将必杀技信息 1表示单个武将必杀技信息
+}
+// ##begin##查看武将必杀技信息##end##
+message actor_unique_skill_info_s2c {
+    repeated p_actor_unique_skill      unique_skill_infos = 1;   // 武将必杀技信息
+
+}
+
+// ##begin##激活武将必杀技##end##
+message actor_activate_unique_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将唯一id
+}
+// ##begin##激活武将必杀技##end##
+message actor_activate_unique_skill_s2c {
+}
+
+// ##begin##学习武将必杀技##end##
+message actor_learn_unique_skill_c2s {
+    optional uint32                    pos = 1;                  // 必杀技位置
+    optional uint32                    only_id = 2;              // 武将唯一id
+    optional uint32                    skill_id = 3;             // 武将必杀技id
+}
+// ##begin##学习武将必杀技##end##
+message actor_learn_unique_skill_s2c {
+}
+
+// ##begin##武将必杀技升级##end##
+message actor_level_unique_skill_c2s {
+    optional uint32                    only_id = 1;               // 武将唯一id
+
+}
+// ##begin##武将必杀技升级##end##
+message actor_level_unique_skill_s2c {
+}
+
+// ##begin##重置武将必杀技##end##
+message actor_reset_unique_skill_c2s {
+    optional uint32                    pos = 1;                  // 必杀技位置
+    optional uint32                    only_id = 2;              // 武将唯一id
+    optional uint32                    skill_id = 3;             // 武将必杀技id
+}
+// ##begin##重置武将必杀技##end##
+message actor_reset_unique_skill_s2c {
+}
+
+// ##begin##复原武将必杀技##end##
+message actor_recover_unique_skill_c2s {
+    optional uint32                    pos = 1;                  // 必杀技位置
+    optional uint32                    only_id = 2;              // 武将唯一id
+    optional uint32                    skill_id = 3;             // 武将必杀技id
+}
+// ##begin##复原武将必杀技##end##
+message actor_recover_unique_skill_s2c {
+}
+
+// ##begin##武将必杀技拓印##end##
+message actor_rub_unique_skill_c2s {
+    optional uint32                    pos = 1;                  // 必杀技位置
+    optional uint32                    only_id = 2 ;             // 武将唯一id
+}
+// ##begin##武将必杀技拓印##end##
+message actor_rub_unique_skill_s2c {
+}
+
+// ##begin##更新武将必杀技##end##
+message actor_update_unique_skill_s2c {
+    repeated p_actor_unique_skill      unique_skills = 1;        // 武将必杀技
+}
+
+// ##begin##查看武将主将技能信息##end##
+message actor_main_skill_info_c2s {
+    optional uint32                    only_id = 1;              // 0所有武将主将技信息 1表示单个武将主将技信息
+}
+// ##begin##查看武将主将技能信息##end##
+message actor_main_skill_info_s2c {
+    repeated p_actor_main_skill        main_skill_infos = 1;     // 武将主将技信息
+}
+
+// ##begin##武将替换主将技##end##
+message actor_replace_main_skill_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    replace_active_id = 2;    // 替换激活id
+}
+// ##begin##武将替换主将技##end##
+message actor_replace_main_skill_s2c {
+}
+
+// ##begin##武将主将技解锁##end##
+message actor_main_skill_unlock_c2s {
+    optional uint32                    only_id = 1;              // 武将id
+    optional uint32                    active_id = 2;            // 解锁激活id
+}
+// ##begin##武将主将技解锁##end##
+message actor_main_skill_unlock_s2c {
+}
+
+// ##begin##更新武将主将技##end##
+message actor_update_main_skill_s2c {
+    repeated p_actor_main_skill        main_skill_infos = 1;     // 武将主将技信息
+}
+
+// ==========================================================================================
+// 委任信息
+//
+// ==========================================================================================
+// ##begin##查看委任信息##end##
+message actor_appoint_info_c2s {
+}
+// ##begin##查看委任信息##end##
+message actor_appoint_info_s2c {
+    repeated p_appoint_info            appoint_infos = 1;         // 委任信息
+}
+
+// ##begin##委任更新##end##
+message actor_appoint_update_s2c {
+    repeated p_appoint_info            appoint_infos = 1;         // 委任信息
+}
+
+// ##begin##委任武将##end##
+message actor_appoint_up_c2s {
+    optional uint32                    appoint_id = 1;            // 委任id
+    optional uint32                    only_id = 2;               // 武将唯一id
+}
+// ##begin##委任武将##end##
+message actor_appoint_up_s2c {
+}
+
+// ##begin##卸任武将##end##
+message actor_appoint_down_c2s {
+    optional uint32                    only_id = 2;               // 武将唯一id
+}
+// ##begin##卸任武将##end##
+message actor_appoint_down_s2c {
+}
+
+// ##begin##替换武将##end##
+message actor_appoint_replace_c2s {
+    optional uint32                    appoint_id = 1;            // 委任id
+    optional uint32                    only_id = 2;               // 武将唯一id
+}
+// ##begin##替换武将##end##
+message actor_appoint_replace_s2c {
+}
+
+// ==========================================================================================
+// 武将属性信息
+//
+// ==========================================================================================
+// ##begin##查看武将属性信息##end##
+message actor_detail_attr_c2s {
+    optional uint32                    only_id = 1;               // 武将唯一id
+}
+// ##begin##查看武将属性信息##end##
+message actor_detail_attr_s2c {
+    optional p_actor_attr              actor_attrs = 1;           // 特定武将属性信息
+}
+
+// ##begin##属性变动##end##
+message actor_update_attr_s2c {
+    repeated p_actor_attr              actor_attrs = 1;           // 武将属性信息
+}
+
+// ##begin##当前属性变动##end##
+message actor_update_now_attr_s2c {
+    repeated p_actor_attr              actor_now_attrs = 1;       // 武将当前属性变动
+}
+// ==========================================================================================
+// 募兵相关
+//
+// ==========================================================================================
+// ##begin##点击补兵##end##
+message actor_bubing_c2s {
+    repeated p_actor_bubing            actor_bubings = 1;         // 武将补兵
+}
+// ##begin##点击补兵##end##
+message actor_bubing_s2c {
+}
+
+// ##begin##武将转化##end##
+message actor_zhuanhua_c2s {
+    repeated uint32                     actor_only_ids = 1;       // 武将唯一id
+    optional uint32                     zhuanhua_cost_id = 2;     // 1-铜币转化 2-金珠转化
+    repeated p_turn_item                p_turn_items = 3;         // 转化道具使用
+}
+// ##begin##武将转化##end##
+message actor_zhuanhua_s2c {
+    optional uint32                     zhuanhua_actor_num = 1;   // 已转化的武将数量
+    optional uint32                     zhanhun_num = 2;          // 战魂数量
+    repeated p_item_public              get_items = 3;            // 获得道具
+}
+
+// ##begin##更新武将副本队伍信息##end##
+message actor_fb_team_update_s2c {
+    repeated p_fb_team_info             fb_team_actors = 1;       // 武将队伍信息
+}
+
+// ==========================================================================================
+// 武将碎片召唤
+//
+// ==========================================================================================
+// ##begin##点击召唤##end##
+message actor_call_info_c2s {
+    optional uint32                     item_id = 1;              // 武将碎片道具id
+    optional uint32                     item_num = 2;             // 道具数量
+}
+// ##begin##点击召唤##end##
+message actor_call_info_s2c {
+    repeated p_item_public              get_items = 3;            // 获得道具
+}
+
+// ==========================================================================================
+// 武将激活
+//
+// ==========================================================================================
+// ##begin##武将激活##end##
+message actor_activate_c2s {
+    optional uint32                     actor_id = 1;             // 武将id
+}
+// ##begin##武将激活##end##
+message actor_activate_s2c {
+}

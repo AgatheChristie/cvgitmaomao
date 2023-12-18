@@ -308,24 +308,24 @@ scene_broadcast(Type, Param) ->
 			1 ->%%当该次刷新的怪物全部被击杀完毕时将播报：当前 xxxxx（怪物名用白色字体） 已全部清除，60秒后下一波魔物即将入侵！
 				{MonId} = Param,
 				MonName = get_mon_name(MonId),
-				io_lib:format("当前<font color='#FFFFFF'>~s</font>已全部清除，大量的财宝被发现！！60秒后下一波魔物即将入侵！", [MonName]);
+				util:format(?T("当前<font color='#FFFFFF'>~s</font>已全部清除，大量的财宝被发现！！60秒后下一波魔物即将入侵！"), [MonName]);
 			2 ->%%当刷新怪物时，播报：xxxxx（怪物名用白色字体）已浸入远古大陆，请前往剿杀！
 				{MonId} = Param,
 				MonName = get_mon_name(MonId),
-				io_lib:format("<font color='#FFFFFF'>~s</font>已侵入远古大陆，请前往剿杀！", [MonName]);
+				util:format(?T("<font color='#FFFFFF'>~s</font>已侵入远古大陆，请前往剿杀！"), [MonName]);
 			3 ->%%路西法死亡时喊话及屏幕显示：我居然输了。。。不过别高兴得太早，冥王会将你们通通杀掉的。。。
 				spawn(fun()->timer:apply_after(10000, lib_warfare, scene_broadcast,[4, undefined]) end),%%5秒之后，做一次场景的广播
-				"我居然输了...不过别高兴得太早,冥王会将你们通通杀掉的...";
+				util:format(?T("我居然输了...不过别高兴得太早,冥王会将你们通通杀掉的..."));
 			4 ->%%路西法死亡后10秒显示播报：冥王将在50秒后出现，请做好准备！
-				"冥王将在50秒后出现,请做好准备！";
+				util:format(?T("冥王将在50秒后出现,请做好准备！"));
 			5 ->%%哈迪斯出现5秒后喊话及屏幕显示：蝼蚁也敢忤逆冥王之威！你们这是自寻死路！
-				"蝼蚁也敢忤逆冥王之威!你们这是自寻死路！";
+				util:format(?T("蝼蚁也敢忤逆冥王之威!你们这是自寻死路！"));
 			6 ->%%哈迪斯死亡时喊话及屏幕显示：我是不会放过你们这群蝼蚁的。。。等着我怒火再次降临吧。。。
-				"我是不会放过你们这群蝼蚁的...等着我怒火再次降临吧...";
+				util:format(?T("我是不会放过你们这群蝼蚁的...等着我怒火再次降临吧..."));
 			10 ->%%路西法出现5秒后，头顶冒泡显示，并在屏幕中间显示（字体大小最好调整为1-2行可以显示完），显示5秒（下面无特殊说明，则显示时间默认为5秒）：卑微的爬虫们，我，魔神路西法，必将尔等斩尽杀绝！
-				"卑微的爬虫们，我，魔神路西法，必将尔等斩尽杀绝！";
+				util:format(?T("卑微的爬虫们，我，魔神路西法，必将尔等斩尽杀绝！"));
 			_ ->
-				""
+				util:format(?T("嘻嘻啊！"))
 		end,
 	{ok, BinData39100} = pt_39:write(39100, [Type, Content]),
 	spawn(fun() -> mod_scene_agent:send_to_scene(?WARFARE_SCENE_ID, BinData39100) end).

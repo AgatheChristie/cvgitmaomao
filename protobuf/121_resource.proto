@@ -1,0 +1,45 @@
+import "common.proto";
+// ##model_begin##资源模块##model_end##
+// ##begin##资源信息##end##
+message resource_info_c2s {
+}
+// ##begin##资源信息##end##
+message resource_info_s2c {
+    optional uint32                      capacity = 1;              // 仓库容量
+    repeated p_output_info               output_infos = 2;          // 产量信息
+}
+
+// ##begin##资源五维图信息##end##
+message resource_wuweitu_info_c2s {
+}
+// ##begin##资源五维图信息##end##
+message resource_wuweitu_info_s2c {
+    repeated p_wuweitu_info               wuweitu_infos = 1;        // 产量信息
+}
+
+// ##begin##资源地信息##end##
+message resource_land_c2s {
+}
+// ##begin##资源地信息##end##
+message resource_land_s2c {
+    optional p_resource_land             resource_land = 1;         // 资源地信息
+}
+
+// ##begin##资源地分配役工##end##
+message resource_distribute_farmer_c2s {
+    repeated p_distribute_farmer         distribute_farmers = 1;    // 分配役工列表
+}
+// ##begin##资源地分配役工##end##
+message resource_distribute_farmer_s2c {
+    optional p_resource_land             resource_land = 1;         // 资源地信息
+}
+
+// ##begin##更新资源地信息##end##
+message resource_land_update_s2c {
+    optional p_resource_land             resource_land = 1;         // 资源地信息
+}
+
+// ##begin##更新产量信息##end##
+message resource_output_update_s2c {
+    repeated p_output_info               output_infos = 1;          // 产量信息
+}

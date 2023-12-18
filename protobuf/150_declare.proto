@@ -1,0 +1,40 @@
+import "common.proto";
+// ##model_begin##宣战模块##model_end##
+// ##begin##宣战信息##end##
+message declare_info_c2s {
+}
+// ##begin##宣战信息##end##
+message declare_info_s2c {
+	optional uint32                   declare_status = 1;       // 宣战状态
+	optional uint32                   declare_sec = 2;          // 状态时间点
+	repeated p_declare_city           declare_citys = 3;        // 宣战城池信息
+}
+
+// ##begin##宣战状态更新##end##
+message declare_status_update_s2c {
+	optional uint32                   declare_status = 1;       // 宣战状态
+	optional uint32                   declare_sec = 2;          // 状态时间点
+}
+
+// ##begin##宣战信息更新##end##
+message declare_city_update_s2c {
+	repeated p_declare_city           declare_citys = 1;        // 宣战城池信息
+}
+
+// ##begin##选择城池##end##
+message declare_select_c2s {
+    optional uint32                   city_id = 1;              // 城池id
+}
+// ##begin##选择城池##end##
+message declare_select_s2c {
+}
+
+// ##begin##宣战杀敌榜##end##
+message declare_kill_rank_c2s {
+}
+// ##begin##宣战杀敌榜##end##
+message declare_kill_rank_s2c {
+    repeated p_declare_kill_rank      kill_ranks = 1;           // 宣战杀敌榜
+    optional uint32                   kill_num = 2;             // 自身击杀数
+}
+

@@ -1,0 +1,672 @@
+import "common.proto";
+// ##model_begin##国家模块##model_end##
+// ##begin##查看国家总览界面##end##
+message camp_overview_info_c2s {
+}
+// ##begin##查看国家总览界面##end##
+message camp_overview_info_s2c {
+	optional uint32                     camp_id = 1;                    // 国家id
+	repeated p_overview_role            overview_roles = 2;             // 国家总览(国主、相国)
+	optional uint32                     plot_num = 3;                   // 领土数量
+	optional uint32                     camp_power = 4;                 // 国家实力
+	optional uint32                     camp_level = 5;                 // 国家等级
+	optional uint32                     camp_exp = 6;                   // 国家经验
+	optional uint32                     total_science_point = 7;        // 总科技点
+	optional uint32                     week_science_point = 8;         // 本周科技点
+	optional uint32                     extra_science_point = 9;        // 额外科技点
+	optional string                     notice_board = 10;              // 国家公告内容
+	optional uint32                     notice_sec = 11;                // 国家公告修改时间
+	optional uint32                     status_end_sec = 12;            // 国家状态结束时间
+	optional uint32                     camp_status = 13;               // 国家状态 0:正常 1:灭国中 2:已灭国
+}
+// ##begin##国家成员列表##end##
+message camp_member_info_c2s {
+	optional uint32                     page = 1;                       // 页数
+}
+// ##begin##国家成员列表##end##
+message camp_member_info_s2c {
+	optional uint32                     camp_id = 1;                    // 国家id
+	repeated p_camp_role                camp_roles = 2;                 // 国家成员
+	optional uint32                     current_page = 3;               // 当前页数
+	optional uint32                     total_page = 4;                 // 总页数
+	optional p_camp_role                camp_role_self = 5;             // 请求者信息
+}
+
+// ##begin##国主竞逐信息##end##
+message camp_king_election_info_c2s {
+}
+// ##begin##国主竞逐信息##end##
+message camp_king_election_info_s2c {
+	optional uint32                     camp_id = 1;                    // 国家id
+	repeated p_camp_role                camp_roles = 2;                 // 国家成员
+	optional p_camp_role                camp_role_self = 5;             // 请求者信息
+}
+
+// ##begin##开服产生国主倒计时##end##
+message camp_leader_born_sec_c2s {
+
+}
+// ##begin##开服产生国主倒计时##end##
+message camp_leader_born_sec_s2c {
+	optional uint32                     leader_born_sec = 1;            // 总页数
+}
+
+// ##begin##国家官员信息##end##
+message camp_post_info_c2s {
+}
+// ##begin##国家官员信息##end##
+message camp_post_info_s2c {
+	optional uint32                     camp_id = 1;                    // 国家id
+	repeated p_post_role                post_roles = 2;                 // 国家成员
+	optional uint32                     demise_sec = 3;                 // 禅让结束时间
+	optional uint32                     now_vote_id = 4;                // 弹劾投票中(0没有在投票，其他值在投票)
+	optional uint32                     demise_id = 5;                  // 禅让者id
+	optional string                     demise_name = 6;                // 禅让者名字
+	optional uint32                     impeach_sec = 7;                // 弹劾冷却时间戳
+	optional uint32                     leader_prev_rank_id = 8;        // 国主上周贡献排名(国主没产生前为0)
+	repeated uint32                     apply_camp_posts = 9;           // 已申请国家官员列表
+}
+
+// ##begin##国家禅让任命列表##end##
+message camp_operate_lists_c2s {
+	optional uint32                     deal_type = 1;                  // 处理类型(1禅让列表 2任命列表)
+	optional uint32                     post = 2;                       // 任命的具体职位
+}
+// ##begin##国家禅让任命列表##end##
+message camp_operate_lists_s2c {
+	repeated p_camp_member              camp_members = 1;               // 任命列表
+}
+
+// ##begin##关闭国家信息界面##end##
+message camp_close_info_c2s {
+}
+// ##begin##关闭国家信息界面##end##
+message camp_close_info_s2c {
+}
+
+// ##begin##打开国家信息界面##end##
+message camp_open_info_c2s {
+}
+// ##begin##打开国家信息界面##end##
+message camp_open_info_s2c {
+}
+
+// ##begin##查看国家今日排行界面##end##
+message camp_today_rank_info_c2s {
+}
+// ##begin##查看国家今日排行界面##end##
+message camp_today_rank_info_s2c {
+	repeated p_today_member             today_members = 1;              // 今日排行榜玩家信息
+	optional uint32                     self_today_rank_id = 2;         // 我的排名
+	optional uint32                     self_today_devote = 3;          // 我的今日贡献
+}
+
+
+// ==========================================================================================
+// 国家官员操作
+//
+// ==========================================================================================
+// ##begin##任命操作##end##
+message camp_appoint_c2s {
+	optional uint32                     appoint_id = 1;                 // 任命角色id
+	optional uint32                     post = 2;                       // 职位
+}
+// ##begin##任命操作##end##
+message camp_appoint_s2c {
+}
+
+// ##begin##罢免操作##end##
+message camp_remove_c2s {
+	optional uint32                     appoint_id = 1;                 // 罢免角色id
+}
+// ##begin##罢免操作##end##
+message camp_remove_s2c {
+}
+
+// ##begin##修改公告##end##
+message camp_modify_notice_c2s {
+	optional string                     notice_board = 1;               // 公告内容
+}
+// ##begin##修改公告##end##
+message camp_modify_notice_s2c {
+}
+
+// ##begin##辞职操作##end##
+message camp_resign_c2s {
+}
+// ##begin##辞职操作##end##
+message camp_resign_s2c {
+}
+
+// ##begin##发布法令##end##
+message camp_release_token_c2s {
+	optional uint32                     token_id = 1;                   // 法令id
+}
+// ##begin##发布法令##end##
+message camp_release_token_s2c {
+}
+
+// ##begin##禁言操作##end##
+message camp_unspeak_c2s {
+	optional uint32                     role_id = 1;                    // 玩家id
+	optional uint32                     select_id = 2;                  // 禁言选项id
+}
+// ##begin##禁言操作##end##
+message camp_unspeak_s2c {
+}
+
+// ##begin##解禁言操作##end##
+message camp_cancel_unspeak_c2s {
+	optional uint32                     role_id = 1;                    // 玩家id
+}
+// ##begin##解禁言操作##end##
+message camp_cancel_unspeak_s2c {
+}
+
+// ##begin##弹劾操作##end##
+message camp_impeach_c2s {
+	optional string                     impeach_reason = 1;             // 弹劾理由
+}
+// ##begin##弹劾操作##end##
+message camp_impeach_s2c {
+}
+
+// ##begin##国家君主禅让##end##
+message camp_demise_c2s {
+	optional uint32                     demise_id = 1;                  // 操作对象角色id
+}
+// ##begin##国家君主禅让##end##
+message camp_demise_s2c {
+}
+
+// ##begin##取消禅让##end##
+message camp_quit_demise_c2s {
+}
+// ##begin##取消禅让##end##
+message camp_quit_demise_s2c {
+}
+
+// ##begin##官员申请信息##end##
+message camp_post_apply_info_c2s {
+}
+// ##begin##官员申请信息##end##
+message camp_post_apply_info_s2c {
+	repeated p_post_apply_info          post_apply_infos = 1;           // 官员申请信息
+}
+
+// ##begin##更新官员申请信息##end##
+message camp_post_apply_update_s2c {
+	repeated p_post_apply_info          post_apply_infos = 1;           // 官员申请信息
+}
+
+// ##begin##删除官员申请信息##end##
+message camp_post_apply_delete_s2c {
+	repeated p_post_apply_info          post_apply_infos = 1;           // 官员申请信息
+}
+
+// ##begin##申请官员##end##
+message camp_post_apply_c2s {
+	optional uint32                     post = 1;                       // 国家id
+}
+// ##begin##申请官员##end##
+message camp_post_apply_s2c {
+}
+
+// ##begin##操作申请列表##end##
+message camp_deal_post_apply_c2s {
+	optional uint32                     type = 1;                       // 处理类型(1:同意，2:拒绝)
+	optional uint32                     role_id = 2;                    // 角色id
+	optional uint32                     post = 3;                       // 官职
+}
+// ##begin##操作申请列表##end##
+message camp_deal_post_apply_s2c{
+}
+
+// ##begin##国家官职全部拒绝##end##
+message camp_post_all_refuse_c2s {
+}
+// ##begin##国家官职全部拒绝##end##
+message camp_post_all_refuse_s2c{
+}
+
+// ==========================================================================================
+// 国家官员更新
+//
+// ==========================================================================================
+// ##begin##更新职位列表##end##
+message camp_post_update_s2c {
+	repeated p_post_role                post_roles = 1;                 // 成员职位更新列表
+}
+
+// ##begin##更新公告##end##
+message camp_update_notice_s2c {
+	optional string                     notice_board = 1;               // 公告内容
+}
+
+// ##begin##更新公告修改时间戳##end##
+message camp_update_notice_sec_s2c {
+	optional uint32                     notice_sec = 1;                 // 公告修改时间戳
+}
+
+// ##begin##更新禅让信息##end##
+message camp_update_demise_info_s2c {
+	optional uint32                     finish_sec = 1;                 // 禅让结束时间戳
+	optional uint32                     demise_id = 7;                  // 禅让者id
+	optional string                     demise_name = 3;                // 禅让者名字
+}
+
+// ##begin##更新禁言时间时间戳##end##
+message camp_update_unspeak_s2c {
+	optional uint32                     camp_unspeak_sec = 1;           // 国家禁言时间戳
+}
+
+// ##begin##更新弹劾冷却##end##
+message camp_update_impeach_vote_s2c {
+	optional uint32                     now_vote_id = 1;                // 弹劾投票中(0没有在投票，其他值在投票)
+	optional uint32                     impeach_sec = 2;                // 弹劾冷却时间
+}
+
+// ==========================================================================================
+// 国家国库相关
+//
+// ==========================================================================================
+// ##begin##国家国库信息##end##
+message camp_capacity_info_c2s {
+}
+
+// ##begin##国家国库信息##end##
+message camp_capacity_info_s2c {
+	optional uint32                     donate_num = 1;                 // 今日个人捐献数量
+	optional uint32                     day_donate_limit = 2;           // 每日个人捐献上限
+	repeated p_camp_resource            camp_resources = 3;             // 国家资源
+	repeated p_city_output_info         city_output_infos = 4;          // 城池对国库的加成信息
+	repeated p_camp_capacity            camp_capacitys = 5;             // 国家仓库
+}
+
+// ##begin##捐献##end##
+message camp_donate_c2s {
+	repeated p_camp_resource            resources = 1;                  // 玩家资源
+}
+// ##begin##捐献##end##
+message camp_donate_s2c {
+	optional uint32                     donate_num = 1;                 // 今日个人捐献数量
+}
+
+// ##begin##国家日志信息##end##
+message camp_log_c2s {
+	optional uint32                     page = 1;                       // 页数
+}
+// ##begin##国家日志信息##end##
+message camp_log_s2c {
+	optional uint32                     page = 1;                       // 页数
+	optional uint32                     total_page = 2;                 // 总页数
+	repeated p_camp_log                 camp_log = 3;                   // 国家日志
+}
+
+// ##begin##国家资源日志变动##end##
+message camp_log_add_s2c {
+	repeated p_camp_log                  camp_log = 1;                  // 国家日志增加
+}
+
+// ##begin##更新国库信息##end##
+message camp_capacity_update_s2c {
+	repeated p_camp_capacity            camp_capacitys = 1;             // 国家仓库
+}
+
+// ==========================================================================================
+// 国家福利国家宝箱相关
+//
+// ==========================================================================================
+// ##begin##国家福利信息##end##
+message camp_welfare_info_c2s {
+}
+
+// ##begin##国家福利信息##end##
+message camp_welfare_info_s2c {
+	optional uint32                     treasure_exp = 1;               // 宝藏经验
+	repeated p_welfare_box_info         welfare_box_infos = 2;          // 福利宝箱信息
+	repeated p_welfare_treasure_info    treasure_infos = 3;             // 福利宝藏信息
+	optional uint32                     day_treasure_times = 4;         // 今日获得的宝藏次数
+	repeated p_welfare_box_get          welfare_box_gets = 5;           // 今日获取宝箱数量
+}
+
+// ##begin##国家等级经验更新##end##
+message camp_level_exp_update_s2c {
+	optional uint32                     camp_level = 1;                  // 国家等级
+	optional uint32                     camp_exp = 2;                    // 国家经验
+}
+
+// ##begin##国家科技点更新##end##
+message camp_science_point_update_s2c {
+	optional uint32                     total_science_point = 1;        // 总科技点
+	optional uint32                     week_science_point = 2;         // 本周科技点
+	optional uint32                     extra_science_point = 3;        // 额外科技点
+}
+
+// ##begin##增加宝箱##end##
+message camp_welfare_box_add_s2c {
+	repeated p_welfare_box_info         box_infos = 1;                  // 宝箱信息
+}
+
+// ##begin##删除宝箱##end##
+message camp_welfare_box_delete_s2c {
+	repeated uint32                     box_only_ids = 1;               // 宝箱onlyid列表
+}
+
+
+// ##begin##宝箱领奖##end##
+message camp_welfare_box_award_c2s {
+	optional uint32                     type = 1;                       // 宝箱类型 0_普通 1_稀有
+	repeated uint32                     box_only_ids = 2;               // 宝箱onlyid列表
+}
+// ##begin##宝箱领奖##end##
+message camp_welfare_box_award_s2c {
+	repeated p_welfare_box_info         welfare_box_infos = 1;          // 福利宝箱信息
+	repeated p_item_public              awards = 2;                     // 奖励展示信息
+}
+
+// ##begin##更新宝箱获取数量##end##
+message camp_welfare_box_get_update_s2c {
+	repeated p_welfare_box_get          box_gets = 1;                   // 获取宝箱数量
+}
+
+// ==========================================================================================
+// 国家福利国家宝藏相关
+//
+// ==========================================================================================
+// ##begin##增加宝藏##end##
+message camp_welfare_treasure_add_s2c {
+	repeated p_welfare_treasure_info    treasure_infos = 1;             // 福利宝藏信息
+}
+
+// ##begin##删除宝藏##end##
+message camp_welfare_treasure_delete_s2c {
+	repeated uint32                     treasure_only_ids = 1;          // 宝藏onlyid列表
+}
+
+// ##begin##宝藏领奖##end##
+message camp_welfare_treasure_award_c2s {
+	optional uint32                     treasure_only_id = 1;           // 宝藏onlyid
+}
+// ##begin##宝藏领奖##end##
+message camp_welfare_treasure_award_s2c {
+	optional uint32                     treasure_only_id = 1;           // 宝藏onlyid
+	repeated p_item_public              awards = 2;                     // 奖励展示信息
+}
+
+// ##begin##国家宝藏经验更新##end##
+message camp_treasure_exp_update_s2c {
+	optional uint32                     day_treasure_times = 1;         // 今日获得的宝藏次数
+	optional uint32                     treasure_exp = 2;               // 宝藏经验
+}
+
+// ==========================================================================================
+// 国家科技相关
+//
+// ==========================================================================================
+// ##begin##国家科技信息##end##
+message camp_science_info_c2s {
+}
+
+// ##begin##国家科技信息##end##
+message camp_science_info_s2c {
+    optional uint32                     study_id = 1;                   // 正在研究的科技id
+    optional uint32                     end_sec = 2;                    // 结束时间
+    repeated p_science_term             science_terms = 3;              // 科技子项
+    optional uint32                     support_times = 4;              // 支援次数
+    optional uint32                     next_restore_sec = 5;           // 下次恢复时间
+    optional uint32                     recommend_id = 6;               // 推荐科技id
+}
+
+// ##begin##国家科技支援##end##
+message camp_science_support_c2s {
+    optional uint32                     support_type = 1;               // 支援花费类型 1:普通支援 2:金株支援
+    optional uint32                     science_id = 2;                 // 科技id 
+    optional uint32                     support_aim_type = 3;           // 支援目标类型 0:升级支援 1:国令充能支援
+}
+
+// ##begin##国家科技支援##end##
+message camp_science_support_s2c {
+    optional uint32                     support_times = 1;              // 支援次数
+    optional uint32                     next_restore_sec = 2;           // 下次恢复时间
+    optional uint32                     science_id = 3;                 // 科技id
+    optional uint32                     schedule = 4;                   // 当前进度
+    optional uint32                     multiple = 5;                   // 暴击倍数
+    optional uint32                     support_aim_type = 6;           // 支援目标类型
+}
+
+// ##begin##国家科技研究##end##
+message camp_science_study_c2s {
+    optional uint32                     science_id = 1;               // 科技id
+}
+
+// ##begin##国家科技研究##end##
+message camp_science_study_s2c {
+}
+
+// ##begin##国家科技开始研究##end##
+message camp_science_start_study_s2c {
+    optional uint32                     science_id = 1;                // 正在研究科技id
+    optional uint32                     end_sec = 2;                   // 结束时间
+}
+
+// ##begin##国家科技更新##end##
+message camp_science_update_s2c {
+    optional p_science_term             science_term = 1;               // 科技子项
+}
+
+// ##begin##国家科技支援次数更新##end##
+message camp_science_support_times_update_s2c {
+	optional uint32                     support_times = 1;              // 支援次数
+	optional uint32                     next_restore_sec = 2;           // 下次恢复时间
+}
+
+// ##begin##设置推荐科技id##end##
+message camp_science_recommend_c2s {
+	optional uint32                     science_id = 1;                  // 科技id
+}
+
+// ##begin##设置推荐科技id##end##
+message camp_science_recommend_s2c {
+}
+
+// ##begin##国家法令信息##end##
+message camp_science_token_info_c2s {
+}
+
+// ##begin##国家法令信息##end##
+message camp_science_token_info_s2c {
+	repeated p_science_token            science_tokens = 1;               // 国令子项
+}
+
+// ##begin##国家法令更新##end##
+message camp_science_token_update_s2c {
+    optional p_science_token             science_token = 1;               // 国令子项
+}
+
+// ##begin##国家法令激活##end##
+message camp_science_token_active_c2s {
+	optional uint32                      science_id = 1;                  // 科技id
+	optional uint32                      extra_value = 2;                 // 额外参数
+}
+
+// ##begin##国家法令激活##end##
+message camp_science_token_active_s2c {
+}
+
+// ##begin##国家法令激活广播##end##
+message camp_science_token_active_broadcast_s2c {
+    optional uint32                      science_id = 1;                  // 科技id
+    optional uint32                      science_level = 2;               // 科技等级
+}
+
+// ==========================================================================================
+// 灭国相关
+//
+// ==========================================================================================
+// ##begin##灭国成功##end##
+message camp_death_success_s2c {
+    optional uint32                     camp_id = 1;                      // 国家id
+	optional uint32                     death_camp_id = 2;                // 被灭国家id
+	optional uint32                     is_one_camp = 3;                  // 是否统一
+	optional uint32                     end_sec = 4;                      // 数据处理结束时间
+}
+
+// ##begin##灭国完成##end##
+message camp_death_finish_s2c {
+	optional uint32                     death_camp_id = 1;                // 被灭国家id
+	repeated p_camp_resource            add_resources = 2;                // 缴获的国库资源
+	repeated uint32                     city_ids = 3;                     // 归顺的城池ids
+	optional uint32                     is_one_camp = 4;                  // 是否统一
+}
+
+// ##begin##所有国家状态##end##
+message camp_all_camp_status_c2s {
+}
+
+// ##begin##所有国家状态##end##
+message camp_all_camp_status_s2c {
+	repeated p_camp_status              camp_statuses = 1;                 // 国家状态
+}
+
+// ##begin##国家状态更新##end##
+message camp_status_update_s2c {
+	optional p_camp_status              camp_status = 1;                   // 国家状态
+}
+
+// ##begin##玩家更换国家id##end##
+message camp_update_camp_s2c {
+	optional uint32                     camp_id = 1;                       // 国家id
+}
+
+// ==========================================================================================
+// 国家标记
+//
+// ==========================================================================================
+// ##begin##国家标记信息##end##
+message camp_sign_info_c2s {
+}
+// ##begin##国家标记信息##end##
+message camp_sign_info_s2c {
+	repeated p_camp_sign                camp_signs = 1;                       // 国家标记信息
+}
+
+// ##begin##增加国家标记##end##
+message camp_sign_add_c2s {
+	optional uint32                    city_id = 1;                           // 城池id
+	optional string                    describe = 2;                          // 描述
+}
+
+// ##begin##增加国家标记##end##
+message camp_sign_add_s2c {
+}
+
+// ##begin##删除国家标记##end##
+message camp_sign_del_c2s {
+	optional uint32                     city_id = 1;                          // 城池id
+}
+
+// ##begin##删除国家标记##end##
+message camp_sign_del_s2c {
+}
+
+// ##begin##更新国家标记##end##
+message camp_sign_update_s2c {
+	repeated p_camp_sign                camp_signs = 1;                       // 国家标记信息
+}
+
+// ##begin##删除国家标记##end##
+message camp_sign_delete_s2c {
+	optional uint32                     city_id = 1;                          // 城池id
+}
+
+// ==========================================================================================
+// 集结
+//
+// ==========================================================================================
+// ##begin##集结信息##end##
+message camp_buildup_info_c2s {
+}
+
+// ##begin##集结信息##end##
+message camp_buildup_info_s2c {
+    repeated p_buildup_info             buildup_infos = 1;                   // 集结信息
+}
+
+
+// ##begin##攻城集结##end##
+message camp_attack_buildup_c2s {
+    optional uint32                     buildup_city_id = 1;                 // 集结城池id
+    optional uint32                     aim_city_id = 2;                     // 目标城池id 
+    optional uint32                     buildup_sec = 3;                     // 集结时间
+}
+
+// ##begin##攻城集结##end##
+message camp_attack_buildup_s2c {
+}
+
+// ##begin##攻城集结终止##end##
+message camp_attack_buildup_abort_c2s {
+    optional uint32                     only_id = 1;                         // 唯一id
+}
+
+// ##begin##攻城集结终止##end##
+message camp_attack_buildup_abort_s2c {
+}
+
+// ##begin##集结更新##end##
+message camp_buildup_update_s2c {
+    optional p_buildup_info             buildup_info = 1;                    // 集结信息
+}
+
+// ==========================================================================================
+// 国家法令
+//
+// ==========================================================================================
+// ##begin##国家法令信息##end##
+message camp_faling_info_c2s {
+}
+// ##begin##国家法令信息##end##
+message camp_faling_info_s2c {
+    repeated p_camp_faling              camp_falings = 1;                     // 国家法令信息
+}
+
+// ##begin##发送国家法令##end##
+message camp_faling_send_c2s {
+    optional string                     title = 1;                            // 标题
+    optional string                     content = 2;                          // 内容
+}
+// ##begin##发送国家法令##end##
+message camp_faling_send_s2c {
+}
+
+// ##begin##增加国家法令##end##
+message camp_faling_add_s2c {
+    repeated p_camp_faling              camp_falings = 1;                     // 国家法令信息
+}
+
+// ##begin##删除国家法令##end##
+message camp_faling_delete_c2s {
+    repeated uint32                     faling_ids = 1;                       // 国家法令列表
+}
+// ##begin##删除国家法令##end##
+message camp_faling_delete_s2c {
+    repeated uint32                     faling_ids = 1;                       // 国家法令列表
+}
+
+// ==========================================================================================
+// 远征军
+//
+// ==========================================================================================
+// ##begin##远征军信息##end##
+message camp_far_army_info_c2s {
+}
+// ##begin##远征军信息##end##
+message camp_far_army_info_s2c {
+    repeated p_far_army                  far_armys = 1;                          // 远征军信息
+}
+
+// ##begin##远征军更新##end##
+message camp_far_army_update_s2c {
+    repeated p_far_army                  far_armys = 1;                          // 远征军信息
+}

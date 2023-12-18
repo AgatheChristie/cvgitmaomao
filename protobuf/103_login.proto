@@ -1,0 +1,32 @@
+import "common.proto";
+// ##model_begin##登陆模块##model_end##
+// ##begin##选择角色##end##
+message login_select_c2s {
+    optional uint32                            role_id = 1;                  // 玩家id
+}
+// ##begin##选择角色##end##
+message login_select_s2c {
+    optional uint32                            role_id = 1;                  // 玩家id
+    optional string                            relogin_key = 2;              // 重登陆key
+}
+
+// ##begin##重登陆##end##
+message login_relogin_c2s {
+    optional uint32                            role_id = 1;                  // 玩家id
+    optional string                            relogin_key = 2;              // 重登陆key
+}
+// ##begin##重登陆##end##
+message login_relogin_s2c {
+    optional uint32                            role_id = 1;                  // 玩家id
+    optional string                            relogin_key = 2;              // 重登陆key
+}
+
+// ##begin##登陆拒绝##end##
+message login_reject_s2c {
+    optional uint32                            code = 1;                     // 错误码
+}
+
+// ##begin##停服时间##end##
+message login_stop_s2c {
+   optional uint32                            time = 1;                     // 停服时间
+}

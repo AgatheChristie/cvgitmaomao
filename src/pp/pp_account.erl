@@ -8,7 +8,37 @@
 -export([handle/3]).
 -include("common.hrl").
 -include("record.hrl").
+-include("pb_convert.hrl").
+-include("protobuf_pb.hrl").
 -compile(export_all).
+
+%%登陆验证
+handle(?NET_NIU_ROLE_LOGIN_C2S, [], #net_niu_role_login_c2s{sn = Sn, acc_id = Accid, acc_name = Accname,
+	ts_tamp = TsTamp, ticket = Ticket}) ->
+	?DEBUG("Sn:~p end",[Sn]),
+	?DEBUG("Accid:~p end",[Accid]),
+	?DEBUG("AccName:~p end",[Accname]),
+	?DEBUG("TsTamp:~p end",[TsTamp]),
+	?DEBUG("Ticket:~p end",[Ticket]),
+	Ret =
+		try is_bad_pass([Sn, Accid, Accname, TsTamp, Ticket]) of
+			true ->  true;
+			_ ->
+				case config:get_strict_md5(server) of
+					1 -> false;
+					_ -> true
+				end
+		catch
+			_:_ -> false
+		end,
+	case Ret of
+		true ->
+			_L = lib_account:get_role_list(Sn, Accid, Accname),
+			NowSec = util:unixtime(),
+			Reply = #net_niu_role_login_s2c{is_success = 1,now_sec = NowSec},
+			{true, Reply, Sn, Accid, Accname};
+		_ -> false
+	end;
 
 %%登陆验证
 handle(10000, [], Data) ->

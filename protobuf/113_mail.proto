@@ -1,0 +1,62 @@
+import "common.proto";
+// ##model_begin##邮件模块##model_end##
+// ##begin##邮件信息##end##
+message mail_info_c2s {
+    optional uint32                 mail_sort = 1;                      // 邮件分类
+    optional uint32                 page_id = 2;                        // 第几页
+}
+// ##begin##邮件信息##end##
+message mail_info_s2c {
+    optional uint32                 page_id = 1;                        // 第几页
+    optional uint32                 total_page = 2;                     // 总页数
+    optional uint32                 mail_sort = 3;                      // 邮件分类 1.联盟邮件 2.分组邮件 3.系统邮件
+    repeated p_mail_info            mail_infos = 4;                     // 邮件信息
+}
+
+// ##begin##增加邮件##end##
+message mail_add_s2c {
+    optional uint32                 mail_sort = 3;                      // 邮件分类 1.联盟邮件 2.分组邮件 3.系统邮件
+    repeated p_mail_info            mail_infos = 4;                     // 邮件信息
+}
+
+// ##begin##查看邮件##end##
+message mail_read_c2s {
+    optional uint32                 mail_sort = 1;                      // 邮件分类
+    repeated uint32                 mail_ids = 2;                       // 邮件id列表
+}
+// ##begin##查看邮件##end##
+message mail_read_s2c {
+}
+
+// ##begin##更新查看邮件状态##end##
+message mail_update_read_s2c {
+    repeated p_mail_read            mail_reads = 1;                     // 邮件是否已读信息
+}
+
+// ##begin##邮件领奖##end##
+message mail_award_c2s {
+    optional uint32                 mail_sort = 1;                      // 邮件分类
+    repeated uint32                 mail_ids = 2;                       // 邮件id列表
+}
+// ##begin##邮件领奖##end##
+message mail_award_s2c {
+    repeated p_item_public          rewards = 1;                        // 邮件奖励信息
+}
+
+// ##begin##更新邮件领奖状态##end##
+message mail_update_award_s2c {
+    repeated p_mail_award           mail_awards = 1;                    // 邮件信息
+}
+
+// ##begin##删除邮件##end##
+message mail_delete_c2s {
+    optional uint32                 mail_sort = 1;                      // 邮件分类
+    repeated uint32                 mail_ids = 2;                       // 邮件id列表
+}
+// ##begin##删除邮件##end##
+message mail_delete_s2c {
+    optional uint32                 mail_sort = 1;                      // 邮件分类
+    repeated uint32                 mail_ids = 2;                       // 邮件id列表
+}
+
+

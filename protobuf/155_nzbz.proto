@@ -1,0 +1,20 @@
+import "common.proto";
+// ##model_begin##南征北战发奖模块##model_end##
+// ##begin##南征北战个人排行榜##end##
+message nzbz_role_rank_c2s {
+}
+// ##begin##南征北战个人排行榜##end##
+message nzbz_role_rank_s2c {
+	repeated p_nzbz_role_rank         role_ranks = 1;            // 南征北战排行榜
+	optional uint32                   self_gongxun = 2;          // 自身南征北战功勋
+}
+
+// ##begin##南征北战国家排行榜##end##
+message nzbz_camp_rank_c2s {
+}
+// ##begin##南征北战国家排行榜##end##
+message nzbz_camp_rank_s2c {
+	repeated p_nzbz_camp_rank         camp_ranks = 1;            // 南征北战排行榜
+}
+
+

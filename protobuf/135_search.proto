@@ -1,0 +1,28 @@
+import "common.proto";
+// ##model_begin##寻访模块##model_end##
+// ##begin##寻访次数信息##end##
+message search_info_c2s {
+}
+// ##begin##寻访次数信息##end##
+message search_info_s2c {
+	optional uint32                   day_times = 1;            // 寻访次数(已使用的寻访次数)
+	optional uint32                   max_times = 2;            // 最大寻访次数
+	repeated p_search_info            search_infos = 3;         // 寻访信息
+}
+
+// ##begin##寻访卡包##end##
+message search_goods_c2s {
+}
+// ##begin##寻访卡包##end##
+message search_goods_s2c {
+	repeated p_search_info            search_infos = 1;          // 寻访信息
+	repeated p_item_public_special    item_publics = 2;          // 道具信息
+	repeated uint32                   actor_ids = 3;             // 武将id
+	repeated p_item_actor             item_actors = 4;           // 道具武将
+}
+
+// ##begin##更新寻访次数##end##
+message search_update_times_s2c {
+	optional uint32                   day_times = 1;            // 寻访次数(已使用的寻访次数)
+	optional uint32                   max_times = 2;            // 最大寻访次数
+}

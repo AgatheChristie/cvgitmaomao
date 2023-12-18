@@ -1,0 +1,62 @@
+import "common.proto";
+// ##model_begin##装备模块##model_end##
+// ##begin##装备信息##end##
+message equip_info_c2s {
+	optional uint32                        actor_only_id = 1;          // 穿戴武将唯一id(0.请求所有武将装备信息)
+}
+// ##begin##装备信息##end##
+message equip_info_s2c {
+	repeated p_actor_equip                 equips = 1;                 // 装备信息
+}
+
+// ##begin##更新装备##end##
+message equip_update_s2c {
+	repeated p_actor_equip                 update_equips = 1;          // 更新装备信息
+}
+
+// ##begin##穿戴装备##end##
+message equip_wear_c2s {
+	optional uint32                        actor_only_id = 1;         // 武将唯一id
+	optional uint32                        equip_pos = 2;             // 装备位置
+	optional uint32                        only_id = 3;               // 道具唯一id
+}
+// ##begin##穿戴装备##end##
+message equip_wear_s2c {
+}
+
+// ##begin##脱下装备##end##
+message equip_take_off_c2s {
+	optional uint32                        actor_only_id = 1;         // 武将唯一id
+	optional uint32                        equip_pos = 2;             // 装备位置
+}
+// ##begin##脱下装备##end##
+message equip_take_off_s2c {
+}
+
+// ##begin##装备强化##end##
+message equip_strengthen_c2s {
+	optional uint32                        only_id = 1;               // 装备道具唯一id
+}
+// ##begin##装备强化##end##
+message equip_strengthen_s2c {
+}
+
+// ##begin##装备重铸##end##
+message equip_reforge_c2s {
+	optional uint32                        only_id = 1;               // 装备道具唯一id
+}
+// ##begin##装备重铸##end##
+message equip_reforge_s2c {
+}
+
+// ##begin##装备淬火##end##
+message equip_quench_c2s {
+	optional uint32                        only_id = 1;               // 装备道具唯一id
+	optional uint32                        use_protect = 2;           // 淬火使用保护 0.不用 1.用
+}
+// ##begin##装备淬火##end##
+message equip_quench_s2c {
+    optional uint32                        quench_result = 1;         // 淬火是否成功 0.不成功 1.成功 2.保护
+    optional uint32                        old_teji_id = 2;           // 旧特技id
+    optional uint32                        new_teji_id = 3;           // 新特技id
+}

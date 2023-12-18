@@ -66,6 +66,8 @@
 
 -define(ALL_SERVER_PLAYERS, 10000).
 
+
+
 %%数据库模块选择 (db_mysql 或 db_mongo)
 -define(DB_MODULE, db_mongo).			
 
@@ -166,6 +168,8 @@
     ?LOG_INFO(Format, Args)).
 -define(WARNING_MSG(Format, Args),
     ?LOG_WARNING(Format, Args)).
+-define(ERROR(Format, Args),
+    ?LOG_ERROR(Format, Args)).
 -define(ERROR_MSG(Format, Args),
     ?LOG_ERROR(Format, Args)).
 -define(CRITICAL_MSG(Format, Args),

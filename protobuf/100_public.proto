@@ -1,0 +1,13 @@
+import "common.proto";
+// ##model_begin##公共模块##model_end##
+
+// ##begin##公共成功##end##
+message public_success_s2c {
+}
+
+// ##begin##公共失败##end##
+message public_failure_s2c {
+    optional uint32                         ecode = 1;                  // 设置id
+    repeated uint32                         int_values = 2;             // 整形参数列表
+    repeated string                         string_values = 3;          // 字符串参数列表
+}

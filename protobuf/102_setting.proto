@@ -1,0 +1,44 @@
+import "common.proto";
+// ##model_begin##设置模块##model_end##
+// ##begin##获取设置##end##
+message setting_all_c2s {
+    optional uint32                              group_id = 1;                // 设置组信息
+}
+// ##begin##获取设置##end##
+message setting_all_s2c {
+    repeated p_setting_info                      setting_infos = 1;           // 设置信息
+    optional uint32                              group_id = 2;                // 设置组信息
+}
+
+// ##begin##设置内容##end##
+message setting_set_c2s {
+    optional uint32                              id = 1;                      // 设置id
+    optional uint32                              value = 2;                   // 设置值
+}
+// ##begin##设置内容##end##
+message setting_set_s2c {
+}
+
+// ##begin##批量设置内容##end##
+message setting_set_more_c2s {
+    repeated p_setting_info                      setting_infos = 1;           // 设置信息
+}
+// ##begin##批量设置内容##end##
+message setting_set_more_s2c {
+}
+
+// ##begin##取消设置内容##end##
+message setting_del_c2s {
+    optional uint32                              id = 1;                      // 设置id
+}
+// ##begin##取消设置内容##end##
+message setting_del_s2c {
+}
+
+// ##begin##批量取消设置内容##end##
+message setting_del_more_c2s {
+    repeated uint32                              ids = 1;                     // 设置id列表
+}
+// ##begin##批量取消设置内容##end##
+message setting_del_more_s2c {
+}

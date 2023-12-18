@@ -309,9 +309,9 @@ distinct(PoolId, Collection, Key, Selector) ->
     end.
 
 findAndModify(PoolId, Collection, Name, Key) ->
-    ?DEBUG("Key:~p end",[Key]),
-    ?DEBUG("Collection:~p end",[Collection]),
-    ?DEBUG("Name:~p end",[Name]),
+    %%?DEBUG("Key:~p end",[Key]),
+    %%?DEBUG("Collection:~p end",[Collection]),
+    %%?DEBUG("Name:~p end",[Name]),
 	Key1 = tool:to_binary(Key),
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
     Q = [{<<"findandmodify">>, Collection}, {<<"ns">>, Database},
@@ -323,7 +323,7 @@ findAndModify(PoolId, Collection, Name, Key) ->
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
         #response{documents=[QCC]} = T ->
-            ?DEBUG("T:~p end",[T]),
+            %%?DEBUG("T:~p end",[T]),
                 case lists:keyfind(<<"value">>,1,QCC) of
                     {_,Record} ->
                         case lists:keyfind(Key1, 1, Record) of

@@ -1,0 +1,23 @@
+import "common.proto";
+// ##model_begin##公共兵种模块##model_end##
+// ##begin##公共兵种信息##end##
+message public_army_c2s {
+}
+// ##begin##公共兵种信息##end##
+message public_army_s2c {
+    repeated p_public_army                  public_armys = 1;             // 公共兵种信息
+}
+
+// ##begin##公共兵种升级##end##
+message public_army_upgrade_c2s {
+    optional uint32                         army_id = 1;                  // 公共兵种id
+}
+// ##begin##公共兵种升级##end##
+message public_army_upgrade_s2c {
+}
+
+
+// ##begin##公共兵种更新##end##
+message public_army_update_s2c {
+    repeated p_public_army                  public_armys = 1;             // 公共兵种信息
+}

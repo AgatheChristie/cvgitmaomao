@@ -1,0 +1,30 @@
+import "common.proto";
+// ##model_begin##小游戏模块##model_end##
+// ##begin##小游戏信息##end##
+message single_game_info_c2s {
+}
+
+// ##begin##小游戏信息##end##
+message single_game_info_s2c {
+    repeated p_single_game               single_games = 1;          // 小游戏信息
+}
+
+// ##begin##小游戏结果##end##
+message single_game_result_c2s {
+    optional p_single_game_key           single_game_key = 1;      // 小游戏主键
+    optional uint32                      result = 2;               // 结果 0:失败 1:成功
+}
+
+// ##begin##小游戏结果##end##
+message single_game_result_s2c {
+}
+
+// ##begin##新增小游戏##end##
+message single_game_new_s2c {
+    optional p_single_game               single_game = 1;          // 小游戏信息
+}
+
+// ##begin##删除小游戏##end##
+message single_game_delete_s2c {
+    optional p_single_game_key           single_game_key = 1;      // 小游戏主键
+}

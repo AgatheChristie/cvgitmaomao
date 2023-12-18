@@ -1,0 +1,28 @@
+import "common.proto";
+// ##model_begin##群雄讨董模块##model_end##
+// ##begin##群雄讨董信息##end##
+message crusade_info_c2s {
+}
+// ##begin##群雄讨董信息##end##
+message crusade_info_s2c {
+	optional uint32                   crusade_status = 1;       // 群雄讨董状态
+	optional uint32                   crusade_result = 2;       // 群雄讨董结果 0初始 1胜利 2失败
+	optional uint32                   city_id = 3;              // 营寨id 0表示活动结束
+	optional uint32                   end_sec = 4;              // 结束时间
+}
+
+// ##begin##群雄讨董状态更新##end##
+message crusade_status_update_s2c {
+	optional uint32                   crusade_status = 1;       // 群雄讨董状态
+	optional uint32                   crusade_result = 2;       // 群雄讨董结果
+}
+
+// ##begin##群雄讨董杀敌榜##end##
+message crusade_kill_rank_c2s {
+}
+// ##begin##群雄讨董杀敌榜##end##
+message crusade_kill_rank_s2c {
+	optional uint32                   total_panjun_num = 1;     // 剩余叛军总数量
+	repeated p_crusade_kill_rank      kill_ranks = 2;           // 群雄讨董杀敌榜
+}
+

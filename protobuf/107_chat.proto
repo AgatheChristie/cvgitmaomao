@@ -1,0 +1,80 @@
+import "common.proto";
+// ##model_begin##聊天模块##model_end##
+// ##begin##聊天内容##end##
+message chat_content_s2c {
+    optional uint32                         chat_type = 1;                // 聊天类型
+    repeated p_chat_content                 contents = 2;                 // 内容信息
+}
+
+// ##begin##获取聊天信息##end##
+message chat_info_c2s {
+    optional uint32                         chat_type = 1;                // 聊天类型
+}
+// ##begin##获取聊天信息##end##
+message chat_info_s2c {
+    optional uint32                         chat_type = 1;                // 聊天类型
+    optional uint32                         free_times = 2;               // 聊天免费次数
+    repeated p_chat_content                 contents = 3;                 // 内容信息
+}
+
+// ##begin##删除聊天记录##end##
+message chat_info_delete_s2c {
+    optional uint32                         type = 1;                     // 聊天类型
+    repeated uint32                         chat_ids = 2;                 // 聊天id列表
+}
+
+// ##begin##世界聊天信息##end##
+message chat_world_c2s {
+    repeated p_chat_part                    parts = 1;                    // 聊天内容
+}
+// ##begin##世界聊天信息##end##
+message chat_world_s2c {
+}
+
+// ##begin##势力聊天信息##end##
+message chat_camp_c2s {
+    repeated p_chat_part                    parts = 1;                    // 聊天内容
+}
+// ##begin##势力聊天信息##end##
+message chat_camp_s2c {
+}
+
+// ##begin##联盟聊天信息##end##
+message chat_league_c2s {
+    repeated p_chat_part                    parts = 1;                    // 聊天内容
+}
+// ##begin##联盟聊天信息##end##
+message chat_league_s2c {
+}
+
+// ##begin##更新聊天免费次数##end##
+message chat_update_free_times_s2c {
+    optional uint32                         chat_type = 1;                // 聊天类型
+    optional uint32                         free_times= 2;                // 聊天免费次数
+}
+
+// ##begin##私人聊天信息##end##
+message chat_private_c2s {
+    repeated p_chat_part                    parts = 1;                    // 聊天内容
+    optional uint32                         role_id = 2;                  // 聊天的玩家id
+}
+// ##begin##私人聊天信息##end##
+message chat_private_s2c {
+}
+
+// ##begin##获取私聊未读信息##end##
+message chat_private_info_c2s {
+}
+// ##begin##获取私聊未读信息##end##
+message chat_private_info_s2c {
+    repeated p_private_chat                 private_chats = 1;            // 私聊内容
+}
+
+// ##begin##私聊已读信息##end##
+message chat_private_read_c2s {
+    optional uint32                         role_id = 1;                  // 玩家id
+    optional uint32                         max_read_id = 2;              // 最大已读聊天id
+}
+// ##begin##私聊已读信息##end##
+message chat_private_read_s2c {
+}

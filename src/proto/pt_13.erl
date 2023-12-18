@@ -120,8 +120,14 @@ read(13043, <<Accept:8>>) ->
 
 
 %%同意或拒绝双修邀请
-read(13045, <<OtherPlayerId:32,Code:8>>) ->
-    {ok, [OtherPlayerId,Code]};
+read(13045, <<
+    OtherPlayerId:32,
+    Code:8
+>>) ->
+    {ok, [
+        OtherPlayerId,
+        Code
+    ]};
 
 %%开始或取消双修动作(Code开始双修1，结束双修2)InitX,Y发起人的原始坐标
 read(13046, <<OtherPlayerId:32,Code:8,InitX:16,InitY:16>>) ->
@@ -402,11 +408,12 @@ write(13006, Spr) ->
 write(13007, []) ->
     {ok, pt:pack(13007, <<0:16, <<>>/binary>>)};
 write(13007, Quickbar) ->
-    Rlen = length(Quickbar),
     F = fun({L, T, Id}) ->
         <<L:8, T:8, Id:32>>
     end,
+    Rlen = length(Quickbar),
     RB = tool:to_binary([F(D) || D <- Quickbar]),
+
     {ok, pt:pack(13007, <<Rlen:16, RB/binary>>)};
 
 %%保存快捷栏
@@ -422,7 +429,17 @@ write(13010, State) ->
     {ok, pt:pack(13010, <<State:8>>)};
 
 %%查询进入场景所需信息
-write(13011, [Hp, Hp_lim, Mp, Mp_lim, Gold, Cash, Coin, Bcoin, ChangeReason]) ->
+write(13011, [
+    Hp,
+    Hp_lim,
+    Mp,
+    Mp_lim,
+    Gold,
+    Cash,
+    Coin,
+    Bcoin,
+    ChangeReason
+]) ->
     Data = <<
             Hp:32,
             Hp_lim:32,
@@ -453,8 +470,16 @@ write(13013, [BUFF, Now]) ->
 %% 返回物品buff效果
 write(13014, BUFF) ->
 	Len = length(BUFF),
-	F = fun([GoodsId,Value,LeftTime]) ->
-			<<GoodsId:32 , Value:32 , LeftTime:32>>
+	F = fun([
+        GoodsId,
+        Value,
+        LeftTime
+    ]) ->
+			<<
+                GoodsId:32,
+                Value:32,
+                LeftTime:32
+            >>
 		end,
 	LB = tool:to_binary(lists:map(F, BUFF)),
 	Data = <<Len:16 ,LB/binary>>,

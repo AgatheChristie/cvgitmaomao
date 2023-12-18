@@ -1,0 +1,24 @@
+import "common.proto";
+// ##model_begin##图标模块##model_end##
+// ##begin##图标信息##end##
+message icon_info_c2s {
+}
+// ##begin##图标信息##end##
+message icon_info_s2c {
+    repeated p_icon_info                icons = 1;                      // 图标信息
+}
+
+// ##begin##图标增加##end##
+message icon_add_s2c {
+    repeated p_icon_info                add_icons = 1;                  // 增加图标信息
+}
+
+// ##begin##图标更新##end##
+message icon_update_s2c {
+    repeated p_icon_info                update_icons = 1;               // 更新图标信息
+}
+
+// ##begin##删除图标##end##
+message icon_delete_s2c {
+    repeated uint32                     delete_ids = 1;                 // 删除图标
+}

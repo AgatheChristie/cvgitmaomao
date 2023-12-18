@@ -1,0 +1,15 @@
+import "common.proto";
+// ##model_begin##红点模块##model_end##
+
+// ##begin##红点信息##end##
+message red_dot_info_c2s {
+}
+// ##begin##红点信息##end##
+message red_dot_info_s2c {
+    repeated uint32                         ids = 1;                //  功能id列表
+}
+
+// ##begin##红点增加信息##end##
+message red_dot_add_s2c {
+    repeated uint32                         ids = 1;                //  功能id列表
+}

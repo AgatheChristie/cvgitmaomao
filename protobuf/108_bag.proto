@@ -1,0 +1,112 @@
+import "common.proto";
+// ##model_begin##背包模块##model_end##
+
+// ==========================================================================================
+// 背包信息
+//
+// ==========================================================================================
+// ##begin##背包信息##end##
+message bag_info_c2s {
+   optional uint32                         type = 1;                     // 选项id  
+}
+// ##begin##背包信息##end##
+message bag_info_s2c {
+   optional uint32                         type = 1;                     // 选项id 
+   repeated p_item_info                    bag_infos = 2;                // 背包信息
+   optional uint32                         total_grid = 3;               // 可用格子总数量
+}
+
+// ##begin##增加道具##end##
+message bag_add_s2c {
+   optional uint32                         type = 1;                     // 选项id  
+   repeated p_item_info                    add_infos = 2;                // 增加道具信息
+}
+
+// ##begin##更新道具##end##
+message bag_update_s2c {
+   optional uint32                         type = 1;                     // 选项id  
+   repeated p_item_info                    update_infos = 2;             // 更新道具信息
+}
+
+// ##begin##删除道具##end##
+message bag_delete_s2c {
+   optional uint32                         type = 1;                     // 选项id  
+   repeated uint32                         delete_ids = 2;               // 删除道具信息(唯一id)
+}
+
+// ==========================================================================================
+// 背包格子
+//
+// ==========================================================================================
+
+// ##begin##购买格子##end##
+message bag_buy_grid_c2s {
+   optional uint32                         type = 1;                     // 选项id
+   optional uint32                         buy_grid = 2;                 // 购买格子 (累加后购买的格子)
+}
+// ##begin##格子信息##end##
+message bag_buy_grid_s2c {
+}
+
+// ##begin##格子信息更新##end##
+message bag_grid_update_s2c {
+   repeated p_bag_grid_info                update_grids = 1;             // 更新格子信息
+}
+
+// ==========================================================================================
+// 背包物品操作信息
+//
+// ==========================================================================================
+// ##begin##使用物品##end##
+message bag_item_use_c2s {
+   optional uint32                         bag_type = 1;                // 背包类型
+   optional uint32                         only_id = 2;                 // 道具唯一id
+   optional uint32                         use_num = 3;                 // 数量
+   repeated uint32                         int_values = 5;              // 使用时参数
+}
+// ##begin##使用物品##end##
+message bag_item_use_s2c {
+   repeated p_item_public_special          item_publics = 1;            // 道具信息
+}
+
+// ##begin##合成物品##end##
+message bag_item_compose_c2s {
+   repeated p_item_only                    item_onlys = 1;               // 道具唯一信息
+   optional uint32                         compose_num = 2;              // 合成的次数
+}
+// ##begin##合成物品##end##
+message bag_item_compose_s2c {
+   repeated p_item_public                  item_publics = 1;             // 道具信息
+}
+
+// ##begin##强化装备物品##end##
+message bag_item_qianghua_c2s {
+    optional uint32                        only_id = 1;                  // 道具唯一id
+    optional uint32                        bag_type = 2;                 // 背包类型
+}
+// ##begin##强化装备物品##end##
+message bag_item_qianghua_s2c {
+    optional uint32                        is_succ = 1;                  // 强化是否成功 1:成功 0:失败
+}
+
+// ##begin##道具交付##end##
+message bag_item_deliver_c2s {
+   repeated p_item_only                    item_onlys = 1;               // 道具唯一id跟数量列表
+}
+// ##begin##道具交付##end##
+message bag_item_deliver_s2c {
+}
+
+// ==========================================================================================
+// 背包物品出售
+//
+// ==========================================================================================
+// ##begin##出售物品##end##
+message bag_item_sell_c2s {
+   optional uint32                         bag_type = 1;                 // 背包类型
+   repeated p_item_only                    item_onlys = 2;               // 道具唯一信息
+}
+// ##begin##出售物品##end##
+message bag_item_sell_s2c {
+
+}

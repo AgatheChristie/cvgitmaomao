@@ -1,0 +1,68 @@
+import "common.proto";
+// ##model_begin##治理模块##model_end##
+// ##begin##治理信息##end##
+message govern_info_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##治理信息##end##
+message govern_info_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   minxin_camp_id = 3;        // 民心国家id
+    optional uint32                   minxin = 4;                // 民心
+    repeated p_gov_log                gov_logs = 5;              // 查看者所属国家的治理日志
+    repeated p_gov_policy_token       gov_policy_tokens = 6;     // 城池令信息
+}
+
+// ##begin##关闭治理信息界面##end##
+message govern_close_info_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##关闭治理信息界面##end##
+message govern_close_info_s2c {
+}
+
+// ##begin##打开治理信息界面##end##
+message govern_open_info_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##打开治理信息界面##end##
+message govern_open_info_s2c {
+}
+
+// ##begin##更新民心##end##
+message govern_favour_point_update_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   minxin_camp_id = 3;        // 民心国家id
+    optional uint32                   minxin = 4;                // 民心
+}
+
+// ##begin##使用城池令##end##
+message govern_policy_token_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   policy_token_id = 3;       // 城池令id
+}
+// ##begin##使用城池令##end##
+message govern_policy_token_s2c {
+
+}
+
+// ##begin##城池令更新##end##
+message govern_policy_token_update_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    repeated p_gov_policy_token       gov_policy_tokens = 3;     // 城池令信息
+}
+
+// ##begin##城池令激活广播##end##
+message govern_policy_token_broadcast_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    optional uint32                   policy_token_id = 2;       // 城池令id
+}
+
+

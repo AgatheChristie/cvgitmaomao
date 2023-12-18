@@ -1,0 +1,34 @@
+import "common.proto";
+// ##model_begin##阵型模块##model_end##
+// ##begin##阵型设置状态##end##
+message zhenxing_set_status_c2s {
+    optional uint32                         actor_only_id = 1;             // 武将唯一ID
+    optional string                         battle_id = 2;                 // 战斗唯一标识 如果是0后端判断武将是否上阵或是停留状态
+    optional uint32                         zhenxing_id = 3;               // 阵型id
+    optional uint32                         zhenxing_status = 4;           // 阵型状态 0.未使用 1.使用
+}
+// ##begin##阵型设置状态##end##
+message zhenxing_set_status_s2c {
+}
+
+
+// ##begin##阵型学习##end##
+message zhenxing_study_c2s {
+    optional uint32                         actor_only_id = 1;             // 武将唯一ID
+    optional uint32                         zhenxing_active_id = 2;        // 阵型激活id
+}
+// ##begin##阵型学习##end##
+message zhenxing_study_s2c {
+}
+
+
+// ##begin##阵型状态更新##end##
+message zhenxing_status_update_s2c {
+    repeated p_zhenxing_status              zhenxing_statuss = 1;          // 阵型状态信息
+}
+
+// ##begin##阵型信息更新##end##
+message zhenxing_info_update_s2c {
+    optional uint32                         actor_only_id = 1;             // 武将唯一ID
+    repeated p_zhenxing_term                zhenxing_terms = 2;            // 阵型信息
+}

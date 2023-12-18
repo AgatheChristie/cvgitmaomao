@@ -1,0 +1,56 @@
+import "common.proto";
+// ##model_begin##驯马模块##model_end##
+// ##begin##驯马信息##end##
+message xunma_info_c2s {
+}
+
+// ##begin##驯马信息##end##
+message xunma_info_s2c {
+    optional uint32                            xunma_id = 1;                     // 驯马id
+    optional uint32                            start_sec = 2;                    // 开始时间
+    optional uint32                            end_sec = 3;                      // 结束时间
+}
+
+// ##begin##驯马开始##end##
+message xunma_start_c2s {
+	optional uint32                            xunma_id = 1;                     // 驯马id
+}
+
+// ##begin##驯马开始##end##
+message xunma_start_s2c {
+    optional uint32                            xunma_id = 1;                     // 驯马id
+    optional uint32                            start_sec = 2;                    // 开始时间
+    optional uint32                            end_sec = 3;                      // 结束时间
+}
+
+// ##begin##驯马完成##end##
+message xunma_complete_s2c {
+    optional uint32                             xunma_id = 1;                      // 驯马id
+}
+
+// ##begin##驯马取消##end##
+message xunma_cancel_c2s {
+	optional uint32                            xunma_id = 1;                     // 驯马id
+}
+
+// ##begin##驯马取消##end##
+message xunma_cancel_s2c {
+}
+
+// ##begin##驯马奖励##end##
+message xunma_reward_c2s {
+}
+
+// ##begin##驯马奖励##end##
+message xunma_reward_s2c {
+	repeated p_item_public_special              item_publics = 1;                  // 道具信息
+}
+
+// ##begin##驯马消耗##end##
+message xunma_cost_c2s {
+}
+
+// ##begin##驯马消耗##end##
+message xunma_cost_s2c {
+	repeated p_xunma_cost                       xunma_costs = 1;                   // 驯马消耗
+}

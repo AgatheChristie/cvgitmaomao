@@ -1,0 +1,40 @@
+import "common.proto";
+// ##model_begin##寻访模块##model_end##
+// ##begin##卡包信息##end##
+message lottery_info_c2s {
+}
+// ##begin##卡包信息##end##
+message lottery_info_s2c {
+    repeated p_lottery_info             lottery_infos = 1;         // 卡包信息
+}
+
+// ##begin##寻访##end##
+message lottery_act_c2s {
+    optional uint32                     lottery_id = 1;            // 卡包id
+    optional uint32                     lottery_type = 2;          // 寻访类型
+    optional uint32                     cost_type = 3;             // 消耗类型 1-默认消耗 2-备选消耗
+}
+// ##begin##寻访##end##
+message lottery_act_s2c {
+    optional uint32                     lottery_id = 1;            // 卡包id
+    optional uint32                     lottery_type = 2;          // 招募类型
+    repeated p_item_actor               item_actors = 4;           // 道具武将
+    repeated p_actor_simple_info        p_actor_simple_infos = 5;  // 武将精简信息
+}
+
+
+// ##begin##更新卡包信息##end##
+message lottery_update_info_s2c {
+    repeated p_lottery_info             lottery_infos = 1;         // 卡包信息
+}
+
+// ##begin##领取阶段奖励##end##
+message lottery_stage_award_c2s {
+    optional uint32                     lottery_id = 1;            // 卡包id
+    optional uint32                     award_id = 2;              // 奖励id
+}
+// ##begin##领取阶段奖励##end##
+message lottery_stage_award_s2c {
+    optional uint32                     lottery_id = 1;            // 卡包id
+    optional uint32                     award_id = 2;              // 奖励id
+}

@@ -1,0 +1,196 @@
+import "common.proto";
+// ##model_begin##玩家模块##model_end##
+
+// ##begin##玩家信息##end##
+message role_info_c2s {
+}
+// ##begin##玩家信息##end##
+message role_info_s2c {
+    optional uint32                             role_id = 1;                  // 玩家id
+    optional string                             role_name = 2;                // 玩家名
+    optional uint32                             create_sec = 3;               // 创角时间
+    optional uint32                             online_sec = 4;               // 当前在线时长
+    optional uint32                             league_id  = 5;               // 联盟id
+    optional string                             league_name = 6;              // 联盟名称
+    optional uint32                             com_task_id = 7;              // 已经完成的最大主线任务id
+    optional uint32                             server_id = 8;                // 服务器id
+    repeated p_money_info                       money_infos = 9;              // 货币信息
+    repeated p_money_card                       money_cards = 10;             // 充值卡信息
+    repeated p_guide_group                      guide_groups = 11;            // 引导信息
+    optional uint32                             head_portrait_using = 12;     // 正在使用的头像id
+    repeated p_head_portrait                    head_portraits = 13;          // 已拥有的头像
+    optional uint32                             chat_frame_using = 14;        // 正在使用的气泡id
+    repeated p_chat_frame                       chat_frames = 15;             // 已拥有的气泡
+    optional uint32                             camp_id = 16;                 // 势力id
+    optional string                             resume = 17;                  // 个人简介
+    repeated p_buy_decree                       buy_decrees = 18;             // 政令信息
+    optional uint32                             recovery_sec = 19;            // 下次政令恢复时间
+    optional uint32                             rename_times = 20;            // 改名次数
+    optional uint32                             world_chat_free_times = 21;   // 世界聊天免费次数
+    optional uint32                             league_lq_sec = 22;           // 加入联盟冷却时间
+    optional uint32                             league_post = 23;             // 联盟职位
+    optional uint32                             search_use_times = 24;        // 寻访使用次数
+    optional uint32                             task_chapter = 25;            // 任务当前章节
+    optional uint32                             fb_id = 26;                   // 通关关卡最大id
+    optional uint32                             unspeak_sec = 27;             // 禁言时间戳
+    optional uint32                             camp_post = 28;               // 国家职位
+    optional uint32                             prev_rank_id = 29;            // 上周贡献排名
+    optional uint32                             is_skip_guide = 30;           // 是否跳过引导 0:否 1:是
+    optional uint32                             now_group_id = 31;            // 签到组id
+    optional uint32                             now_reward_id = 32;           // 签到奖励id
+    optional uint32                             attendance_status = 33;       // 签到状态(0未签，1已签到)
+    optional uint32                             total_devote = 34;            // 总贡献
+    optional uint32                             today_devote = 35;            // 今日贡献
+    optional uint32                             now_devote = 36;              // 本周贡献
+    optional uint32                             player_value = 37;            // 角色实力
+    optional uint32                             plot_value = 38;              // 地块实力
+    optional uint32                             build_value = 39;             // 城建实力
+    optional uint32                             actor_value = 40;             // 武将实力
+    optional uint32                             total_gongxun = 41;           // 总功勋
+    repeated uint32                             occupy_plot_ids = 42;         // 已占领过的地块ids
+    optional uint32                             camp_level = 43;              // 国家等级
+    optional uint32                             camp_unspeak_sec = 44;        // 国家禁言时间戳
+}
+
+// ##begin##货币协议##end##
+message role_update_money_s2c {
+    repeated p_money_info                       money_infos = 1;              // 货币信息
+}
+
+// ##begin##属性变动##end##
+message role_update_attr_s2c {
+    repeated p_actor_attr                       actor_attrs = 1;              // 角色属性信息
+}
+
+// ##begin##联盟信息更新##end##
+message role_update_league_s2c {
+    optional uint32                             league_id = 1;                // 联盟id
+    optional string                             league_name = 2;              // 联盟名
+}
+
+// ##begin##联盟冷却时间更新##end##
+message role_update_league_lq_sec_s2c {
+    optional uint32                             league_lq_sec = 1;            // 加入联盟冷却时间
+}
+
+// ##begin##改名##end##
+message role_rename_c2s {
+    optional string                             role_name = 1;                // 玩家名
+}
+// ##begin##改名##end##
+message role_rename_s2c {
+}
+
+// ##begin##换头像##end##
+message role_change_head_portrait_c2s {
+    optional uint32                             head_portrait_id = 1;         // 头像id
+}
+// ##begin##换头像##end##
+message role_change_head_portrait_s2c {
+}
+
+// ##begin##头像更新##end##
+message role_update_head_portrait_s2c {
+    optional uint32                            using_id = 1;                  // 当前使用头像
+    repeated p_head_portrait                   head_portraits = 2;            // 已拥有头像
+}
+
+// ##begin##换气泡##end##
+message role_change_chat_frame_c2s {
+    optional uint32                            chat_frame_id = 1;             // 气泡id
+}
+// ##begin##换气泡##end##
+message role_change_chat_frame_s2c {
+}
+
+// ##begin##气泡更新##end##
+message role_update_chat_frame_s2c {
+    optional uint32                            using_id = 1;                  // 当前使用气泡
+    repeated p_chat_frame                      chat_frames = 2;               // 已拥有气泡
+}
+
+// ##begin##选择势力##end##
+message role_select_camp_c2s {
+    optional uint32                            camp_id = 1;                   // 势力id
+    optional string                            role_name = 2;                 // 玩家名
+}
+// ##begin##选择势力##end##
+message role_select_camp_s2c {
+    optional string                            role_name = 1;                 // 玩家名
+}
+
+// ##begin##灭国后选择势力##end##
+message role_camp_death_select_camp_c2s {
+    optional uint32                            camp_id = 1;                   // 势力id
+}
+
+// ##begin##灭国后选择势力##end##
+message role_camp_death_select_camp_s2c {
+}
+
+// ##begin##修改个人简介##end##
+message role_change_resume_c2s {
+    optional string                            resume = 1;                    // 个人简介
+} 
+
+// ##begin##修改个人简介##end##
+message role_change_resume_s2c {
+}
+
+// ##begin##联盟职位更新##end##
+message role_update_league_post_s2c {
+    optional uint32                            league_post = 1;               // 加入联盟冷却时间
+}
+
+// ##begin##更新国家职位##end##
+message role_update_camp_post_s2c {
+    optional uint32                            camp_post = 1;                 // 国家职位
+}
+
+
+// ##begin##更新玩家上周贡献排名##end##
+message role_update_prev_rank_s2c {
+    optional uint32                            prev_rank_id = 1;              // 上周贡献度排名
+}
+
+// ##begin##更新玩家实力##end##
+message role_update_player_value_s2c {
+    optional uint32                            player_value = 1;              // 角色实力
+    optional uint32                            actor_value = 2;               // 武将实力
+    optional uint32                            build_value = 3;               // 城建实力
+    optional uint32                            plot_value = 4;                // 地块实力
+}
+
+// ##begin##查看详细玩家实力##end##
+message role_player_detail_info_c2s {
+    optional uint32                            role_id = 1;                   // 玩家id
+}
+// ##begin##查看详细玩家实力##end##
+message role_player_detail_info_s2c {
+    optional uint32                            player_value = 1;              // 角色实力
+    optional uint32                            actor_value = 2;               // 武将实力
+    optional uint32                            build_value = 3;               // 城建实力
+    optional uint32                            plot_value = 4;                // 地块实力
+}
+
+// ##begin##更新玩家签到信息##end##
+message role_update_attendance_info_s2c {
+    optional uint32                            now_group_id = 1;              // 签到组id
+    optional uint32                            now_reward_id = 2;             // 签到奖励id
+    optional uint32                            attendance_status = 3;         // 签到状态(0未签，1已签到)
+}
+
+// ##begin##玩家请求签到##end##
+message role_ask_attendance_c2s {
+}
+// ##begin##玩家请求签到##end##
+message role_ask_attendance_s2c {
+    repeated p_item_actor               item_actors = 1;                      // 道具武将
+}
+
+// ##begin##玩家贡献度更新##end##
+message role_update_devote_s2c {
+    optional uint32                             total_devote = 1;             // 总贡献度
+    optional uint32                             now_devote = 2;               // 本周贡献度
+    optional uint32                             today_devote = 3;             // 今日贡献度
+}

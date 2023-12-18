@@ -1,0 +1,1146 @@
+%% coding: latin-1.
+-record(p_actor_info, {only_id = 0, actor_id = 0, skill_infos = [], use_point = 0, actor_level = 0, actor_star = 0, now_exp = 0, unique_skills = [], team_id = 0, team_pos = 0, max_point = 0, attr_infos = [], appoint_id = 0, attr_points = [], special_statuss = [], use_items = [], now_attrs = [], main_skills = [], actor_skill_cost = [], zhenxing_terms = [], army_terms = [], training_pos = 0, actor_value = 0, fb_team_pos = 0, max_assign_point = 0}).
+-record(p_actor_attr, {only_id = 0, attr_infos = []}).
+-record(p_add_special_status, {only_id = 0, special_statuss = []}).
+-record(p_special_status, {status_type = 0, status_end_sec = 0}).
+-record(p_del_special_status, {only_id = 0, status_type = 0}).
+-record(p_actor_team, {only_id = 0, team_id = 0, team_pos = 0}).
+-record(p_setting_info, {id = 0, value = 0}).
+-record(p_item_info, {only_id = 0, item_id = 0, item_num = 0, source_type = 0, expired_sec = 0, add_info}).
+-record(p_item_attach, {strengthen_level = 0, actor_only_id = 0, trick_ids = [], attr_infos = [], teji_infos = [], quench_times = 0}).
+-record(p_item_teji, {pos_id = 0, teji_id = 0}).
+-record(p_money_info, {money_id = 0, money_num = 0, source_type = 0}).
+-record(p_chat_content, {chat_id = 0, chat_sec = 0, is_light = 0, is_admin = 0, role_info, parts = []}).
+-record(p_chat_part, {type = 0, content = [], int_args = [], string_args = [], template_id = 0}).
+-record(p_common_role, {id = 0, name = [], head_portrait = 0, camp_id = 0, camp_post = 0, status = 0, total_value = 0, server_name = [], resume = [], camp_unspeak_sec = 0}).
+-record(p_chat_role, {role_info, chat_frame_id = 0}).
+-record(p_attr_info, {attr_type = 0, attr_value = 0}).
+-record(p_shop_item, {sale_id = 0, add_items = [], cost_items = [], limit_type = 0, limit_num = 0, buy_condition = 0, show_condition = 0, sort_id = 0, tag = []}).
+-record(p_shop_buy, {sale_id = 0, buy_num = 0}).
+-record(p_rank_info, {rank_id = 0, role_id = 0, role_name = [], rank_values = [], camp_id = 0, league_name = [], league_post = 0, server_name = [], resume = [], league_id = 0, head_portrait = 0, camp_post = 0, award_id = 0}).
+-record(p_icon_info, {icon_id = 0, open_sec = 0, server_end_sec = 0, end_sec = 0, advance_sec = 0, icon_status = 0}).
+-record(p_mail_coll, {mail_sort = 0, mail_infos = []}).
+-record(p_mail_info, {mail_id = 0, mail_type = 0, mail_title = [], mail_content = [], is_read = 0, is_award = 0, mail_items = [], template_id = 0, int_values = [], string_values = [], send_sec = 0, role_name = []}).
+-record(p_mail_item, {item_id = 0, item_num = 0}).
+-record(p_mail_read, {mail_sort = 0, mail_id = 0, is_read = 0}).
+-record(p_mail_award, {mail_sort = 0, mail_id = 0, is_read = 0, is_award = 0}).
+-record(p_pay_order, {order_id = [], order_status = 0, need_rmb = 0}).
+-record(p_pay_log, {config_id = 0, pay_sec = 0}).
+-record(p_pay_config, {config_id = 0, pay_num = 0}).
+-record(p_pay_params, {param_type = [], param_value = []}).
+-record(p_money_card, {card_id = 0, end_sec = 0}).
+-record(p_item_only, {only_id = 0, item_num = 0}).
+-record(p_bag_grid_info, {type = 0, total_grid = 0}).
+-record(p_item_public, {item_id = 0, item_num = 0}).
+-record(p_item_public_special, {item_id = 0, item_num = 0, add_info}).
+-record(p_task, {only_id = 0, task_id = 0, task_status = 0, task_terms = [], int_values = [], finish_values = []}).
+-record(p_task_term, {term_id = 0, term_value = 0, max_term_value = 0}).
+-record(p_task_id, {only_id = 0, task_id = 0}).
+-record(p_achieve_id, {only_id = 0, achieve_id = 0}).
+-record(p_other_actor, {actor_id = 0, level = 0}).
+-record(p_activity_group, {group_id = 0, group_icon = []}).
+-record(p_achieve, {achieve_id = 0, achieve_status = 0, achieve_terms = []}).
+-record(p_achieve_term, {term_id = 0, term_value = 0, max_term_value = 0}).
+-record(p_activity_info, {activity_id = 0, type = 0, term_infos = [], end_sec = 0, group_id = 0, activity_name = [], icon = [], desc = [], head_icon = [], bubble_picture = [], start_sec = 0, prefab = [], sort_id = 0}).
+-record(p_term_info, {term_id = 0, schedule = 0, total_schedule = 0, has_receive_times = 0, receive_times = 0, total_receive_times = 0, server_times = 0, total_server_times = 0, touch_condition = 0, receive_condition = 0, receive_needs = [], rewards = [], term_desc = [], receive_sec = 0, show_condition = 0, original_needs = []}).
+-record(p_activity_limit, {activity_id = 0, end_sec = 0, term_infos = []}).
+-record(p_activity_limit_term, {term_id = 0, buy_times = 0, limit_times = 0, receive_times = 0, status = 0}).
+-record(p_item_use, {type = 0, only_id = 0, use_num = 0, script_id = 0, int_values = []}).
+-record(p_guide_group, {group_id = 0, guide_ids = []}).
+-record(p_buy_decree, {buy_id = 0, buy_times = 0}).
+-record(p_head_portrait, {head_portrait_id = 0, expire_sec = 0}).
+-record(p_chat_frame, {chat_frame_id = 0, expire_sec = 0}).
+-record(p_city_info, {city_id = 0, camp_id = 0, league_id = 0, war_free_sec = 0, city_status = 0, minxin_camp_id = 0, minxin = 0, defense_mons = [], defense_mon_sec = 0, city_npc_attack, baggage_cars = []}).
+-record(p_minxin_add_effect, {effect_id = 0, city_id = 0, effect_level = 0}).
+-record(p_ccl_add_effect, {policy_token_id = 0, city_id = 0, end_sec = 0}).
+-record(p_gov_log, {template_id = 0, int_values = [], string_values = []}).
+-record(p_gov_policy_token, {policy_token_id = 0, used_times = 0, effect_sec = 0}).
+-record(p_city_detail, {city_id = 0, camp_id = 0, mon_infos = [], mon_summarys = [], minxin_camp_id = 0, minxin = 0, minxin_add_effects = [], ccl_add_effects = [], resources_output = []}).
+-record(p_city_mon_summary, {mon_type = 0, mon_term_type = 0, now_count = 0, max_count = 0, total_count = 0, leave_count = 0, max_mon_level = 0}).
+-record(p_city_mon_info, {team_id = 0, status = 0, mon_type = 0, mon_term_type = 0, max_mon_level = 0, mon_team_id = 0}).
+-record(p_city_wild_mon, {city_id = 0, wild_mon_infos = []}).
+-record(p_wild_mon_info, {point = 0, mon_team_id = 0, status = 0, next_refresh_sec = 0}).
+-record(p_city_caiwa_plot, {city_id = 0, caiwa_plots = []}).
+-record(p_caiwa_plot, {plot_id = 0, open_sec = 0, caiwa_roles = [], already_caiwa_roles = []}).
+-record(p_caiwa_role, {role_id = 0, start_sec = 0}).
+-record(p_already_caiwa_role, {role_id = 0, times = 0}).
+-record(p_city_mon_rank, {rank_id = 0, subject_type = 0, subject_id = 0, subject_name = [], hurt_hp = 0}).
+-record(p_walk_path, {city_id = 0}).
+-record(p_now_team_walk, {subject_type = 0, subject_id = 0, team_id = 0, now_id = 0, now_sec = 0, next_id = 0, next_sec = 0}).
+-record(p_scene_team_key, {subject_type = 0, subject_id = 0, team_id = 0}).
+-record(p_team_walk, {subject_type = 0, subject_id = 0, team_id = 0, source_id = 0, source_sec = 0, target_id = 0, target_sec = 0, walk_paths = [], team_speed = 0, order_type = 0}).
+-record(p_scene_team, {subject_type = 0, subject_id = 0, team_id = 0, subject_name = [], camp_id = 0, team_status = 0, order_type = 0, target_id = 0, city_id = 0, plot_id = 0, team_speed = 0, league_id = 0, main_actor_id = 0, end_sec = 0, start_sec = 0, total_value = 0, total_bingli = 0}).
+-record(p_team_shiqi, {team_id = 0, team_shiqi = 0}).
+-record(p_output_info, {resource_type = 0, output = 0}).
+-record(p_wuweitu_info, {resource_type = 0, addition_infos = []}).
+-record(p_addition_info, {addition_id = 0, addition_value = 0}).
+-record(p_resource_land, {free_farmer_num = 0, total_farmer_num = 0, resource_terms = []}).
+-record(p_resource_term, {resource_type = 0, farmer_num = 0}).
+-record(p_distribute_farmer, {resource_type = 0, farmer_num = 0}).
+-record(p_actor_skill_info, {only_id = 0, skill_infos = []}).
+-record(p_city_output_info, {resource_type = 0, output = 0}).
+-record(p_skill_info, {skill_id = 0, skill_level = 0, skill_pos = 0, skill_bring = 0}).
+-record(p_welfare_box_info, {only_id = 0, box_id = 0, expire_sec = 0, is_award = 0, awards = [], role_name = [], award_sec = 0, source_type = 0, stage = 0}).
+-record(p_welfare_box_get, {box_type = 0, get_num = 0}).
+-record(p_welfare_box_expire, {only_id = 0, expire_sec = 0}).
+-record(p_welfare_box_award, {only_id = 0, is_award = 0}).
+-record(p_welfare_treasure_info, {only_id = 0, treasure_grade = 0, expire_sec = 0, is_award = 0}).
+-record(p_army_term, {army_id = 0, level = 0, army_status = 0}).
+-record(p_army_status, {actor_only_id = 0, army_id = 0, army_status = 0}).
+-record(p_army_level, {actor_only_id = 0, army_id = 0, level = 0}).
+-record(p_zhenxing_status, {actor_only_id = 0, zhenxing_id = 0, zhenxing_status = 0}).
+-record(p_zhenxing_term, {zhenxing_id = 0, zhenxing_status = 0}).
+-record(p_actor_point, {only_id = 0, max_assign_point = 0, attr_points = []}).
+-record(p_team_info, {team_id = 0, team_status = 0, ts_start_sec = 0, ts_end_sec = 0, team_actors = [], team_speed = 0, team_special_status = 0, tss_start_sec = 0, tss_end_sec = 0, is_restore = 0, can_action = 0, team_shiqi = 0, team_tag, ms_actor_id = 0, event_status = 0}).
+-record(p_team_actor, {only_id = 0, team_pos = 0}).
+-record(p_team_status, {team_id = 0, team_status = 0, ts_start_sec = 0, ts_end_sec = 0, team_special_status = 0, tss_start_sec = 0, tss_end_sec = 0, team_tag}).
+-record(p_team_speed, {team_id = 0, team_speed = 0}).
+-record(p_attr_point, {attr_type = 0, point_value = 0}).
+-record(p_build_info, {group_id = 0, build_id = 0, finish_sec = 0, queue_pos = 0, begin_sec = 0}).
+-record(p_appoint_info, {appoint_id = 0, only_id = 0}).
+-record(p_actor_exp, {only_id = 0, exp = 0}).
+-record(p_actor_level, {only_id = 0, level = 0, exp = 0}).
+-record(p_recruit_actor, {actor_id = 0, pos = 0, is_zhuanhua = 0}).
+-record(p_recruit_conc, {completion_times = 0, actor_nums = []}).
+-record(p_recruit_conc_term, {actor_star = 0, num = 0, zhuanhua_num = 0, four_star_actor_ids = []}).
+-record(p_recruit_info, {recruit_id = 0, total_times = 0, daily_times = 0, recruit_terms = []}).
+-record(p_recruit_term, {recruit_type = 0, next_free_sec = 0, free_status = 0, discount_status = 0}).
+-record(p_summary_self, {self_type = 0, fight_awards = [], summary_actors = []}).
+-record(p_summary_actor, {actor_id = 0, get_exp = 0, prev_level = 0, prev_exp = 0, after_level = 0, after_exp = 0, actor_star = 0}).
+-record(p_battle_self, {self_type = 0, actors = [], ms_actor_id = 0}).
+-record(p_battle_actor, {actor_id = 0, level = 0, team_pos = 0, attrs = [], now_attrs = [], zhenxings = [], army_id = 0, zhenxing_id = 0, army_level = 0, army_attrs = [], p_army_infos = [], battle_status = 0, common_skills = [], main_skills = [], unique_skills = [], actor_star = 0, buff_ids = [], ai = []}).
+-record(p_fight_self, {self_type = 0, actors = []}).
+-record(p_fight_actor, {actor_id = 0, level = 0, attrs = [], now_attrs = [], army_id = 0, army_level = 0, army_attrs = [], common_skills = [], major_skills = [], fight_zhenxing = 0, unique_skills = [], actor_star = 0, buff_ids = [], ai = []}).
+-record(p_fight_skill, {skill_id = 0, skill_pos = 0, skill_level = 0}).
+-record(p_battle_team, {battle_id = [], battle_type = 0, team_id = 0, status = 0}).
+-record(p_report_summary, {fight_times = 0, fight_result = 0, battle_summarys = []}).
+-record(p_battle_summary, {self_type = 0, actor_id = 0, now_attrs = [], fight_summary, hand_infos = [], total_frame = 0}).
+-record(p_hand_info, {frame_id = 0, command = 0, extra = 0}).
+-record(p_fight_summary, {has_hp = 0, restore_hp = 0, lose_hp = 0, has_soldier = 0, lose_soldier = 0, restore_soldier = 0, summary_data, skill_summary_datas = [], buff_summary_datas = [], process_summary_datas = []}).
+-record(p_fight_summary_values, {int_values = []}).
+-record(p_battle_report, {battle_id = [], city_id = 0, fight_result = 0, report_selfs = [], start_sec = 0, end_sec = 0, battle_type = 0}).
+-record(p_battle_report_self, {self_type = 0, subject_type = 0, subject_id = 0, subject_name = [], league_id = 0, league_name = [], camp_id = 0, report_actors = [], fight_awards = [], is_read = 0, is_store = 0, team_shiqi = 0}).
+-record(p_battle_report_actor, {actor_id = 0, actor_level = 0, actor_star = 0, get_exp = 0, team_pos = 0, prev_now_attrs = [], after_now_attrs = [], army_id = 0, army_level = 0, common_skills = [], unique_skills = [], attrs = [], first_attrs = []}).
+-record(p_report_detail, {fight_times = 0, fight_result = 0, detail_selfs = []}).
+-record(p_report_detail_self, {self_type = 0, subject_type = 0, subject_id = 0, detail_actors = []}).
+-record(p_report_detail_actor, {actor_id = 0, prev_now_attrs = [], after_now_attrs = [], fight_zhenxing = 0, fight_summary, hand_infos = [], major_skills = [], buff_ids = [], unique_skills = [], army_attrs = [], ai = []}).
+-record(p_actor_zhiliao, {actor_only_id = 0, zhiliao_num = 0}).
+-record(p_actor_bubing, {actor_only_id = 0, bubing_num = 0}).
+-record(p_league_member, {role_id = 0, name = [], level = 0, camp_id = 0, power = 0, post = 0, status = 0, last_logout_time = 0, pos = 0, head_portrait_id = 0}).
+-record(p_league_resource, {resource_type = 0, num = 0}).
+-record(p_camp_resource, {resource_type = 0, num = 0}).
+-record(p_camp_capacity, {resource_type = 0, num = 0}).
+-record(p_actor_model, {type = 0, item_id = 0}).
+-record(p_league, {id = 0, name = [], level = 0, member_num = 0, camp = 0, is_apply = 0, total_member_num = 0, join_conditions = []}).
+-record(p_diplomacy_info, {id = 0, name = [], level = 0, member_num = 0, camp_id = 0, status = 0, finish_sec = 0}).
+-record(p_league_join, {type = 0, value = 0}).
+-record(p_league_log, {template_id = 0, int_values = [], string_values = []}).
+-record(p_camp_log, {template_id = 0, int_values = [], string_values = [], log_sec = 0}).
+-record(p_apply_info, {id = 0, name = [], level = 0, vip_level = 0, is_month_car = 0, sex = 0, career = 0, power = 0, league_id = 0, camp_id = 0, head_portrait_id = 0}).
+-record(p_shouyao_info, {league_id = 0, league_name = [], league_level = 0, yaoqing_name = [], member_num = 0, total_member_num = 0, league_camp_id = 0}).
+-record(p_league_post, {role_id = 0, post = 0, pos = 0}).
+-record(p_actor_star, {only_id = 0, star = 0}).
+-record(p_unique_skill_info, {skill_id = 0, skill_level = 0, is_active = 0}).
+-record(p_actor_unique_skill, {only_id = 0, unique_skills = []}).
+-record(p_main_skill_info, {active_id = 0, skill_id = 0, skill_level = 0, skill_bring = 0}).
+-record(p_actor_main_skill, {only_id = 0, main_skills = []}).
+-record(p_actor_equip, {actor_only_id = 0, equip_infos = []}).
+-record(p_equip_info, {pos = 0, only_id = 0}).
+-record(p_plot_info, {plot_id = 0, plot_status = 0, is_detect = 0, plot_level = 0, build_type = 0, build_level = 0}).
+-record(p_plot_order, {plot_id = 0, order_type = 0, build_type = 0, end_sec = 0}).
+-record(p_train_info, {pos = 0, only_id = 0}).
+-record(p_friend_info, {role_info}).
+-record(p_duanzao_cost, {id = 0, cost_items = []}).
+-record(p_xunma_cost, {id = 0, cost_items = [], cost_sec = 0}).
+-record(p_plot_status, {map_id = 0, plot_id = 0, plot_status = 0, plot_level = 0}).
+-record(p_plot_restore, {plot_id = 0, battle_type = 0, restore_sec = 0}).
+-record(p_private_chat, {role_id = 0, contents = []}).
+-record(p_achieve_info, {achieve_type = 0, achieves = []}).
+-record(p_search_info, {search_sec = 0, template_id = 0, int_values = [], string_values = []}).
+-record(p_rank_camp_info, {rank_id = 0, camp_id = 0, role_id = 0, role_name = [], head_portrait = 0, rank_values = [], member_num = 0, camp_level = 0, camp_exp = 0, city_num = 0}).
+-record(p_trend_info, {trend_id = 0, role_trend_status = 0, start_sec = 0, end_sec = 0, complete_sec = 0, trend_status = 0}).
+-record(p_trend_camp, {rank_id = 0, camp_id = 0, end_sec = 0, value = 0}).
+-record(p_fb_info, {fb_id = 0, has_times = 0}).
+-record(p_fb_team_info, {only_id = 0, fb_team_pos = 0}).
+-record(p_fb_mon_info, {actor_id = 0, fb_team_pos = 0, mon_star = 0, mon_level = 0, mon_attrs = [], army_id = 0}).
+-record(p_camp_role, {role_id = 0, total_devote = 0, prev_devote = 0, yesterday_devote = 0, camp_post = 0, leave_sec = 0, name = [], now_devote = 0, reach_sec = 0, prev_rank_id = 0, yesterday_rank_id = 0, total_value = 0, head_portrait = 0, camp_unspeak_sec = 0}).
+-record(p_post_role, {role_id = 0, camp_post = 0, head_portrait = 0, prev_rank_id = 0, name = [], total_devote = 0, total_value = 0}).
+-record(p_vote_info, {only_id = 0, vote_id = 0, source_name = [], target_name = [], reason = [], vote_terms = [], end_sec = 0, is_end = 0, is_pass = 0, voter_ids = []}).
+-record(p_vote_term, {role_id = 0, select_id = 0}).
+-record(p_camp_member, {role_id = 0, total_devote = 0, prev_devote = 0, now_devote = 0, name = [], camp_post = 0, prev_rank_id = 0, yesterday_devote = 0, yesterday_rank_id = 0, camp_unspeak_sec = 0}).
+-record(p_fight_sort, {fight_only_id = 0, sort_type = 0, sort_selfs = []}).
+-record(p_fight_sort_self, {self_type = 0, subject_type = 0, subject_id = 0, team_id = 0}).
+-record(p_scene_self, {self_type = 0, actors = [], ms_actor_id = 0}).
+-record(p_scene_actor, {team_pos = 0, actor_id = 0, level = 0, attrs = [], now_attrs = [], army_id = 0, army_level = 0, actor_star = 0, scene_status = 0}).
+-record(p_fight_log, {log_id = 0, template_id = 0, int_values = [], string_values = [], log_sec = 0}).
+-record(p_today_member, {role_id = 0, role_name = [], today_devote = 0}).
+-record(p_science_term, {science_id = 0, science_level = 0, support_schedule = 0}).
+-record(p_science_token, {science_id = 0, science_level = 0, support_schedule = 0, effect_sec = 0, cooling_sec = 0, effect_level = 0}).
+-record(p_actor_value, {only_id = 0, actor_value = 0}).
+-record(p_attendance_info, {now_group_id = 0, now_reward_id = 0}).
+-record(p_overview_role, {role_id = 0, camp_post = 0, name = []}).
+-record(p_fight_queue, {queue_type = 0, queue_terms = []}).
+-record(p_fight_queue_term, {subject_type = 0, subject_id = 0, team_id = 0, queue_id = 0}).
+-record(p_month_card, {card_id = 0, status = 0, end_sec = 0}).
+-record(p_trend_term_info, {trend_id = 0, award_status = 0, term_value = 0, max_term_value = 0, trend_camp_infos = []}).
+-record(p_guild_group, {group_id = 0, guide_ids = []}).
+-record(p_supply_info, {supply_type = 0, only_id = 0, finish_sec = 0, supply_num = 0, finish_num = 0, init_num = 0}).
+-record(p_begin_supply, {supply_type = 0, only_id = 0, supply_num = 0}).
+-record(p_army_info, {army_id = 0, army_level = 0}).
+-record(p_add_ask, {add_id = 0, int_values = []}).
+-record(p_add_info, {add_info_id = 0, add_info_value = 0, add_info_terms = []}).
+-record(p_add_info_term, {term_id = 0, value = 0}).
+-record(p_turn_item, {only_id = 0, use_num = 0}).
+-record(p_item_actor, {item_id = 0, item_num = 0, is_turn = 0, sort_pos = 0}).
+-record(p_public_army, {army_id = 0, level = 0}).
+-record(p_actor_simple_info, {only_id = 0, actor_id = 0}).
+-record(p_team_restore_status, {team_id = 0, is_restore = 0}).
+-record(p_camp_status, {camp_id = 0, camp_status = 0, attack_camp_id = 0, leader_name = [], end_sec = 0, camp_level = 0}).
+-record(p_post_apply_info, {role_id = 0, name = [], post = 0, total_value = 0, prev_rank_id = 0, yesterday_rank_id = 0, now_devote = 0}).
+-record(p_city_npc_attack, {attack_city_id = 0, defense_city_id = 0, attack_camp_id = 0, mon_team_count = 0, status = 0, start_sec = 0, end_sec = 0}).
+-record(p_sign_info, {city_id = 0, describe = [], sign_sec = 0}).
+-record(p_camp_sign, {city_id = 0, describe = [], operator_id = 0, sign_sec = 0}).
+-record(p_camp_faling, {faling_id = 0, faling_title = [], faling_content = [], send_sec = 0, role_name = [], camp_post = 0}).
+-record(p_fight_buff, {self_type = 0, buff_ids = []}).
+-record(p_camp_task, {group_id = 0, task_only_id = 0, task_id = 0, finish_times = 0}).
+-record(p_lottery_info, {lottery_id = 0, draw_times = 0, total_times = 0, stage_award_ids = []}).
+-record(p_buildup_info, {only_id = 0, buildup_city_id = 0, aim_city_id = 0, end_sec = 0, status = 0}).
+-record(p_fb_summary_self, {self_type = 0, item_actors = [], summary_actors = []}).
+-record(p_team_tag, {order_type = 0, plot_id = 0}).
+-record(p_far_army, {camp_id = 0, source_city_id = 0, aim_city_id = 0, end_sec = 0}).
+-record(p_cam_rank_info, {rank_id = 0, role_id = 0, role_name = [], rank_values = [], camp_id = 0, server_name = [], head_portrait = 0, camp_post = 0}).
+-record(p_camp_activity, {activity_key, camp_id = 0, activity_status = 0, status_start_sec = 0}).
+-record(p_camp_activity_key, {activity_id = 0, camp_id = 0}).
+-record(p_wgfk_log, {template_id = 0, int_values = [], string_values = []}).
+-record(p_wgfk_info, {activity_id = 0, death_camp_id = 0, wgfk_gold_num = 0, status = 0, left_times = 0, begin_sec = 0, end_sec = 0}).
+-record(p_camp_xlfj, {activity_key, start_sec = 0, xlfj_boxs = [], refresh_times = 0, refresh_sec = 0, next_refresh_sec = 0}).
+-record(p_xlfj_box, {box_id = 0, city_point, is_reward = 0, role_name = [], is_disclose = 0, is_get_tips = 0, disclose_num = 0}).
+-record(p_city_point, {city_id = 0, point = 0}).
+-record(p_fanpai, {plot_id = 0, level = 0, now_sort = 0, fanpai_details = [], rewards = []}).
+-record(p_fanpai_detail, {type = 0, fanpai_terms = []}).
+-record(p_fanpai_term, {id = 0, sort = 0, pos = 0, is_key = 0}).
+-record(p_privilege_info, {privilege_id = 0, end_sec = 0}).
+-record(p_actor_capitulate, {id = 0, schedule = 0, city_id = 0, stage = 0}).
+-record(p_declare_city, {city_id = 0, camp_id = 0, old_camp_id = 0, new_camp_id = 0}).
+-record(p_declare_kill_rank, {rank_id = 0, role_id = 0, role_name = [], head_portrait = 0, camp_id = 0, kill_num = 0}).
+-record(p_crusade_kill_rank, {rank_id = 0, camp_id = 0, kill_num = 0}).
+-record(p_baggage_car_key, {city_id = 0, start_sec = 0}).
+-record(p_baggage_car, {baggage_car_key, city_id = 0, camp_id = 0, walk_paths = [], reach_sec = 0}).
+-record(p_single_event_term, {only_id = 0, team_id = 0, type = 0, sys_id = 0, status = 0, city_point, walk_paths = [], status_end_sec = 0, status_start_sec = 0}).
+-record(p_single_event_point, {only_id = 0, city_point}).
+-record(p_mj_challenge_term, {term_id = 0, score = 0, is_reward = 0}).
+-record(p_mj_challenge_rank, {rank_id = 0, role_name = [], total_score = 0, role_id = 0, camp_id = 0, head_portrait_id = 0}).
+-record(p_tavern_info, {tavern_id = 0, tavern_groups = []}).
+-record(p_tavern_group, {tavern_group_id = 0, tavern_actors = []}).
+-record(p_tavern_actor, {tavern_actor_id = 0, max_star = 0}).
+-record(p_public_mon_info, {mon_id = 0, actor_id = 0, team_pos = 0, mon_level = 0, mon_star = 0, common_skills = [], main_skills = [], unique_skills = [], attrs = [], first_attrs = [], army_id = 0, army_level = 0, m_major_skills = [], m_zhenxing_id = 0}).
+-record(p_nzbz_role_rank, {rank_id = 0, role_id = 0, role_name = [], head_portrait = 0, camp_id = 0, gongxun = 0}).
+-record(p_nzbz_camp_rank, {rank_id = 0, camp_id = 0, score = 0}).
+-record(p_single_game, {single_game_key, sys_term_id = 0}).
+-record(p_single_game_key, {func_type = 0, only_id = 0}).
+-record(p_niu_role_info, {role_id = 0, status = 0, realm = 0, career = 0, sex = 0, lv = 0, nick_name = []}).
+-record(public_success_s2c, {}).
+-record(public_failure_s2c, {ecode = 0, int_values = [], string_values = []}).
+-record(net_heart_c2s, {}).
+-record(net_heart_s2c, {now_ms = 0}).
+-record(net_before_c2s, {}).
+-record(net_before_s2c, {open_time = 0, merge_time = 0}).
+-record(net_niu_role_login_c2s, {sn = 0, acc_id = 0, acc_name = [], ts_tamp = 0, ticket = []}).
+-record(net_niu_role_login_s2c, {is_success = 0, now_sec = 0}).
+-record(setting_all_c2s, {group_id = 0}).
+-record(setting_all_s2c, {setting_infos = [], group_id = 0}).
+-record(setting_set_c2s, {id = 0, value = 0}).
+-record(setting_set_s2c, {}).
+-record(setting_set_more_c2s, {setting_infos = []}).
+-record(setting_set_more_s2c, {}).
+-record(setting_del_c2s, {id = 0}).
+-record(setting_del_s2c, {}).
+-record(setting_del_more_c2s, {ids = []}).
+-record(setting_del_more_s2c, {}).
+-record(login_select_c2s, {role_id = 0}).
+-record(login_select_s2c, {role_id = 0, relogin_key = []}).
+-record(login_relogin_c2s, {role_id = 0, relogin_key = []}).
+-record(login_relogin_s2c, {role_id = 0, relogin_key = []}).
+-record(login_reject_s2c, {code = 0}).
+-record(login_stop_s2c, {time = 0}).
+-record(role_info_c2s, {}).
+-record(role_info_s2c, {role_id = 0, role_name = [], create_sec = 0, online_sec = 0, league_id = 0, league_name = [], com_task_id = 0, server_id = 0, money_infos = [], money_cards = [], guide_groups = [], head_portrait_using = 0, head_portraits = [], chat_frame_using = 0, chat_frames = [], camp_id = 0, resume = [], buy_decrees = [], recovery_sec = 0, rename_times = 0, world_chat_free_times = 0, league_lq_sec = 0, league_post = 0, search_use_times = 0, task_chapter = 0, fb_id = 0, unspeak_sec = 0, camp_post = 0, prev_rank_id = 0, is_skip_guide = 0, now_group_id = 0, now_reward_id = 0, attendance_status = 0, total_devote = 0, today_devote = 0, now_devote = 0, player_value = 0, plot_value = 0, build_value = 0, actor_value = 0, total_gongxun = 0, occupy_plot_ids = [], camp_level = 0, camp_unspeak_sec = 0}).
+-record(role_update_money_s2c, {money_infos = []}).
+-record(role_update_attr_s2c, {actor_attrs = []}).
+-record(role_update_league_s2c, {league_id = 0, league_name = []}).
+-record(role_update_league_lq_sec_s2c, {league_lq_sec = 0}).
+-record(role_rename_c2s, {role_name = []}).
+-record(role_rename_s2c, {}).
+-record(role_change_head_portrait_c2s, {head_portrait_id = 0}).
+-record(role_change_head_portrait_s2c, {}).
+-record(role_update_head_portrait_s2c, {using_id = 0, head_portraits = []}).
+-record(role_change_chat_frame_c2s, {chat_frame_id = 0}).
+-record(role_change_chat_frame_s2c, {}).
+-record(role_update_chat_frame_s2c, {using_id = 0, chat_frames = []}).
+-record(role_select_camp_c2s, {camp_id = 0, role_name = []}).
+-record(role_select_camp_s2c, {role_name = []}).
+-record(role_camp_death_select_camp_c2s, {camp_id = 0}).
+-record(role_camp_death_select_camp_s2c, {}).
+-record(role_change_resume_c2s, {resume = []}).
+-record(role_change_resume_s2c, {}).
+-record(role_update_league_post_s2c, {league_post = 0}).
+-record(role_update_camp_post_s2c, {camp_post = 0}).
+-record(role_update_prev_rank_s2c, {prev_rank_id = 0}).
+-record(role_update_player_value_s2c, {player_value = 0, actor_value = 0, build_value = 0, plot_value = 0}).
+-record(role_player_detail_info_c2s, {role_id = 0}).
+-record(role_player_detail_info_s2c, {player_value = 0, actor_value = 0, build_value = 0, plot_value = 0}).
+-record(role_update_attendance_info_s2c, {now_group_id = 0, now_reward_id = 0, attendance_status = 0}).
+-record(role_ask_attendance_c2s, {}).
+-record(role_ask_attendance_s2c, {item_actors = []}).
+-record(role_update_devote_s2c, {total_devote = 0, now_devote = 0, today_devote = 0}).
+-record(role_mix_client_s2c, {client_version = []}).
+-record(role_mix_guide_info_c2s, {}).
+-record(role_mix_guide_info_s2c, {guide_groups = []}).
+-record(role_mix_complete_guide_c2s, {guide_id = 0}).
+-record(role_mix_complete_guide_s2c, {}).
+-record(role_mix_skip_guide_s2c, {is_success = 0}).
+-record(role_mix_collect_log_c2s, {type = 0, key = [], value = [], extra = []}).
+-record(role_mix_collect_log_s2c, {}).
+-record(role_mix_buy_decree_deal_c2s, {buy_id = 0}).
+-record(role_mix_buy_decree_deal_s2c, {}).
+-record(role_mix_buy_decree_update_s2c, {buy_decrees = []}).
+-record(role_mix_recovery_decree_update_s2c, {recovery_sec = 0}).
+-record(role_mix_resource_swap_c2s, {reduce_resource_type = 0, reduce_num = 0, add_resource_type = 0}).
+-record(role_mix_resource_swap_s2c, {}).
+-record(role_mix_daily_info_c2s, {}).
+-record(role_mix_daily_info_s2c, {daily_point = 0, award_ids = []}).
+-record(role_mix_daily_point_award_c2s, {award_id = 0}).
+-record(role_mix_daily_point_award_s2c, {}).
+-record(role_mix_daily_point_update_s2c, {daily_point = 0}).
+-record(role_mix_month_card_update_s2c, {month_cards = []}).
+-record(role_mix_month_card_c2s, {}).
+-record(role_mix_month_card_s2c, {month_cards = []}).
+-record(role_mix_month_card_receive_c2s, {card_id = 0}).
+-record(role_mix_month_card_receive_s2c, {}).
+-record(role_mix_add_info_c2s, {add_asks = []}).
+-record(role_mix_add_info_s2c, {add_infos = []}).
+-record(role_mix_add_update_s2c, {add_info}).
+-record(role_mix_maintain_s2c, {type = 0, self_type = 0, string_value = []}).
+-record(role_mix_gongxun_update_s2c, {total_gongxun = 0}).
+-record(role_mix_sign_info_c2s, {}).
+-record(role_mix_sign_info_s2c, {sign_infos = []}).
+-record(role_mix_sign_add_c2s, {city_id = 0, describe = []}).
+-record(role_mix_sign_add_s2c, {sign_infos = []}).
+-record(role_mix_sign_del_c2s, {city_id = 0}).
+-record(role_mix_sign_del_s2c, {city_id = 0}).
+-record(role_mix_actor_capitulate_info_c2s, {}).
+-record(role_mix_actor_capitulate_info_s2c, {actor_capitulates = []}).
+-record(role_mix_actor_capitulate_update_s2c, {actor_capitulate}).
+-record(role_mix_actor_capitulate_c2s, {id = 0, is_capitulate = 0}).
+-record(role_mix_actor_capitulate_s2c, {result = 0}).
+-record(role_mix_mj_challenge_info_c2s, {icon_id = 0}).
+-record(role_mix_mj_challenge_info_s2c, {mj_challenge_terms = [], mj_challenge_ranks = []}).
+-record(role_mix_mj_challenge_battle_c2s, {icon_id = 0, term_id = 0, only_id = 0, is_skip_fight = 0}).
+-record(role_mix_mj_challenge_battle_s2c, {battle_id = []}).
+-record(role_mix_mj_challenge_update_s2c, {icon_id = 0, term_id = 0, is_reward = 0}).
+-record(role_mix_mj_challenge_end_s2c, {battle_id = [], fight_result = 0, score = 0, summary_selfs = []}).
+-record(other_simple_info_c2s, {role_id = 0}).
+-record(other_simple_info_s2c, {role_info}).
+-record(other_detail_info_c2s, {role_id = 0}).
+-record(other_detail_info_s2c, {actor_infos = []}).
+-record(chat_content_s2c, {chat_type = 0, contents = []}).
+-record(chat_info_c2s, {chat_type = 0}).
+-record(chat_info_s2c, {chat_type = 0, free_times = 0, contents = []}).
+-record(chat_info_delete_s2c, {type = 0, chat_ids = []}).
+-record(chat_world_c2s, {parts = []}).
+-record(chat_world_s2c, {}).
+-record(chat_camp_c2s, {parts = []}).
+-record(chat_camp_s2c, {}).
+-record(chat_league_c2s, {parts = []}).
+-record(chat_league_s2c, {}).
+-record(chat_update_free_times_s2c, {chat_type = 0, free_times = 0}).
+-record(chat_private_c2s, {parts = [], role_id = 0}).
+-record(chat_private_s2c, {}).
+-record(chat_private_info_c2s, {}).
+-record(chat_private_info_s2c, {private_chats = []}).
+-record(chat_private_read_c2s, {role_id = 0, max_read_id = 0}).
+-record(chat_private_read_s2c, {}).
+-record(bag_info_c2s, {type = 0}).
+-record(bag_info_s2c, {type = 0, bag_infos = [], total_grid = 0}).
+-record(bag_add_s2c, {type = 0, add_infos = []}).
+-record(bag_update_s2c, {type = 0, update_infos = []}).
+-record(bag_delete_s2c, {type = 0, delete_ids = []}).
+-record(bag_buy_grid_c2s, {type = 0, buy_grid = 0}).
+-record(bag_buy_grid_s2c, {}).
+-record(bag_grid_update_s2c, {update_grids = []}).
+-record(bag_item_use_c2s, {bag_type = 0, only_id = 0, use_num = 0, int_values = []}).
+-record(bag_item_use_s2c, {item_publics = []}).
+-record(bag_item_compose_c2s, {item_onlys = [], compose_num = 0}).
+-record(bag_item_compose_s2c, {item_publics = []}).
+-record(bag_item_qianghua_c2s, {only_id = 0, bag_type = 0}).
+-record(bag_item_qianghua_s2c, {is_succ = 0}).
+-record(bag_item_deliver_c2s, {item_onlys = []}).
+-record(bag_item_deliver_s2c, {}).
+-record(bag_item_sell_c2s, {bag_type = 0, item_onlys = []}).
+-record(bag_item_sell_s2c, {}).
+-record(pay_order_update_s2c, {code = 0, pay_orders = []}).
+-record(pay_config_info_c2s, {}).
+-record(pay_config_info_s2c, {pay_configs = []}).
+-record(pay_config_update_s2c, {pay_configs = []}).
+-record(pay_order_c2s, {config_id = 0, product_num = 0, token = []}).
+-record(pay_order_s2c, {order_id = [], need_rmb = 0, sdk_order_id = []}).
+-record(pay_order_other_c2s, {role_id = 0, config_id = 0, product_num = 0, is_broadcast = 0, token = []}).
+-record(pay_order_other_s2c, {order_id = [], need_rmb = 0, sdk_order_id = []}).
+-record(pay_order_item_c2s, {only_id = 0, token = []}).
+-record(pay_order_item_s2c, {}).
+-record(pay_log_info_c2s, {}).
+-record(pay_log_info_s2c, {pay_logs = []}).
+-record(rank_info_c2s, {rank_type = 0, page_id = 0}).
+-record(rank_info_s2c, {rank_type = 0, rank_infos = [], my_rank_id = 0, rank_values = [], page_id = 0, total_page = 0, rank_camp_infos = [], award_sec = 0}).
+-record(icon_info_c2s, {}).
+-record(icon_info_s2c, {icons = []}).
+-record(icon_add_s2c, {add_icons = []}).
+-record(icon_update_s2c, {update_icons = []}).
+-record(icon_delete_s2c, {delete_ids = []}).
+-record(red_dot_info_c2s, {}).
+-record(red_dot_info_s2c, {ids = []}).
+-record(red_dot_add_s2c, {ids = []}).
+-record(mail_info_c2s, {mail_sort = 0, page_id = 0}).
+-record(mail_info_s2c, {page_id = 0, total_page = 0, mail_sort = 0, mail_infos = []}).
+-record(mail_add_s2c, {mail_sort = 0, mail_infos = []}).
+-record(mail_read_c2s, {mail_sort = 0, mail_ids = []}).
+-record(mail_read_s2c, {}).
+-record(mail_update_read_s2c, {mail_reads = []}).
+-record(mail_award_c2s, {mail_sort = 0, mail_ids = []}).
+-record(mail_award_s2c, {rewards = []}).
+-record(mail_update_award_s2c, {mail_awards = []}).
+-record(mail_delete_c2s, {mail_sort = 0, mail_ids = []}).
+-record(mail_delete_s2c, {mail_sort = 0, mail_ids = []}).
+-record(activity_info_c2s, {}).
+-record(activity_info_s2c, {activity_groups = [], activitys = []}).
+-record(activity_add_s2c, {add_activitys = [], activity_groups = []}).
+-record(activity_update_s2c, {update_activitys = [], activity_groups = []}).
+-record(activity_term_update_s2c, {activity_id = 0, term_infos = []}).
+-record(activity_update_all_s2c, {activity_id = 0, term_id = 0, server_receive_times = 0}).
+-record(activity_delete_s2c, {activity_ids = []}).
+-record(activity_award_c2s, {activity_id = 0, term_id = 0, times = 0}).
+-record(activity_award_s2c, {activity_id = 0, term_id = 0, activity_rewards = []}).
+-record(shop_info_c2s, {shop_id = 0}).
+-record(shop_info_s2c, {shop_id = 0, shop_items = [], shop_buys = [], start_sec = 0, end_sec = 0, item_refresh_sec = 0, free_used_times = 0, free_total_times = 0, add_free_times_sec = 0, pay_used_times = 0, add_pay_times_sec = 0}).
+-record(shop_buy_c2s, {shop_id = 0, sale_id = 0, num = 0}).
+-record(shop_buy_s2c, {shop_id = 0, sale_id = 0, buy_num = 0}).
+-record(shop_buy_all_c2s, {shop_id = 0}).
+-record(shop_buy_all_s2c, {shop_id = 0, shop_items = [], shop_buys = []}).
+-record(shop_refresh_c2s, {shop_id = 0}).
+-record(shop_refresh_s2c, {shop_id = 0, shop_items = [], free_used_times = 0, pay_used_times = 0}).
+-record(task_info_c2s, {task_type = 0}).
+-record(task_info_s2c, {task_type = 0, tasks = []}).
+-record(task_add_s2c, {task_type = 0, tasks = []}).
+-record(task_update_s2c, {task_type = 0, tasks = []}).
+-record(task_commit_c2s, {task_type = 0, task_only_id = 0}).
+-record(task_commit_s2c, {}).
+-record(task_com_task_s2c, {com_task_chapter = 0}).
+-record(task_delete_s2c, {task_type = 0, task_ids = []}).
+-record(task_touch_term_c2s, {term_type = 0, target_value = 0, extra_values = [], term_times = 0}).
+-record(task_touch_term_s2c, {}).
+-record(task_accept_c2s, {task_type = 0, task_only_id = 0}).
+-record(task_accept_s2c, {}).
+-record(task_camp_info_c2s, {}).
+-record(task_camp_info_s2c, {camp_tasks = [], next_fresh_sec = 0}).
+-record(task_camp_update_s2c, {camp_tasks = []}).
+-record(scene_city_info_c2s, {map_id = 0}).
+-record(scene_city_info_s2c, {citys = []}).
+-record(scene_city_update_s2c, {map_id = 0, citys = []}).
+-record(scene_city_detail_c2s, {map_id = 0, city_id = 0}).
+-record(scene_city_detail_s2c, {city_detail}).
+-record(scene_city_detail_close_c2s, {map_id = 0, city_id = 0}).
+-record(scene_city_detail_close_s2c, {}).
+-record(scene_city_mon_update_s2c, {city_id = 0, mon_infos = []}).
+-record(scene_city_mon_delete_s2c, {city_id = 0, team_ids = []}).
+-record(scene_city_mon_rank_c2s, {map_id = 0, city_id = 0}).
+-record(scene_city_mon_rank_s2c, {mon_ranks = []}).
+-record(scene_now_s2c, {map_id = 0, now_walks = []}).
+-record(scene_start_order_c2s, {team_id = 0, order_type = 0, map_id = 0, source_id = 0, target_id = 0, walk_paths = [], is_skip_fight = 0, plot_id = 0, buildup_id = 0, far_army_id = 0, deal_times = 0, auto_back = 0}).
+-record(scene_start_order_s2c, {}).
+-record(scene_cancel_order_c2s, {team_id = 0}).
+-record(scene_cancel_order_s2c, {}).
+-record(scene_broadcast_team_walk_s2c, {map_id = 0, team_walks = []}).
+-record(scene_broadcast_team_s2c, {map_id = 0, scene_teams = []}).
+-record(scene_broadcast_team_delete_s2c, {map_id = 0, team_keys = []}).
+-record(scene_team_info_c2s, {map_id = 0}).
+-record(scene_team_info_s2c, {map_id = 0, scene_teams = [], team_walks = []}).
+-record(scene_cultivation_end_sec_s2c, {plot_id = 0, team_id = 0, end_sec = 0}).
+-record(scene_fight_detail_c2s, {map_id = 0, city_id = 0}).
+-record(scene_fight_detail_s2c, {fight_count = 0, quick_times = 0, fight_sorts = [], fight_logs = [], fight_queues = [], fight_buffs = [], scene_selfs = []}).
+-record(scene_fight_detail_close_c2s, {map_id = 0, city_id = 0}).
+-record(scene_fight_detail_close_s2c, {}).
+-record(scene_add_fight_c2s, {map_id = 0, city_id = 0, team_id = 0}).
+-record(scene_add_fight_s2c, {}).
+-record(scene_add_quick_c2s, {map_id = 0, city_id = 0}).
+-record(scene_add_quick_s2c, {}).
+-record(scene_look_fight_sort_c2s, {map_id = 0, city_id = 0, fight_only_id = 0}).
+-record(scene_look_fight_sort_s2c, {scene_selfs = []}).
+-record(scene_close_fight_sort_c2s, {map_id = 0, city_id = 0, fight_only_id = 0}).
+-record(scene_close_fight_sort_s2c, {}).
+-record(scene_update_fight_sort_s2c, {fight_sorts = [], city_id = 0}).
+-record(scene_delete_fight_sort_s2c, {fight_only_ids = [], city_id = 0}).
+-record(scene_update_scene_self_s2c, {scene_selfs = [], city_id = 0}).
+-record(scene_update_fight_buff_s2c, {fight_buffs = [], city_id = 0}).
+-record(scene_update_fight_log_s2c, {fight_logs = [], city_id = 0}).
+-record(scene_update_fight_count_s2c, {fight_count = 0, city_id = 0}).
+-record(scene_update_quick_times_s2c, {quick_times = 0, city_id = 0}).
+-record(scene_wild_mon_infos_c2s, {}).
+-record(scene_wild_mon_infos_s2c, {city_wild_mons = []}).
+-record(scene_wild_mon_detail_c2s, {city_id = 0, point = 0}).
+-record(scene_wild_mon_detail_s2c, {city_id = 0, point = 0, public_mon_infos = []}).
+-record(scene_wild_mon_update_s2c, {city_wild_mons = []}).
+-record(scene_caiwa_plots_infos_c2s, {}).
+-record(scene_caiwa_plots_infos_s2c, {city_caiwa_plots = []}).
+-record(scene_caiwa_plots_open_s2c, {plot_id = 0, city_id = 0, open_sec = 0}).
+-record(scene_caiwa_plots_close_s2c, {plot_id = 0, city_id = 0}).
+-record(scene_caiwa_role_start_s2c, {role_id = 0, plot_id = 0, city_id = 0, start_sec = 0}).
+-record(scene_caiwa_role_end_s2c, {role_id = 0, plot_id = 0, city_id = 0, times = 0}).
+-record(scene_add_queue_s2c, {city_id = 0, fight_queues = []}).
+-record(scene_delete_queue_s2c, {city_id = 0, fight_queues = []}).
+-record(scene_clear_queue_s2c, {city_id = 0, queue_type = 0}).
+-record(scene_caiwa_effect_c2s, {}).
+-record(scene_caiwa_effect_s2c, {effect = 0}).
+-record(scene_supply_info_c2s, {team_id = 0}).
+-record(scene_supply_info_s2c, {supply_infos = []}).
+-record(scene_supply_begin_c2s, {team_id = 0, begin_supplys = []}).
+-record(scene_supply_begin_s2c, {supply_infos = []}).
+-record(scene_supply_all_stop_c2s, {team_id = 0}).
+-record(scene_supply_all_stop_s2c, {}).
+-record(scene_supply_stop_c2s, {team_id = 0, supply_type = 0, only_id = 0}).
+-record(scene_supply_stop_s2c, {}).
+-record(scene_team_reach_s2c, {team_id = 0, city_id = 0}).
+-record(scene_city_minxin_add_effect_update_s2c, {city_id = 0, minxin_add_effects = []}).
+-record(scene_city_ccl_add_effect_update_s2c, {city_id = 0, ccl_add_effects = []}).
+-record(scene_city_ccl_add_effect_delete_s2c, {city_id = 0, policy_token_id = 0}).
+-record(scene_broadcast_minxin_belong_change_s2c, {map_id = 0, city_id = 0, minxin_camp_id = 0, minxin = 0}).
+-record(scene_city_defense_update_s2c, {city_id = 0, defense_mons = [], defense_mon_sec = 0}).
+-record(scene_city_defense_delete_s2c, {city_id = 0, team_ids = []}).
+-record(scene_broadcast_npc_attack_city_s2c, {map_id = 0, npc_attack_city}).
+-record(scene_broadcast_baggage_car_add_s2c, {baggage_cars = []}).
+-record(scene_broadcast_baggage_car_delete_s2c, {baggage_cars = []}).
+-record(actor_info_c2s, {}).
+-record(actor_info_s2c, {actors = []}).
+-record(actor_update_s2c, {actors = [], source_type = 0}).
+-record(actor_team_update_s2c, {team_actors = []}).
+-record(actor_add_special_status_s2c, {asp_statuss = []}).
+-record(actor_del_special_status_s2c, {dsp_statuss = []}).
+-record(actor_detail_info_c2s, {only_id = 0}).
+-record(actor_detail_info_s2c, {actors = []}).
+-record(actor_update_point_s2c, {p_actor_points = []}).
+-record(actor_star_c2s, {only_id = 0, use_only_id = []}).
+-record(actor_star_s2c, {}).
+-record(actor_update_star_s2c, {actor_stars = []}).
+-record(actor_reset_point_c2s, {only_id = 0}).
+-record(actor_reset_point_s2c, {}).
+-record(actor_del_s2c, {only_ids = []}).
+-record(actor_attr_add_point_c2s, {only_id = 0, attr_points = []}).
+-record(actor_attr_add_point_s2c, {}).
+-record(actor_update_level_s2c, {level_infos = []}).
+-record(actor_update_exp_s2c, {exp_infos = []}).
+-record(actor_update_use_point_s2c, {only_id = 0, use_point = 0}).
+-record(actor_use_exp_item_c2s, {only_id = 0, use_items = []}).
+-record(actor_use_exp_item_s2c, {}).
+-record(actor_update_value_s2c, {actor_values = []}).
+-record(actor_skill_info_c2s, {only_id = 0}).
+-record(actor_skill_info_s2c, {skill_infos = []}).
+-record(actor_skill_active_c2s, {only_id = 0, skill_id = 0}).
+-record(actor_skill_active_s2c, {}).
+-record(actor_skill_level_c2s, {only_id = 0, skill_id = 0}).
+-record(actor_skill_level_s2c, {}).
+-record(actor_update_skill_s2c, {skill_infos = []}).
+-record(actor_reset_skill_c2s, {only_id = 0, skill_id = 0}).
+-record(actor_reset_skill_s2c, {}).
+-record(actor_wear_skill_c2s, {only_id = 0, skill_id = 0}).
+-record(actor_wear_skill_s2c, {}).
+-record(actor_take_off_skill_c2s, {only_id = 0, skill_id = 0}).
+-record(actor_take_off_skill_s2c, {}).
+-record(actor_replace_skill_c2s, {only_id = 0, skill_id = 0, replace_skill_id = 0}).
+-record(actor_replace_skill_s2c, {}).
+-record(actor_unique_skill_info_c2s, {only_id = 0}).
+-record(actor_unique_skill_info_s2c, {unique_skill_infos = []}).
+-record(actor_activate_unique_skill_c2s, {only_id = 0}).
+-record(actor_activate_unique_skill_s2c, {}).
+-record(actor_learn_unique_skill_c2s, {pos = 0, only_id = 0, skill_id = 0}).
+-record(actor_learn_unique_skill_s2c, {}).
+-record(actor_level_unique_skill_c2s, {only_id = 0}).
+-record(actor_level_unique_skill_s2c, {}).
+-record(actor_reset_unique_skill_c2s, {pos = 0, only_id = 0, skill_id = 0}).
+-record(actor_reset_unique_skill_s2c, {}).
+-record(actor_recover_unique_skill_c2s, {pos = 0, only_id = 0, skill_id = 0}).
+-record(actor_recover_unique_skill_s2c, {}).
+-record(actor_rub_unique_skill_c2s, {pos = 0, only_id = 0}).
+-record(actor_rub_unique_skill_s2c, {}).
+-record(actor_update_unique_skill_s2c, {unique_skills = []}).
+-record(actor_main_skill_info_c2s, {only_id = 0}).
+-record(actor_main_skill_info_s2c, {main_skill_infos = []}).
+-record(actor_replace_main_skill_c2s, {only_id = 0, replace_active_id = 0}).
+-record(actor_replace_main_skill_s2c, {}).
+-record(actor_main_skill_unlock_c2s, {only_id = 0, active_id = 0}).
+-record(actor_main_skill_unlock_s2c, {}).
+-record(actor_update_main_skill_s2c, {main_skill_infos = []}).
+-record(actor_appoint_info_c2s, {}).
+-record(actor_appoint_info_s2c, {appoint_infos = []}).
+-record(actor_appoint_update_s2c, {appoint_infos = []}).
+-record(actor_appoint_up_c2s, {appoint_id = 0, only_id = 0}).
+-record(actor_appoint_up_s2c, {}).
+-record(actor_appoint_down_c2s, {only_id = 0}).
+-record(actor_appoint_down_s2c, {}).
+-record(actor_appoint_replace_c2s, {appoint_id = 0, only_id = 0}).
+-record(actor_appoint_replace_s2c, {}).
+-record(actor_detail_attr_c2s, {only_id = 0}).
+-record(actor_detail_attr_s2c, {actor_attrs}).
+-record(actor_update_attr_s2c, {actor_attrs = []}).
+-record(actor_update_now_attr_s2c, {actor_now_attrs = []}).
+-record(actor_bubing_c2s, {actor_bubings = []}).
+-record(actor_bubing_s2c, {}).
+-record(actor_zhuanhua_c2s, {actor_only_ids = [], zhuanhua_cost_id = 0, p_turn_items = []}).
+-record(actor_zhuanhua_s2c, {zhuanhua_actor_num = 0, zhanhun_num = 0, get_items = []}).
+-record(actor_fb_team_update_s2c, {fb_team_actors = []}).
+-record(actor_call_info_c2s, {item_id = 0, item_num = 0}).
+-record(actor_call_info_s2c, {get_items = []}).
+-record(actor_activate_c2s, {actor_id = 0}).
+-record(actor_activate_s2c, {}).
+-record(resource_info_c2s, {}).
+-record(resource_info_s2c, {capacity = 0, output_infos = []}).
+-record(resource_wuweitu_info_c2s, {}).
+-record(resource_wuweitu_info_s2c, {wuweitu_infos = []}).
+-record(resource_land_c2s, {}).
+-record(resource_land_s2c, {resource_land}).
+-record(resource_distribute_farmer_c2s, {distribute_farmers = []}).
+-record(resource_distribute_farmer_s2c, {resource_land}).
+-record(resource_land_update_s2c, {resource_land}).
+-record(resource_output_update_s2c, {output_infos = []}).
+-record(army_set_status_c2s, {actor_only_id = 0, battle_id = [], army_id = 0, army_status = 0}).
+-record(army_set_status_s2c, {}).
+-record(army_update_status_s2c, {army_statuss = []}).
+-record(army_update_s2c, {actor_only_id = 0, army_terms = []}).
+-record(army_level_update_s2c, {army_levels = []}).
+-record(army_open_c2s, {actor_only_id = 0, army_active_id = 0}).
+-record(army_open_s2c, {}).
+-record(team_info_c2s, {}).
+-record(team_info_s2c, {teams = []}).
+-record(team_update_s2c, {teams = []}).
+-record(team_status_update_s2c, {status_infos = []}).
+-record(team_speed_update_s2c, {team_speeds = []}).
+-record(team_delete_s2c, {team_ids = []}).
+-record(team_pos_update_s2c, {team_id = 0, team_actors = [], ms_actor_id = 0}).
+-record(team_pos_delete_s2c, {team_id = 0, team_pos = 0, ms_actor_id = 0}).
+-record(team_actor_up_c2s, {team_id = 0, team_pos = 0, only_id = 0}).
+-record(team_actor_up_s2c, {}).
+-record(team_actor_down_c2s, {team_id = 0, team_pos = 0}).
+-record(team_actor_down_s2c, {}).
+-record(team_actor_replace_c2s, {team_id = 0, team_pos = 0, only_id = 0, old_only_id = 0}).
+-record(team_actor_replace_s2c, {}).
+-record(team_actor_exchange_c2s, {team_id = 0, team_pos = 0, exchange_team_id = 0, exchange_pos = 0}).
+-record(team_actor_exchange_s2c, {}).
+-record(team_restore_status_update_s2c, {restore_statuss = []}).
+-record(team_restore_status_delete_s2c, {restore_statuss = []}).
+-record(team_update_shiqi_s2c, {team_shiqis = []}).
+-record(team_major_skill_actor_replace_c2s, {team_id = 0, actor_id = 0}).
+-record(team_major_skill_actor_replace_s2c, {}).
+-record(fight_net_heart_c2s, {}).
+-record(fight_net_heart_s2c, {}).
+-record(fight_single_fight_operation_c2s, {battle_id = [], fight_selfs = [], fight_times = 0, is_skip_fight = 0, hand_infos = [], total_frame = 0, start_sec = 0}).
+-record(fight_single_fight_operation_s2c, {battle_id = []}).
+-record(fight_report_summary_s2c, {battle_id = [], report_summarys = []}).
+-record(build_info_c2s, {}).
+-record(build_info_s2c, {build_infos = []}).
+-record(build_upgrade_c2s, {group_id = 0, flag = 0, queue_pos = 0}).
+-record(build_upgrade_s2c, {}).
+-record(build_update_upgrade_s2c, {build_infos = []}).
+-record(battle_not_end_info_c2s, {}).
+-record(battle_not_end_info_s2c, {hand_teams = [], report_count = 0}).
+-record(battle_not_end_detail_c2s, {battle_id = []}).
+-record(battle_not_end_detail_s2c, {battle_id = [], battle_type = 0, battle_selfs = [], start_sec = 0}).
+-record(battle_new_battle_c2s, {battle_type = 0, is_skip_fight = 0, team_id = 0, values = [], mon_id = 0}).
+-record(battle_new_battle_s2c, {battle_id = []}).
+-record(battle_new_battle_detail_s2c, {battle_id = [], battle_type = 0, battle_selfs = [], is_skip_fight = 0, start_sec = 0}).
+-record(battle_single_fight_operation_c2s, {battle_id = [], actor_id = 0, ms_actor_id = 0, fight_zhenxing = 0, hand_infos = [], total_frame = 0, army_id = 0, status = 0}).
+-record(battle_single_fight_operation_s2c, {}).
+-record(battle_single_fight_complete_s2c, {battle_id = [], fight_result = 0, battle_selfs = []}).
+-record(battle_single_battle_end_s2c, {battle_id = [], fight_result = 0, summary_selfs = []}).
+-record(battle_retreat_c2s, {battle_id = []}).
+-record(battle_retreat_s2c, {}).
+-record(battle_report_c2s, {battle_id = [], page_type = 0, report_type = 0, self_id = 0}).
+-record(battle_report_s2c, {battle_reports = []}).
+-record(battle_report_read_c2s, {battle_id = []}).
+-record(battle_report_read_s2c, {}).
+-record(battle_report_detail_c2s, {battle_id = []}).
+-record(battle_report_detail_s2c, {report_details = [], is_skip_fight = 0}).
+-record(battle_report_deal_c2s, {battle_id = [], deal_type = 0}).
+-record(battle_report_deal_s2c, {deal_type = 0}).
+-record(battle_report_count_s2c, {report_count = 0}).
+-record(battle_fix_mon_info_c2s, {mon_team_id = 0}).
+-record(battle_fix_mon_info_s2c, {public_mon_infos = []}).
+-record(build_mix_zhengbing_info_c2s, {}).
+-record(build_mix_zhengbing_info_s2c, {available_num = 0, max_num = 0, queue_num = 0, finish_all_sec = 0, zhengbing_num = 0, auto_type = 0}).
+-record(build_mix_zhengbing_action_c2s, {zhengbing_num = 0}).
+-record(build_mix_zhengbing_action_s2c, {finish_all_sec = 0}).
+-record(build_mix_zhengbing_cancel_c2s, {}).
+-record(build_mix_zhengbing_cancel_s2c, {}).
+-record(build_mix_zhengbing_update_s2c, {available_num = 0}).
+-record(build_mix_zhengbing_queue_update_s2c, {queue_num = 0}).
+-record(build_mix_zhengbing_finish_sec_update_s2c, {finish_sec = 0}).
+-record(build_mix_zhengbing_auto_c2s, {auto_type = 0}).
+-record(build_mix_zhengbing_auto_s2c, {}).
+-record(build_mix_zhengbing_auto_update_s2c, {auto_type = 0}).
+-record(build_mix_taxes_info_c2s, {}).
+-record(build_mix_taxes_info_s2c, {max_free_times = 0, use_free_times = 0, max_taxes_times = 0, use_taxes_times = 0, build_fix_add = 0, build_dp_add = 0, taxes_value = 0, free_taxes_value = 0, jinzhu_taxes_value = 0}).
+-record(build_mix_levy_c2s, {type = 0}).
+-record(build_mix_levy_s2c, {type = 0, taxes_value = 0}).
+-record(build_mix_taxes_use_update_s2c, {type = 0, use_times = 0}).
+-record(build_mix_taxes_num_update_s2c, {max_taxes_times = 0, use_times = 0}).
+-record(build_mix_max_value_update_s2c, {type = 0, num = 0}).
+-record(zhenxing_set_status_c2s, {actor_only_id = 0, battle_id = [], zhenxing_id = 0, zhenxing_status = 0}).
+-record(zhenxing_set_status_s2c, {}).
+-record(zhenxing_study_c2s, {actor_only_id = 0, zhenxing_active_id = 0}).
+-record(zhenxing_study_s2c, {}).
+-record(zhenxing_status_update_s2c, {zhenxing_statuss = []}).
+-record(zhenxing_info_update_s2c, {actor_only_id = 0, zhenxing_terms = []}).
+-record(league_info_c2s, {}).
+-record(league_info_s2c, {league_id = 0, league_name = [], exp = 0, level = 0, camp = 0, notice_board = [], members = [], leader_id = 0, icon_id = 0, total_member = 0, mail_sec = 0, league_resources = [], demise_sec = 0, modify_notice_sec = 0, total_score = 0, city_num = 0}).
+-record(league_other_info_c2s, {league_id = 0}).
+-record(league_other_info_s2c, {league_id = 0, league_name = [], exp = 0, level = 0, camp = 0, notice_board = [], leader_id = 0, leader_name = [], diplomat_id = 0, diplomat_name = [], icon_id = 0, member_num = 0, total_member = 0, league_resources = [], city_num = 0}).
+-record(league_list_c2s, {page = 0}).
+-record(league_list_s2c, {page = 0, total_page = 0, league_list = []}).
+-record(league_log_c2s, {page = 0}).
+-record(league_log_s2c, {page = 0, total_page = 0, league_log = []}).
+-record(league_donate_c2s, {league_resources = []}).
+-record(league_donate_s2c, {}).
+-record(league_invite_c2s, {shouyao_name = []}).
+-record(league_invite_s2c, {}).
+-record(league_apply_info_c2s, {}).
+-record(league_apply_info_s2c, {apply_infos = []}).
+-record(league_invite_info_c2s, {}).
+-record(league_invite_info_s2c, {shouyao_infos = []}).
+-record(league_deal_invite_info_c2s, {type = 0, league_id = 0}).
+-record(league_deal_invite_info_s2c, {}).
+-record(league_apply_update_s2c, {apply_infos = []}).
+-record(league_apply_delete_s2c, {apply_infos = []}).
+-record(league_create_c2s, {type = 0, league_name = [], notice_board = [], add_type = 0, score_limit = 0, icon_id = 0}).
+-record(league_create_s2c, {}).
+-record(league_apply_c2s, {league_id = 0}).
+-record(league_apply_s2c, {}).
+-record(league_deal_apply_c2s, {type = 0, role_id = 0}).
+-record(league_deal_apply_s2c, {}).
+-record(league_quit_c2s, {}).
+-record(league_quit_s2c, {}).
+-record(league_kick_c2s, {kick_id = 0}).
+-record(league_kick_s2c, {}).
+-record(league_member_add_s2c, {members = []}).
+-record(league_member_del_s2c, {del_id = 0}).
+-record(league_appoint_c2s, {appoint_id = 0, post = 0}).
+-record(league_appoint_s2c, {}).
+-record(league_demise_c2s, {demise_id = 0}).
+-record(league_demise_s2c, {finish_sec = 0}).
+-record(league_break_demise_c2s, {}).
+-record(league_break_demise_s2c, {}).
+-record(league_delate_c2s, {}).
+-record(league_delate_s2c, {}).
+-record(league_post_update_s2c, {post_infos = []}).
+-record(league_join_info_c2s, {}).
+-record(league_join_info_s2c, {join_type = 0, join_conditions = []}).
+-record(league_apply_condition_c2s, {type = 0, join_conditions = []}).
+-record(league_apply_condition_s2c, {}).
+-record(league_notice_board_c2s, {notice_board = []}).
+-record(league_notice_board_s2c, {modify_notice_sec = 0}).
+-record(league_notice_board_update_s2c, {notice_board = []}).
+-record(league_log_add_s2c, {league_log = []}).
+-record(league_leave_c2s, {}).
+-record(league_leave_s2c, {}).
+-record(league_exp_update_s2c, {level = 0, exp = 0}).
+-record(league_change_icon_c2s, {icon_id = 0}).
+-record(league_change_icon_s2c, {}).
+-record(league_update_icon_s2c, {icon_id = 0}).
+-record(league_join_quick_c2s, {}).
+-record(league_join_quick_s2c, {}).
+-record(league_mail_update_s2c, {mail_sec = 0}).
+-record(league_mail_send_c2s, {title = [], content = []}).
+-record(league_mail_send_s2c, {}).
+-record(league_member_status_update_s2c, {role_id = 0, status = 0, last_logout_time = 0}).
+-record(league_resign_c2s, {}).
+-record(league_resign_s2c, {}).
+-record(league_cancel_apply_c2s, {league_id = 0}).
+-record(league_cancel_apply_s2c, {}).
+-record(league_diplomacy_info_c2s, {type = 0}).
+-record(league_diplomacy_info_s2c, {type = 0, diplomacy_infos = []}).
+-record(league_diplomacy_delete_s2c, {type = 0, diplomacy_infos = []}).
+-record(league_diplomacy_update_s2c, {type = 0, diplomacy_infos = []}).
+-record(league_jiejiao_apply_c2s, {league_id = 0}).
+-record(league_jiejiao_apply_s2c, {}).
+-record(league_deal_jiejiao_c2s, {type = 0, league_id = 0}).
+-record(league_deal_jiejiao_s2c, {}).
+-record(league_break_jiejiao_c2s, {league_id = 0}).
+-record(league_break_jiejiao_s2c, {}).
+-record(league_remove_friendship_c2s, {league_id = 0}).
+-record(league_remove_friendship_s2c, {}).
+-record(league_break_remove_friendship_c2s, {league_id = 0}).
+-record(league_break_remove_friendship_s2c, {}).
+-record(xunma_info_c2s, {}).
+-record(xunma_info_s2c, {xunma_id = 0, start_sec = 0, end_sec = 0}).
+-record(xunma_start_c2s, {xunma_id = 0}).
+-record(xunma_start_s2c, {xunma_id = 0, start_sec = 0, end_sec = 0}).
+-record(xunma_complete_s2c, {xunma_id = 0}).
+-record(xunma_cancel_c2s, {xunma_id = 0}).
+-record(xunma_cancel_s2c, {}).
+-record(xunma_reward_c2s, {}).
+-record(xunma_reward_s2c, {item_publics = []}).
+-record(xunma_cost_c2s, {}).
+-record(xunma_cost_s2c, {xunma_costs = []}).
+-record(duanzao_start_c2s, {duanzao_id = 0}).
+-record(duanzao_start_s2c, {item_publics = []}).
+-record(duanzao_cost_c2s, {}).
+-record(duanzao_cost_s2c, {duanzao_costs = []}).
+-record(equip_info_c2s, {actor_only_id = 0}).
+-record(equip_info_s2c, {equips = []}).
+-record(equip_update_s2c, {update_equips = []}).
+-record(equip_wear_c2s, {actor_only_id = 0, equip_pos = 0, only_id = 0}).
+-record(equip_wear_s2c, {}).
+-record(equip_take_off_c2s, {actor_only_id = 0, equip_pos = 0}).
+-record(equip_take_off_s2c, {}).
+-record(equip_strengthen_c2s, {only_id = 0}).
+-record(equip_strengthen_s2c, {}).
+-record(equip_reforge_c2s, {only_id = 0}).
+-record(equip_reforge_s2c, {}).
+-record(equip_quench_c2s, {only_id = 0, use_protect = 0}).
+-record(equip_quench_s2c, {quench_result = 0, old_teji_id = 0, new_teji_id = 0}).
+-record(plot_info_c2s, {}).
+-record(plot_info_s2c, {plot_infos = [], plot_orders = [], plot_restores = []}).
+-record(plot_cancel_order_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_cancel_order_s2c, {map_id = 0, plot_id = 0}).
+-record(plot_order_suspend_s2c, {plot_ids = []}).
+-record(plot_detect_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_detect_s2c, {map_id = 0, plot_id = 0, end_sec = 0}).
+-record(plot_detect_end_s2c, {map_id = 0, plot_id = 0}).
+-record(plot_abandon_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_abandon_s2c, {map_id = 0, plot_id = 0, end_sec = 0}).
+-record(plot_abandon_end_s2c, {map_id = 0, plot_id = 0}).
+-record(plot_build_c2s, {map_id = 0, plot_id = 0, build_type = 0}).
+-record(plot_build_s2c, {map_id = 0, plot_id = 0, build_type = 0, end_sec = 0}).
+-record(plot_build_end_s2c, {map_id = 0, plot_id = 0, build_type = 0, build_lv = 0}).
+-record(plot_build_remove_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_build_remove_s2c, {map_id = 0, plot_id = 0, end_sec = 0}).
+-record(plot_build_remove_end_s2c, {map_id = 0, plot_id = 0}).
+-record(plot_build_upgrade_c2s, {map_id = 0, plot_id = 0, build_type = 0}).
+-record(plot_build_upgrade_s2c, {map_id = 0, plot_id = 0, end_sec = 0}).
+-record(plot_build_upgrade_end_s2c, {map_id = 0, plot_id = 0, build_type = 0, build_lv = 0}).
+-record(plot_level_update_s2c, {plot_id = 0, level = 0}).
+-record(plot_status_update_s2c, {plot_statuses = []}).
+-record(plot_cultivation_end_s2c, {plot_id = 0, team_id = 0}).
+-record(plot_sweep_end_s2c, {plot_id = 0, team_id = 0, fight_result = 0}).
+-record(plot_restore_info_c2s, {}).
+-record(plot_restore_info_s2c, {plot_restores = []}).
+-record(plot_move_c2s, {map_id = 0, old_plot_id = 0, target_plot_id = 0}).
+-record(plot_move_s2c, {}).
+-record(plot_build_move_end_s2c, {map_id = 0, old_plot_id = 0, old_plot_status = 0, new_plot_id = 0, build_type = 0, build_lv = 0}).
+-record(plot_build_now_complete_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_build_now_complete_s2c, {}).
+-record(plot_build_upgrade_now_complete_c2s, {map_id = 0, plot_id = 0}).
+-record(plot_build_upgrade_now_complete_s2c, {}).
+-record(plot_first_occupy_update_s2c, {add_plot_ids = []}).
+-record(search_info_c2s, {}).
+-record(search_info_s2c, {day_times = 0, max_times = 0, search_infos = []}).
+-record(search_goods_c2s, {}).
+-record(search_goods_s2c, {search_infos = [], item_publics = [], actor_ids = [], item_actors = []}).
+-record(search_update_times_s2c, {day_times = 0, max_times = 0}).
+-record(training_info_c2s, {}).
+-record(training_info_s2c, {train_infos = [], train_sec = 0, train_times = 0, total_train_times = 0}).
+-record(training_start_info_c2s, {train_infos = [], total_train_times = 0}).
+-record(training_start_info_s2c, {}).
+-record(training_quit_info_c2s, {}).
+-record(training_quit_info_s2c, {}).
+-record(training_update_info_s2c, {train_infos = [], train_sec = 0, train_times = 0, total_train_times = 0}).
+-record(training_leave_info_c2s, {train_infos = []}).
+-record(training_leave_info_s2c, {}).
+-record(friend_info_c2s, {type = 0}).
+-record(friend_info_s2c, {type = 0, friend_infos = []}).
+-record(friend_abandon_c2s, {type = 0, abandon_ids = []}).
+-record(friend_abandon_s2c, {}).
+-record(friend_delete_s2c, {type = 0, friend_ids = []}).
+-record(friend_search_c2s, {search_name = []}).
+-record(friend_search_s2c, {friend_infos = []}).
+-record(friend_agree_apply_c2s, {agree_ids = []}).
+-record(friend_agree_apply_s2c, {}).
+-record(friend_reject_apply_c2s, {reject_ids = []}).
+-record(friend_reject_apply_s2c, {}).
+-record(friend_black_c2s, {black_ids = []}).
+-record(friend_black_s2c, {}).
+-record(friend_apply_c2s, {apply_ids = []}).
+-record(friend_apply_s2c, {}).
+-record(friend_update_status_s2c, {role_id = 0, status = 0, logout_sec = 0}).
+-record(friend_add_s2c, {type = 0, friend_infos = []}).
+-record(achieve_info_c2s, {}).
+-record(achieve_info_s2c, {award_ids = [], achieve_infos = []}).
+-record(achieve_commit_c2s, {achieve_type = 0, achieve_id = 0}).
+-record(achieve_commit_s2c, {}).
+-record(achieve_point_award_c2s, {award_id = 0}).
+-record(achieve_point_award_s2c, {}).
+-record(achieve_add_s2c, {achieve_type = 0, achieves = []}).
+-record(achieve_update_s2c, {achieve_type = 0, achieves = []}).
+-record(achieve_delete_s2c, {achieve_type = 0, achieve_id = 0}).
+-record(trend_info_c2s, {}).
+-record(trend_info_s2c, {trend_infos = []}).
+-record(trend_update_s2c, {trend_infos = []}).
+-record(trend_term_info_c2s, {trend_id = 0}).
+-record(trend_term_info_s2c, {award_status = 0, term_value = 0, max_term_value = 0, trend_camp_infos = []}).
+-record(trend_term_award_c2s, {trend_id = 0}).
+-record(trend_term_award_s2c, {award_status = 0}).
+-record(trend_all_term_info_c2s, {trend_ids = []}).
+-record(trend_all_term_info_s2c, {trend_term_infos = []}).
+-record(fb_info_c2s, {group_id = 0}).
+-record(fb_info_s2c, {fb_infos = []}).
+-record(fb_mon_info_c2s, {fb_id = 0}).
+-record(fb_mon_info_s2c, {p_fb_mon_infos = []}).
+-record(fb_start_c2s, {fb_id = 0}).
+-record(fb_start_s2c, {}).
+-record(fb_update_s2c, {fb_id = 0, has_times = 0, fight_result = 0}).
+-record(fb_update_times_s2c, {sec = 0}).
+-record(fb_team_info_c2s, {fb_type = 0}).
+-record(fb_team_info_s2c, {fb_type = 0, fb_team_infos = []}).
+-record(fb_team_update_s2c, {fb_type = 0, fb_team_infos = []}).
+-record(fb_team_pos_update_s2c, {fb_type = 0, fb_team_actors = []}).
+-record(fb_team_pos_delete_s2c, {fb_type = 0, fb_team_pos = 0}).
+-record(fb_team_actor_up_c2s, {fb_type = 0, fb_team_pos = 0, only_id = 0}).
+-record(fb_team_actor_up_s2c, {}).
+-record(fb_team_actor_down_c2s, {fb_type = 0, fb_team_pos = 0}).
+-record(fb_team_actor_down_s2c, {}).
+-record(fb_team_actor_exchange_c2s, {fb_type = 0, fb_team_pos = 0, exchange_pos = 0}).
+-record(fb_team_actor_exchange_s2c, {}).
+-record(fb_battle_end_s2c, {battle_id = [], self_type = 0, fight_result = 0, summary_selfs = []}).
+-record(camp_overview_info_c2s, {}).
+-record(camp_overview_info_s2c, {camp_id = 0, overview_roles = [], plot_num = 0, camp_power = 0, camp_level = 0, camp_exp = 0, total_science_point = 0, week_science_point = 0, extra_science_point = 0, notice_board = [], notice_sec = 0, status_end_sec = 0, camp_status = 0}).
+-record(camp_member_info_c2s, {page = 0}).
+-record(camp_member_info_s2c, {camp_id = 0, camp_roles = [], current_page = 0, total_page = 0, camp_role_self}).
+-record(camp_king_election_info_c2s, {}).
+-record(camp_king_election_info_s2c, {camp_id = 0, camp_roles = [], camp_role_self}).
+-record(camp_leader_born_sec_c2s, {}).
+-record(camp_leader_born_sec_s2c, {leader_born_sec = 0}).
+-record(camp_post_info_c2s, {}).
+-record(camp_post_info_s2c, {camp_id = 0, post_roles = [], demise_sec = 0, now_vote_id = 0, demise_id = 0, demise_name = [], impeach_sec = 0, leader_prev_rank_id = 0, apply_camp_posts = []}).
+-record(camp_operate_lists_c2s, {deal_type = 0, post = 0}).
+-record(camp_operate_lists_s2c, {camp_members = []}).
+-record(camp_close_info_c2s, {}).
+-record(camp_close_info_s2c, {}).
+-record(camp_open_info_c2s, {}).
+-record(camp_open_info_s2c, {}).
+-record(camp_today_rank_info_c2s, {}).
+-record(camp_today_rank_info_s2c, {today_members = [], self_today_rank_id = 0, self_today_devote = 0}).
+-record(camp_appoint_c2s, {appoint_id = 0, post = 0}).
+-record(camp_appoint_s2c, {}).
+-record(camp_remove_c2s, {appoint_id = 0}).
+-record(camp_remove_s2c, {}).
+-record(camp_modify_notice_c2s, {notice_board = []}).
+-record(camp_modify_notice_s2c, {}).
+-record(camp_resign_c2s, {}).
+-record(camp_resign_s2c, {}).
+-record(camp_release_token_c2s, {token_id = 0}).
+-record(camp_release_token_s2c, {}).
+-record(camp_unspeak_c2s, {role_id = 0, select_id = 0}).
+-record(camp_unspeak_s2c, {}).
+-record(camp_cancel_unspeak_c2s, {role_id = 0}).
+-record(camp_cancel_unspeak_s2c, {}).
+-record(camp_impeach_c2s, {impeach_reason = []}).
+-record(camp_impeach_s2c, {}).
+-record(camp_demise_c2s, {demise_id = 0}).
+-record(camp_demise_s2c, {}).
+-record(camp_quit_demise_c2s, {}).
+-record(camp_quit_demise_s2c, {}).
+-record(camp_post_apply_info_c2s, {}).
+-record(camp_post_apply_info_s2c, {post_apply_infos = []}).
+-record(camp_post_apply_update_s2c, {post_apply_infos = []}).
+-record(camp_post_apply_delete_s2c, {post_apply_infos = []}).
+-record(camp_post_apply_c2s, {post = 0}).
+-record(camp_post_apply_s2c, {}).
+-record(camp_deal_post_apply_c2s, {type = 0, role_id = 0, post = 0}).
+-record(camp_deal_post_apply_s2c, {}).
+-record(camp_post_all_refuse_c2s, {}).
+-record(camp_post_all_refuse_s2c, {}).
+-record(camp_post_update_s2c, {post_roles = []}).
+-record(camp_update_notice_s2c, {notice_board = []}).
+-record(camp_update_notice_sec_s2c, {notice_sec = 0}).
+-record(camp_update_demise_info_s2c, {finish_sec = 0, demise_name = [], demise_id = 0}).
+-record(camp_update_unspeak_s2c, {camp_unspeak_sec = 0}).
+-record(camp_update_impeach_vote_s2c, {now_vote_id = 0, impeach_sec = 0}).
+-record(camp_capacity_info_c2s, {}).
+-record(camp_capacity_info_s2c, {donate_num = 0, day_donate_limit = 0, camp_resources = [], city_output_infos = [], camp_capacitys = []}).
+-record(camp_donate_c2s, {resources = []}).
+-record(camp_donate_s2c, {donate_num = 0}).
+-record(camp_log_c2s, {page = 0}).
+-record(camp_log_s2c, {page = 0, total_page = 0, camp_log = []}).
+-record(camp_log_add_s2c, {camp_log = []}).
+-record(camp_capacity_update_s2c, {camp_capacitys = []}).
+-record(camp_welfare_info_c2s, {}).
+-record(camp_welfare_info_s2c, {treasure_exp = 0, welfare_box_infos = [], treasure_infos = [], day_treasure_times = 0, welfare_box_gets = []}).
+-record(camp_level_exp_update_s2c, {camp_level = 0, camp_exp = 0}).
+-record(camp_science_point_update_s2c, {total_science_point = 0, week_science_point = 0, extra_science_point = 0}).
+-record(camp_welfare_box_add_s2c, {box_infos = []}).
+-record(camp_welfare_box_delete_s2c, {box_only_ids = []}).
+-record(camp_welfare_box_award_c2s, {type = 0, box_only_ids = []}).
+-record(camp_welfare_box_award_s2c, {welfare_box_infos = [], awards = []}).
+-record(camp_welfare_box_get_update_s2c, {box_gets = []}).
+-record(camp_welfare_treasure_add_s2c, {treasure_infos = []}).
+-record(camp_welfare_treasure_delete_s2c, {treasure_only_ids = []}).
+-record(camp_welfare_treasure_award_c2s, {treasure_only_id = 0}).
+-record(camp_welfare_treasure_award_s2c, {treasure_only_id = 0, awards = []}).
+-record(camp_treasure_exp_update_s2c, {day_treasure_times = 0, treasure_exp = 0}).
+-record(camp_science_info_c2s, {}).
+-record(camp_science_info_s2c, {study_id = 0, end_sec = 0, science_terms = [], support_times = 0, next_restore_sec = 0, recommend_id = 0}).
+-record(camp_science_support_c2s, {support_type = 0, science_id = 0, support_aim_type = 0}).
+-record(camp_science_support_s2c, {support_times = 0, next_restore_sec = 0, science_id = 0, schedule = 0, multiple = 0, support_aim_type = 0}).
+-record(camp_science_study_c2s, {science_id = 0}).
+-record(camp_science_study_s2c, {}).
+-record(camp_science_start_study_s2c, {science_id = 0, end_sec = 0}).
+-record(camp_science_update_s2c, {science_term}).
+-record(camp_science_support_times_update_s2c, {support_times = 0, next_restore_sec = 0}).
+-record(camp_science_recommend_c2s, {science_id = 0}).
+-record(camp_science_recommend_s2c, {}).
+-record(camp_science_token_info_c2s, {}).
+-record(camp_science_token_info_s2c, {science_tokens = []}).
+-record(camp_science_token_update_s2c, {science_token}).
+-record(camp_science_token_active_c2s, {science_id = 0, extra_value = 0}).
+-record(camp_science_token_active_s2c, {}).
+-record(camp_science_token_active_broadcast_s2c, {science_id = 0, science_level = 0}).
+-record(camp_death_success_s2c, {camp_id = 0, death_camp_id = 0, is_one_camp = 0, end_sec = 0}).
+-record(camp_death_finish_s2c, {death_camp_id = 0, add_resources = [], city_ids = [], is_one_camp = 0}).
+-record(camp_all_camp_status_c2s, {}).
+-record(camp_all_camp_status_s2c, {camp_statuses = []}).
+-record(camp_status_update_s2c, {camp_status}).
+-record(camp_update_camp_s2c, {camp_id = 0}).
+-record(camp_sign_info_c2s, {}).
+-record(camp_sign_info_s2c, {camp_signs = []}).
+-record(camp_sign_add_c2s, {city_id = 0, describe = []}).
+-record(camp_sign_add_s2c, {}).
+-record(camp_sign_del_c2s, {city_id = 0}).
+-record(camp_sign_del_s2c, {}).
+-record(camp_sign_update_s2c, {camp_signs = []}).
+-record(camp_sign_delete_s2c, {city_id = 0}).
+-record(camp_buildup_info_c2s, {}).
+-record(camp_buildup_info_s2c, {buildup_infos = []}).
+-record(camp_attack_buildup_c2s, {buildup_city_id = 0, aim_city_id = 0, buildup_sec = 0}).
+-record(camp_attack_buildup_s2c, {}).
+-record(camp_attack_buildup_abort_c2s, {only_id = 0}).
+-record(camp_attack_buildup_abort_s2c, {}).
+-record(camp_buildup_update_s2c, {buildup_info}).
+-record(camp_faling_info_c2s, {}).
+-record(camp_faling_info_s2c, {camp_falings = []}).
+-record(camp_faling_send_c2s, {title = [], content = []}).
+-record(camp_faling_send_s2c, {}).
+-record(camp_faling_add_s2c, {camp_falings = []}).
+-record(camp_faling_delete_c2s, {faling_ids = []}).
+-record(camp_faling_delete_s2c, {faling_ids = []}).
+-record(camp_far_army_info_c2s, {}).
+-record(camp_far_army_info_s2c, {far_armys = []}).
+-record(camp_far_army_update_s2c, {far_armys = []}).
+-record(vote_info_c2s, {}).
+-record(vote_info_s2c, {vote_infos = []}).
+-record(vote_start_c2s, {vote_id = 0}).
+-record(vote_start_s2c, {vote_id = 0}).
+-record(vote_select_c2s, {only_id = 0, select_id = 0}).
+-record(vote_select_s2c, {}).
+-record(vote_update_s2c, {vote_info}).
+-record(vote_delete_s2c, {only_id = 0}).
+-record(govern_info_c2s, {map_id = 0, city_id = 0}).
+-record(govern_info_s2c, {map_id = 0, city_id = 0, minxin_camp_id = 0, minxin = 0, gov_logs = [], gov_policy_tokens = []}).
+-record(govern_close_info_c2s, {map_id = 0, city_id = 0}).
+-record(govern_close_info_s2c, {}).
+-record(govern_open_info_c2s, {map_id = 0, city_id = 0}).
+-record(govern_open_info_s2c, {}).
+-record(govern_favour_point_update_s2c, {map_id = 0, city_id = 0, minxin_camp_id = 0, minxin = 0}).
+-record(govern_policy_token_c2s, {map_id = 0, city_id = 0, policy_token_id = 0}).
+-record(govern_policy_token_s2c, {}).
+-record(govern_policy_token_update_s2c, {map_id = 0, city_id = 0, gov_policy_tokens = []}).
+-record(govern_policy_token_broadcast_s2c, {city_id = 0, policy_token_id = 0}).
+-record(public_army_c2s, {}).
+-record(public_army_s2c, {public_armys = []}).
+-record(public_army_upgrade_c2s, {army_id = 0}).
+-record(public_army_upgrade_s2c, {}).
+-record(public_army_update_s2c, {public_armys = []}).
+-record(activity_limit_info_c2s, {}).
+-record(activity_limit_info_s2c, {activity_infos = []}).
+-record(activity_limit_buy_c2s, {activity_id = 0, term_id = 0}).
+-record(activity_limit_buy_s2c, {}).
+-record(activity_limit_add_s2c, {activity_infos = []}).
+-record(activity_limit_del_s2c, {del_activity_ids = []}).
+-record(activity_limit_update_s2c, {activity_infos = []}).
+-record(activity_limit_receive_c2s, {activity_id = 0, term_id = 0}).
+-record(activity_limit_receive_s2c, {}).
+-record(lottery_info_c2s, {}).
+-record(lottery_info_s2c, {lottery_infos = []}).
+-record(lottery_act_c2s, {lottery_id = 0, lottery_type = 0, cost_type = 0}).
+-record(lottery_act_s2c, {lottery_id = 0, lottery_type = 0, item_actors = [], p_actor_simple_infos = []}).
+-record(lottery_update_info_s2c, {lottery_infos = []}).
+-record(lottery_stage_award_c2s, {lottery_id = 0, award_id = 0}).
+-record(lottery_stage_award_s2c, {lottery_id = 0, award_id = 0}).
+-record(camp_activity_info_c2s, {}).
+-record(camp_activity_info_s2c, {camp_activitys = []}).
+-record(camp_activity_update_s2c, {camp_activitys = []}).
+-record(camp_activity_mix_rank_info_c2s, {camp_id = 0}).
+-record(camp_activity_mix_rank_info_s2c, {cam_rank_infos = []}).
+-record(camp_activity_xlfj_info_c2s, {}).
+-record(camp_activity_xlfj_info_s2c, {camp_xlfjs = []}).
+-record(camp_activity_xlfj_update_s2c, {camp_xlfjs = []}).
+-record(camp_activity_xlfj_box_update_s2c, {activity_key, xlfj_box}).
+-record(camp_activity_xlfj_disclose_c2s, {activity_key, box_id = 0}).
+-record(camp_activity_xlfj_disclose_s2c, {}).
+-record(camp_activity_xlfj_get_tips_c2s, {activity_key, box_id = 0}).
+-record(camp_activity_xlfj_get_tips_s2c, {}).
+-record(camp_wgfk_close_c2s, {activity_id = 0, death_camp_id = 0}).
+-record(camp_wgfk_close_s2c, {}).
+-record(camp_wgfk_open_c2s, {activity_id = 0, death_camp_id = 0}).
+-record(camp_wgfk_open_s2c, {activity_id = 0, death_camp_id = 0, wgfk_gold_num = 0, role_gold_num = 0, wgfk_logs = []}).
+-record(camp_wgfk_info_c2s, {activity_id = 0, death_camp_id = 0}).
+-record(camp_wgfk_info_s2c, {activity_id = 0, death_camp_id = 0, wgfk_gold_num = 0, status = 0, left_times = 0, begin_sec = 0, end_sec = 0}).
+-record(camp_wgfk_log_add_s2c, {wgfk_logs = []}).
+-record(camp_wgfk_role_gold_update_s2c, {activity_id = 0, death_camp_id = 0, role_gold_num = 0}).
+-record(camp_wgfk_camp_gold_update_s2c, {activity_id = 0, death_camp_id = 0, wgfk_gold_num = 0}).
+-record(camp_wgfk_info_update_s2c, {wgfk_infos = []}).
+-record(camp_wgfk_act_rob_c2s, {activity_id = 0, death_camp_id = 0}).
+-record(camp_wgfk_act_rob_s2c, {unusual_rewards = []}).
+-record(privilege_info_c2s, {}).
+-record(privilege_info_s2c, {privilege_infos = []}).
+-record(privilege_add_s2c, {privilege_infos = []}).
+-record(privilege_del_s2c, {privilege_ids = []}).
+-record(declare_info_c2s, {}).
+-record(declare_info_s2c, {declare_status = 0, declare_sec = 0, declare_citys = []}).
+-record(declare_status_update_s2c, {declare_status = 0, declare_sec = 0}).
+-record(declare_city_update_s2c, {declare_citys = []}).
+-record(declare_select_c2s, {city_id = 0}).
+-record(declare_select_s2c, {}).
+-record(declare_kill_rank_c2s, {}).
+-record(declare_kill_rank_s2c, {kill_ranks = [], kill_num = 0}).
+-record(crusade_info_c2s, {}).
+-record(crusade_info_s2c, {crusade_status = 0, crusade_result = 0, city_id = 0, end_sec = 0}).
+-record(crusade_status_update_s2c, {crusade_status = 0, crusade_result = 0}).
+-record(crusade_kill_rank_c2s, {}).
+-record(crusade_kill_rank_s2c, {total_panjun_num = 0, kill_ranks = []}).
+-record(single_event_info_c2s, {}).
+-record(single_event_info_s2c, {reward_times = 0, single_event_terms = [], single_event_points = [], next_refresh_sec = 0}).
+-record(single_event_update_s2c, {reward_times = 0, next_refresh_sec = 0, single_event_terms = []}).
+-record(single_event_point_update_s2c, {single_event_points = []}).
+-record(single_event_delete_s2c, {only_id = 0}).
+-record(single_event_open_c2s, {only_id = 0}).
+-record(single_event_open_s2c, {}).
+-record(single_event_exit_c2s, {only_id = 0}).
+-record(single_event_exit_s2c, {}).
+-record(single_event_start_c2s, {only_id = 0, team_id = 0}).
+-record(single_event_start_s2c, {}).
+-record(single_event_cancel_c2s, {only_id = 0}).
+-record(single_event_cancel_s2c, {}).
+-record(tavern_info_c2s, {}).
+-record(tavern_info_s2c, {tavern_infos = []}).
+-record(tavern_start_c2s, {tavern_id = 0, tavern_group_id = 0, tavern_actor_id = 0, star = 0, actor_only_id = 0}).
+-record(tavern_start_s2c, {}).
+-record(tavern_actor_update_s2c, {tavern_id = 0, tavern_group_id = 0, tavern_actor_id = 0, star = 0}).
+-record(game_win_info_c2s, {}).
+-record(game_win_info_s2c, {game_win_type = 0, award_ids = []}).
+-record(game_win_type_update_s2c, {game_win_type = 0, award_ids = []}).
+-record(nzbz_role_rank_c2s, {}).
+-record(nzbz_role_rank_s2c, {role_ranks = [], self_gongxun = 0}).
+-record(nzbz_camp_rank_c2s, {}).
+-record(nzbz_camp_rank_s2c, {camp_ranks = []}).
+-record(single_game_info_c2s, {}).
+-record(single_game_info_s2c, {single_games = []}).
+-record(single_game_result_c2s, {single_game_key, result = 0}).
+-record(single_game_result_s2c, {}).
+-record(single_game_new_s2c, {single_game}).
+-record(single_game_delete_s2c, {single_game_key}).

@@ -1,0 +1,37 @@
+import "common.proto";
+// ##model_begin##兵种模块##model_end##
+// ##begin##兵种设置状态##end##
+message army_set_status_c2s {
+    optional uint32                        actor_only_id = 1;             // 武将唯一ID
+    optional string                        battle_id = 2;                 // 战斗唯一标识 如果是0后端判断武将是否上阵或是停留状态
+    optional uint32                        army_id = 3;                   // 兵种id
+    optional uint32                        army_status = 4;               // 兵种状态 0.未使用 1.使用
+}
+// ##begin##兵种设置状态##end##
+message army_set_status_s2c {
+}
+
+// ##begin##兵种状态更新##end##
+message army_update_status_s2c {
+    repeated p_army_status                 army_statuss = 1;              // 兵种状态信息
+}
+
+// ##begin##兵种信息更新##end##
+message army_update_s2c {
+    optional uint32                        actor_only_id = 1;             // 武将唯一ID
+    repeated p_army_term                   army_terms = 2;                // 兵种信息
+}
+
+// ##begin##批量兵种等级更新##end##
+message army_level_update_s2c {
+    repeated p_army_level                   army_levels = 1;               // 兵种等级更新
+}
+
+// ##begin##兵种开启##end##
+message army_open_c2s {
+    optional uint32                        actor_only_id = 1;             // 武将唯一ID
+    optional uint32                        army_active_id = 2;            // 兵种激活ID
+}
+// ##begin##兵种开启##end##
+message army_open_s2c {
+}

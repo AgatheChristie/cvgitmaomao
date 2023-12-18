@@ -1,0 +1,66 @@
+import "common.proto";
+// ##model_begin##充值模块##model_end##
+// ##begin##订单更新##end##
+message pay_order_update_s2c {
+    optional uint32                  code = 1;                            // 错误码
+    repeated p_pay_order             pay_orders = 2;                      // 充值订单信息
+}
+
+// ##begin##所有充值档次信息##end##
+message pay_config_info_c2s {
+
+}
+// ##begin##所有充值档次信息##end##
+message pay_config_info_s2c {
+    repeated p_pay_config            pay_configs = 1;                     // 充值订单信息
+}
+
+// ##begin##充值档次更新##end##
+message pay_config_update_s2c {
+    repeated p_pay_config            pay_configs = 1;                     // 充值订单信息
+}
+
+// ##begin##充值下单##end##
+message pay_order_c2s {
+    optional uint32                  config_id = 1;                       // 配置表的订单id
+    optional uint32                  product_num = 2;                     // 购买的数量
+    optional string                  token = 3;                           // sdk对应参数
+}
+// ##begin##充值下单##end##
+message pay_order_s2c {
+    optional string                  order_id = 1;                        // 订单id
+    optional uint32                  need_rmb = 2;                        // 需要的人民币额度
+    optional string                  sdk_order_id = 3;                    // sdk对应订单id
+}
+
+// ##begin##给别人充值下单##end##
+message pay_order_other_c2s {
+    optional uint32                  role_id = 1;                         // 玩家id
+    optional uint32                  config_id = 2;                       // 配置表的订单id
+    optional uint32                  product_num = 3;                     // 购买的数量
+    optional uint32                  is_broadcast = 4;                    // 是否广播
+    optional string                  token = 5;                           // sdk对应参数
+}
+// ##begin##给别人充值下单##end##
+message pay_order_other_s2c {
+    optional string                  order_id = 1;                        // 订单id
+    optional uint32                  need_rmb = 2;                        // 需要的人民币额度
+    optional string                  sdk_order_id = 3;                    // sdk对应订单id
+}
+
+// ##begin##使用道具下单##end##
+message pay_order_item_c2s {
+    optional uint32                  only_id = 1;                         // 道具唯一id
+    optional string                  token = 2;                           // sdk对应参数
+}
+// ##begin##使用道具下单##end##
+message pay_order_item_s2c {
+}
+
+// ##begin##充值日志信息##end##
+message pay_log_info_c2s {
+}
+// ##begin##充值日志信息##end##
+message pay_log_info_s2c {
+    repeated p_pay_log               pay_logs = 1;                       // 充值订单日志
+}

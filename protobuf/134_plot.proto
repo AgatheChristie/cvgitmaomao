@@ -1,0 +1,202 @@
+import "common.proto";
+// ##model_begin##地块模块##model_end##
+// ##begin##地块信息##end##
+message plot_info_c2s {
+}
+// ##begin##地块信息##end##
+message plot_info_s2c {
+    repeated p_plot_info              plot_infos = 1;            // 地块信息
+    repeated p_plot_order             plot_orders = 2;           // 地块指令信息
+    repeated p_plot_restore           plot_restores = 3;         // 地块守军恢复
+}
+
+// ##begin##地块取消指令##end##
+message plot_cancel_order_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块取消指令##end##
+message plot_cancel_order_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+
+// ##begin##地块指令中止##end##
+message plot_order_suspend_s2c {
+    repeated uint32                   plot_ids = 1;               // 地块ids
+}
+
+// ##begin##地块侦查##end##
+message plot_detect_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块侦查##end##
+message plot_detect_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   end_sec = 3;               // 结束时间
+}
+
+// ##begin##地块侦查结束##end##
+message plot_detect_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   plot_id = 2;                // 地块id
+}
+
+// ##begin##地块放弃##end##
+message plot_abandon_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块放弃##end##
+message plot_abandon_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   end_sec = 3;               // 结束时间
+}
+
+// ##begin##地块放弃结束##end##
+message plot_abandon_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   plot_id = 2;                // 地块id
+}
+
+// ##begin##地块建造##end##
+message plot_build_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   build_type = 3;            // 建造类型
+}
+// ##begin##地块建造##end##
+message plot_build_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   build_type = 3;            // 建造类型
+    optional uint32                   end_sec = 4;               // 结束时间
+}
+
+// ##begin##地块建造结束##end##
+message plot_build_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   plot_id = 2;                // 地块id
+    optional uint32                   build_type = 3;             // 建筑类型
+    optional uint32                   build_lv = 4;               // 建筑等级
+}
+
+// ##begin##地块建筑拆除##end##
+message plot_build_remove_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块建筑拆除##end##
+message plot_build_remove_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   end_sec = 4;               // 结束时间
+}
+
+// ##begin##地块建筑拆除结束##end##
+message plot_build_remove_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   plot_id = 2;                // 地块id
+}
+
+// ##begin##地块建筑升级##end##
+message plot_build_upgrade_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   build_type = 3;            // 建筑类型
+}
+// ##begin##地块建筑升级##end##
+message plot_build_upgrade_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+    optional uint32                   end_sec = 4;               // 结束时间
+}
+
+// ##begin##地块建筑升级结束##end##
+message plot_build_upgrade_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   plot_id = 2;                // 地块id
+    optional uint32                   build_type = 3;             // 建筑类型
+    optional uint32                   build_lv = 4;               // 建筑等级
+}
+
+// ##begin##地块升级##end##
+message plot_level_update_s2c {
+    optional uint32                   plot_id = 1;                // 地块id
+    optional uint32                   level = 2;                  // 地块等级
+}
+
+// ##begin##地块状态更新##end##
+message plot_status_update_s2c {
+    repeated p_plot_status            plot_statuses = 1;           // 地块状态
+}
+
+// ##begin##屯田结束##end##
+message plot_cultivation_end_s2c {
+    optional uint32                   plot_id = 1;                 // 地块id
+    optional uint32                   team_id = 2;                 // 队伍id
+}
+
+// ##begin##扫荡结束##end##
+message plot_sweep_end_s2c {
+    optional uint32                   plot_id = 1;                 // 地块id
+    optional uint32                   team_id = 2;                 // 队伍id
+    optional uint32                   fight_result = 3;            // 0:胜利 1:失败 2:撤退
+}
+
+// ##begin##守军恢复信息##end##
+message plot_restore_info_c2s {
+}
+
+// ##begin##守军恢复信息##end##
+message plot_restore_info_s2c {
+    repeated p_plot_restore           plot_restores = 1;            // 地块守军恢复
+}
+
+// ##begin##地块迁移##end##
+message plot_move_c2s {
+    optional uint32                   map_id = 1;                  // 地图id
+    optional uint32                   old_plot_id = 2;             // 原来的地块id
+    optional uint32                   target_plot_id = 3;          // 想迁移的地块id
+
+}
+// ##begin##地块迁移##end##
+message plot_move_s2c {
+
+}
+
+// ##begin##地块建筑迁移结束##end##
+message plot_build_move_end_s2c {
+    optional uint32                   map_id = 1;                 // 地图id
+    optional uint32                   old_plot_id = 2;            // 老地块id
+    optional uint32                   old_plot_status = 3;        // 老地块状态
+    optional uint32                   new_plot_id = 4;            // 新地块id
+    optional uint32                   build_type = 5;             // 高建类型
+    optional uint32                   build_lv = 6;               // 高建等级
+}
+
+// ##begin##地块建造秒升##end##
+message plot_build_now_complete_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块建造秒升##end##
+message plot_build_now_complete_s2c {
+}
+
+// ##begin##地块建筑升级秒升##end##
+message plot_build_upgrade_now_complete_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   plot_id = 2;               // 地块id
+}
+// ##begin##地块建筑升级秒升##end##
+message plot_build_upgrade_now_complete_s2c {
+}
+
+// ##begin##首占地块更新##end##
+message plot_first_occupy_update_s2c {
+    repeated uint32                   add_plot_ids = 1;          // 新增已占领过的地块ids
+}

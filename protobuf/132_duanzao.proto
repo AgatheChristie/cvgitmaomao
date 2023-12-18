@@ -1,0 +1,20 @@
+import "common.proto";
+// ##model_begin##锻造模块##model_end##
+// ##begin##锻造开始##end##
+message duanzao_start_c2s {
+	optional uint32                            duanzao_id = 1;                     // 锻造子项id
+}
+
+// ##begin##锻造开始##end##
+message duanzao_start_s2c {
+	repeated p_item_public_special             item_publics = 1;                   // 道具信息
+}
+
+// ##begin##锻造消耗##end##
+message duanzao_cost_c2s {
+}
+
+// ##begin##锻造消耗##end##
+message duanzao_cost_s2c {
+	repeated p_duanzao_cost                   duanzao_costs = 1;                   // 锻造消耗
+}

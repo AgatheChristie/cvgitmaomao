@@ -1,0 +1,113 @@
+import "common.proto";
+// ##model_begin##关卡模块##model_end##
+// ##begin##关卡信息##end##
+message fb_info_c2s {
+	optional uint32                        group_id = 1;                // 关卡组id
+}
+// ##begin##关卡信息##end##
+message fb_info_s2c {
+	repeated p_fb_info                     fb_infos = 1;                // 关卡信息
+}
+
+// ##begin##关卡怪物部队信息##end##
+message fb_mon_info_c2s {
+	optional uint32                        fb_id = 1;                   // 关卡id
+}
+// ##begin##关卡怪物部队信息##end##
+message fb_mon_info_s2c {
+	repeated p_fb_mon_info                 p_fb_mon_infos = 2;          // 关卡武将信息
+}
+
+// ##begin##关卡开始挑战##end##
+message fb_start_c2s {
+	optional uint32                        fb_id = 1;                   // 关卡id
+}
+// ##begin##关卡开始挑战##end##
+message fb_start_s2c {
+}
+
+// ##begin##关卡更新挑战##end##
+message fb_update_s2c {
+	optional uint32                        fb_id = 1;                   // 关卡id
+	optional uint32                        has_times = 2;               // 已挑战次数
+	optional uint32                        fight_result = 3;            // 0:胜利 1:失败
+}
+
+// ##begin##关卡挑战次数0点更新##end##
+message fb_update_times_s2c {
+	optional uint32                        sec = 1;                    // 时间戳
+}
+
+// ==========================================================================================
+// 副本队伍信息
+//
+// ==========================================================================================
+// ##begin##队伍信息##end##
+message fb_team_info_c2s {
+	optional uint32                        fb_type = 1;                 // 副本类型
+}
+// ##begin##队伍信息##end##
+message fb_team_info_s2c {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	repeated p_fb_team_info                fb_team_infos = 2;           // 队伍信息
+}
+
+// ##begin##队伍更新##end##
+message fb_team_update_s2c {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	repeated p_fb_team_info                fb_team_infos = 2;           // 队伍信息
+}
+
+
+// ##begin##队伍位置更新##end##
+message fb_team_pos_update_s2c {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	repeated p_fb_team_info                fb_team_actors = 2;          // 队伍武将信息
+}
+
+// ##begin##队伍位置删除##end##
+message fb_team_pos_delete_s2c {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	optional uint32                        fb_team_pos = 2;             // 队伍位置
+}
+
+// ##begin##上阵武将##end##
+message fb_team_actor_up_c2s {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	optional uint32                        fb_team_pos = 2;             // 队伍位置
+	optional uint32                        only_id = 3;                 // 武将唯一ID
+}
+// ##begin##上阵武将##end##
+message fb_team_actor_up_s2c {
+}
+
+// ##begin##下阵武将##end##
+message fb_team_actor_down_c2s {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	optional uint32                        fb_team_pos = 2;             // 队伍位置
+}
+// ##begin##下阵武将##end##
+message fb_team_actor_down_s2c {
+}
+
+// ##begin##互换武将##end##
+message fb_team_actor_exchange_c2s {
+	optional uint32                        fb_type = 1;                 // 副本类型
+	optional uint32                        fb_team_pos = 2;             // 队伍位置
+	optional uint32                        exchange_pos = 3;            // 换的队伍位置
+}
+// ##begin##互换武将##end##
+message fb_team_actor_exchange_s2c {
+}
+
+// ==========================================================================================
+// 副本结算
+//
+// ==========================================================================================
+// ##begin##副本结算##end##
+message fb_battle_end_s2c {
+	optional string                   battle_id = 1;              // 战役唯一标识  0不进战斗为碾压 非0为正常战斗
+	optional uint32                   self_type = 2;              // 1.攻方 2.守方
+	optional uint32                   fight_result = 3;           // 战斗结果 0:胜利 1:失败 2:撤退
+	repeated p_fb_summary_self        summary_selfs = 4;          // 副本自定义结算
+}

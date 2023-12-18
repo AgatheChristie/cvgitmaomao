@@ -1,0 +1,44 @@
+import "common.proto";
+// ##model_begin##天下大势模块##model_end##
+// ##begin##大势信息##end##
+message trend_info_c2s {
+}
+// ##begin##大势信息##end##
+message trend_info_s2c {
+    repeated p_trend_info                  trend_infos = 1;             // 大势信息列表
+}
+
+// ##begin##大势信息更新##end##
+message trend_update_s2c {
+    repeated p_trend_info                  trend_infos = 1;             // 大势信息列表
+}
+
+// ##begin##大势子项信息##end##
+message trend_term_info_c2s {
+    optional uint32                        trend_id = 1;                // 大势id
+}
+// ##begin##大势子项信息##end##
+message trend_term_info_s2c {
+    optional uint32                        award_status = 1;            // 领奖状态
+    optional uint32                        term_value = 2;              // 当前进度值
+    optional uint32                        max_term_value = 3;          // 最大进度值
+    repeated p_trend_camp                  trend_camp_infos = 4;        // 国家信息
+}
+
+// ##begin##大势子项领奖##end##
+message trend_term_award_c2s {
+    optional uint32                        trend_id = 1;                // 大势id
+}
+// ##begin##大势子项领奖##end##
+message trend_term_award_s2c {
+    optional uint32                        award_status = 1;            // 领奖状态
+}
+
+// ##begin##获取所有大势子项信息##end##
+message trend_all_term_info_c2s {
+    repeated uint32                        trend_ids = 1;               // 大势id列表
+}
+// ##begin##大势子项信息##end##
+message trend_all_term_info_s2c {
+    repeated p_trend_term_info             trend_term_infos = 1;        // 天下子项信息
+}

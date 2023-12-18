@@ -1,0 +1,74 @@
+import "common.proto";
+// ##model_begin##国家亡国富库模块##model_end##
+// ##begin##关闭国家亡国富库面板##end##
+message camp_wgfk_close_c2s {
+  optional uint32                   activity_id = 1;           // 活动id
+  optional uint32                   death_camp_id = 2;         // 被灭国国家id
+}
+// ##begin##关闭国家亡国富库面板##end##
+message camp_wgfk_close_s2c {
+}
+
+// ##begin##打开国家亡国富库面板##end##
+message camp_wgfk_open_c2s {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+}
+// ##begin##打开国家亡国富库面板##end##
+message camp_wgfk_open_s2c {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+  optional uint32                   wgfk_gold_num = 3;          // 国库剩余黄金数量
+  optional uint32                   role_gold_num = 4;          // 玩家抢到黄金数量
+  repeated p_wgfk_log               wgfk_logs = 5;              // 查看者所属国家的治理日志
+}
+
+// ##begin##亡国富库信息##end##
+message camp_wgfk_info_c2s {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+}
+// ##begin##亡国富库信息##end##
+message camp_wgfk_info_s2c {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+  optional uint32                   wgfk_gold_num = 3;          // 国库剩余黄金数量
+  optional uint32                   status = 4;                 // 亡国富库状态:0未开启1开启2准备首次开启3准备二次开启
+  optional uint32                   left_times = 5;             // 剩余开启次数
+  optional uint32                   begin_sec = 6;              // 抢夺开始时间
+  optional uint32                   end_sec = 7;                // 抢夺结束时间
+}
+
+// ##begin##亡国富库日志增加##end##
+message camp_wgfk_log_add_s2c {
+  repeated p_wgfk_log               wgfk_logs = 1;              // 亡国富库日志增加
+}
+
+// ##begin##亡国富库黄金更新(玩家)##end##
+message camp_wgfk_role_gold_update_s2c {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+  optional uint32                   role_gold_num = 3;          // 玩家抢到黄金数量
+}
+
+// ##begin##亡国富库黄金更新(国库)##end##
+message camp_wgfk_camp_gold_update_s2c {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+  optional uint32                   wgfk_gold_num = 3;          // 国库剩余黄金数量
+}
+
+// ##begin##亡国富库信息更新##end##
+message camp_wgfk_info_update_s2c {
+  repeated p_wgfk_info              wgfk_infos = 1;             // 亡国富库信息
+}
+
+// ##begin##亡国富库开始抢宝##end##
+message camp_wgfk_act_rob_c2s {
+  optional uint32                   activity_id = 1;            // 活动id
+  optional uint32                   death_camp_id = 2;          // 被灭国国家id
+}
+// ##begin##亡国富库开始抢宝##end##
+message camp_wgfk_act_rob_s2c {
+  repeated p_item_public            unusual_rewards = 1;        // 大奖
+}

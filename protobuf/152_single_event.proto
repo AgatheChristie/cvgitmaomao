@@ -1,0 +1,63 @@
+import "common.proto";
+// ##model_begin##单人事件模块##model_end##
+// ##begin##单人事件信息##end##
+message single_event_info_c2s {
+}
+// ##begin##单人事件信息##end##
+message single_event_info_s2c {
+	optional uint32                       reward_times = 1;          // 收益次数
+	repeated p_single_event_term          single_event_terms = 2;    // 单人事件子项
+	repeated p_single_event_point         single_event_points = 3;   // 单人事件坐标
+	optional uint32                       next_refresh_sec = 4;      // 下次刷新时间
+
+}
+
+// ##begin##单人事件子项更新##end##
+message single_event_update_s2c {
+	optional uint32                       reward_times = 1;          // 收益次数
+	optional uint32                       next_refresh_sec = 2;      // 下次刷新时间
+	repeated p_single_event_term          single_event_terms = 3;    // 单人事件子项
+}
+
+// ##begin##单人事件坐标更新##end##
+message single_event_point_update_s2c {
+	repeated p_single_event_point         single_event_points = 1;   // 单人事件坐标
+}
+
+// ##begin##单人事件删除##end##
+message single_event_delete_s2c {
+    optional uint32                        only_id = 1;               // 唯一id
+}
+
+// ##begin##单人事件打开##end##
+message single_event_open_c2s {
+    optional uint32                        only_id = 1;                // 唯一id
+}
+// ##begin##单人事件打开##end##
+message single_event_open_s2c {
+}
+
+// ##begin##单人事件退出##end##
+message single_event_exit_c2s {
+    optional uint32                        only_id = 1;                // 唯一id
+}
+// ##begin##单人事件退出##end##
+message single_event_exit_s2c {
+}
+
+// ##begin##单人事件开始##end##
+message single_event_start_c2s {
+    optional uint32                        only_id = 1;                // 唯一id
+    optional uint32                        team_id = 2;                // 部队id
+}
+// ##begin##单人事件开始##end##
+message single_event_start_s2c {
+}
+
+// ##begin##单人事件中止##end##
+message single_event_cancel_c2s {
+    optional uint32                        only_id = 1;                // 唯一id
+}
+// ##begin##单人事件中止##end##
+message single_event_cancel_s2c {
+}

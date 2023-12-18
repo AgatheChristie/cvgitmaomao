@@ -1,0 +1,57 @@
+import "common.proto";
+// ##model_begin##商店模块##model_end##
+// ##begin##商店信息##end##
+message shop_info_c2s {
+    optional uint32                         shop_id = 1;                    // 商店id
+}
+// ##begin##商店信息##end##
+message shop_info_s2c {
+    optional uint32                         shop_id = 1;                    // 商店id
+    repeated p_shop_item                    shop_items = 2;                 // 商店道具信息
+    repeated p_shop_buy                     shop_buys = 3;                  // 购买信息
+    optional uint32                         start_sec = 4;                  // 商店开启时间(0:表示一直开启着)
+    optional uint32                         end_sec = 5;                    // 商店结束时间(0:没有结束时间)
+    optional uint32                         item_refresh_sec = 6;           // 商品下次自动刷新时间(0:不自动刷新商品)
+    optional uint32                         free_used_times = 7;            // 免费刷新已使用次数
+    optional uint32                         free_total_times = 8;           // 免费刷新总次数
+    optional uint32                         add_free_times_sec = 9;         // 下次添加免费刷新次数的时间(0:不添加免费刷新次数)
+    optional uint32                         pay_used_times = 10;            // 付费刷新已使用次数
+    optional uint32                         add_pay_times_sec = 11;         // 下次添加付费刷新次数的时间(0:不添加付费刷新次数)
+}
+
+// ##begin##商店购买##end##
+message shop_buy_c2s {
+    optional uint32                         shop_id = 1;                    // 商店id
+    optional uint32                         sale_id = 2;                    // 商品售卖唯一id
+    optional uint32                         num = 3;                        // 购买数量
+}
+// ##begin##商店购买##end##
+message shop_buy_s2c {
+    optional uint32                         shop_id = 1;                    // 商店id
+    optional uint32                         sale_id = 2;                    // 商品售卖唯一id
+    optional uint32                         buy_num = 3;                    // 已购买数量（限购类才有购买数量）
+}
+
+// ##begin##商店购买全部##end##
+message shop_buy_all_c2s {
+    optional uint32                         shop_id = 1;                    // 商店id
+}
+// ##begin##商店购买全部##end##
+message shop_buy_all_s2c {
+    optional uint32                         shop_id = 1;                    // 商店id
+    repeated p_shop_item                    shop_items = 2;                 // 商店道具信息
+    repeated p_shop_buy                     shop_buys = 3;                  // 购买信息
+}
+
+// ##begin##手动刷新##end##
+message shop_refresh_c2s {
+	optional uint32                         shop_id = 1;                    // 商店id
+}
+
+// ##begin##手动刷新##end##
+message shop_refresh_s2c {
+    optional uint32                         shop_id = 1;                    // 商店id
+    repeated p_shop_item                    shop_items = 2;                 // 商店道具信息
+    optional uint32                         free_used_times = 3;            // 免费刷新已使用次数
+    optional uint32                         pay_used_times = 4;             // 付费刷新已使用次数
+}

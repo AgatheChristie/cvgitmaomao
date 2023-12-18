@@ -1,0 +1,83 @@
+import "common.proto";
+// ##model_begin##任务模块##model_end##
+// ##begin##任务信息##end##
+message task_info_c2s {
+    optional uint32                 task_type = 1;              // 任务类型
+}
+// ##begin##任务信息##end##
+message task_info_s2c {
+    optional uint32                 task_type = 1;              // 任务类型
+    repeated p_task                 tasks = 2;                  // 任务列表
+}
+
+// ##begin##增加任务##end##
+message task_add_s2c {
+    optional uint32                 task_type = 1;              // 任务类型
+    repeated p_task                 tasks = 2;                  // 任务列表
+}
+
+// ##begin##更新任务##end##
+message task_update_s2c {
+    optional uint32                 task_type = 1;              // 任务类型
+    repeated p_task                 tasks = 2;                  // 任务列表
+}
+
+// ##begin##提交任务##end##
+message task_commit_c2s {
+    optional uint32                 task_type = 1;              // 任务类型
+    optional uint32                 task_only_id = 2;           // 任务唯一id
+}
+// ##begin##提交任务##end##
+message task_commit_s2c {
+}
+
+// ##begin##任务当前章节##end##
+message task_com_task_s2c {
+    optional uint32                 com_task_chapter = 1;       // 任务当前章节
+}
+
+// ##begin##删除任务##end##
+message task_delete_s2c {
+    optional uint32                 task_type = 1;              // 任务类型
+    repeated p_task_id              task_ids = 2;               // 删除任务唯一id
+}
+
+// ##begin##触发子项##end##
+message task_touch_term_c2s {
+    optional uint32                 term_type = 1;              // 任务子项类型
+    optional uint32                 target_value = 2;           // 目标值
+    repeated uint32                 extra_values = 3;           // 额外参数
+    optional uint32                 term_times = 4;             // 触发次数
+}
+// ##begin##触发子项##end##
+message task_touch_term_s2c {
+}
+
+// ##begin##接受任务##end##
+message task_accept_c2s {
+    optional uint32                 task_type = 1;              // 任务类型
+    optional uint32                 task_only_id = 2;           // 任务唯一id
+}
+// ##begin##接受任务##end##
+message task_accept_s2c {
+}
+
+// ==========================================================================================
+// 国家任务
+//
+// ==========================================================================================
+// ##begin##国家任务信息##end##
+message task_camp_info_c2s {
+}
+// ##begin##国家任务信息##end##
+message task_camp_info_s2c {
+    repeated p_camp_task            camp_tasks = 1;             // 国家任务列表
+    optional uint32                 next_fresh_sec = 2;         // 下次刷新时间
+}
+
+// ##begin##推送国家任务更新##end##
+message task_camp_update_s2c {
+    repeated p_camp_task            camp_tasks = 1;             // 国家任务列表
+}
+
+

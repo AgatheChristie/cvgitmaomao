@@ -1,0 +1,46 @@
+import "common.proto";
+// ##model_begin##练兵模块##model_end##
+// ##begin##练兵信息##end##
+message training_info_c2s {
+}
+// ##begin##练兵信息##end##
+message training_info_s2c {
+	repeated p_train_info             train_infos = 1;           // 练兵信息
+	optional uint32                   train_sec = 2;             // 练兵时间戳
+	optional uint32                   train_times = 3;           // 练兵已消耗次数
+	optional uint32                   total_train_times = 4;     // 玩家设置的练兵次数
+}
+
+// ##begin##开始练兵##end##
+message training_start_info_c2s {
+	repeated p_train_info             train_infos = 1;           // 练兵信息
+	optional uint32                   total_train_times = 2;     // 玩家设置的练兵次数
+}
+// ##begin##开始练兵##end##
+message training_start_info_s2c {
+}
+
+// ##begin##中止练兵##end##
+message training_quit_info_c2s {
+}
+// ##begin##中止练兵##end##
+message training_quit_info_s2c {
+}
+
+// ##begin##更新练兵信息##end##
+message training_update_info_s2c {
+	repeated p_train_info             train_infos = 1;           // 练兵信息
+	optional uint32                   train_sec = 2;             // 练兵时间戳
+	optional uint32                   train_times = 3;           // 练兵次数
+	optional uint32                   total_train_times = 4;     // 玩家设置的练兵次数
+}
+
+// ##begin##下阵练兵信息##end##
+message training_leave_info_c2s {
+	repeated p_train_info             train_infos = 1;           // 练兵信息
+}
+// ##begin##下阵练兵信息##end##
+message training_leave_info_s2c {
+}
+
+

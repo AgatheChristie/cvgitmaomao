@@ -1,0 +1,64 @@
+import "common.proto";
+// ##model_begin##国家活动杂项模块##model_end##
+// ##begin##国家活动信息##end##
+message camp_activity_info_c2s {
+}
+// ##begin##国家活动信息##end##
+message camp_activity_info_s2c {
+	repeated p_camp_activity                camp_activitys = 1;            // 国家活动
+}
+
+// ##begin##国家活动更新##end##
+message camp_activity_update_s2c {
+	repeated p_camp_activity                camp_activitys = 1;            // 国家活动
+}
+
+// ##begin##灭国排行榜信息##end##
+message camp_activity_mix_rank_info_c2s {
+    optional uint32                         camp_id = 1;                  // 被攻击的国家id
+}
+// ##begin##灭国排行榜信息##end##
+message camp_activity_mix_rank_info_s2c {
+    repeated p_cam_rank_info                cam_rank_infos = 1;           // 灭国玩法排行榜信息
+}
+
+// ##begin##寻龙分金信息##end##
+message camp_activity_xlfj_info_c2s {
+}
+// ##begin##寻龙分金信息##end##
+message camp_activity_xlfj_info_s2c {
+	repeated p_camp_xlfj                    camp_xlfjs = 1;                // 寻龙分金
+}
+
+// ##begin##寻龙分金更新##end##
+message camp_activity_xlfj_update_s2c {
+	repeated p_camp_xlfj                    camp_xlfjs = 1;                // 寻龙分金
+}
+
+// ##begin##寻龙分金更新箱子##end##
+message camp_activity_xlfj_box_update_s2c {
+    optional p_camp_activity_key           activity_key = 1;              // 活动key
+	optional p_xlfj_box                    xlfj_box = 2;                  // 寻龙分金箱子
+}
+
+// ##begin##寻龙分金揭开##end##
+message camp_activity_xlfj_disclose_c2s {
+    optional p_camp_activity_key            activity_key = 1;               // 活动key
+    optional uint32                         box_id = 2;                     // 宝箱id
+}
+
+// ##begin##寻龙分金揭开##end##
+message camp_activity_xlfj_disclose_s2c {
+}
+
+// ##begin##寻龙分金获取提示##end##
+message camp_activity_xlfj_get_tips_c2s {
+    optional p_camp_activity_key            activity_key = 1;               // 活动key
+    optional uint32                         box_id = 2;                     // 宝箱id
+}
+
+// ##begin##寻龙分金获取提示##end##
+message camp_activity_xlfj_get_tips_s2c {
+}
+
+

@@ -1,0 +1,420 @@
+import "common.proto";
+// ##model_begin##场景模块##model_end##
+// ##begin##所有城池精简信息##end##
+message scene_city_info_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+}
+// ##begin##所有城池精简信息##end##
+message scene_city_info_s2c {
+    repeated p_city_info              citys = 1;                 // 城池信息
+}
+
+// ##begin##更新城池精简信息##end##
+message scene_city_update_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_city_info              citys = 2;                 // 城池信息
+}
+
+// ##begin##点击查看单个城池详细信息##end##
+message scene_city_detail_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##点击查看单个城池详细信息##end##
+message scene_city_detail_s2c {
+    optional p_city_detail            city_detail = 1;           // 城池详细信息
+}
+
+// ##begin##退出查看单个城池详细信息##end##
+message scene_city_detail_close_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##退出查看单个城池详细信息##end##
+message scene_city_detail_close_s2c {
+}
+
+// ##begin##更新单个城池守军信息##end##
+message scene_city_mon_update_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated p_city_mon_info          mon_infos = 2;             // 守军信息
+}
+
+// ##begin##删除单个城池守军信息##end##
+message scene_city_mon_delete_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated uint32                   team_ids = 2;              // 守军队伍id
+}
+
+// ##begin##查看击杀守军排行##end##
+message scene_city_mon_rank_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##查看击杀守军排行##end##
+message scene_city_mon_rank_s2c {
+    repeated p_city_mon_rank          mon_ranks = 1;             // 击杀守军排行
+}
+
+// ##begin##队伍当前移动坐标##end##
+message scene_now_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_now_team_walk          now_walks = 2;             // 当前移动坐标
+}
+
+// ##begin##队伍下达指令##end##
+message scene_start_order_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+    optional uint32                   order_type = 2;            // 指令类型
+    optional uint32                   map_id = 3;                // 地图id
+    optional uint32                   source_id = 4;             // 起点城池
+    optional uint32                   target_id = 5;             // 目标城池
+    repeated p_walk_path              walk_paths = 6;            // 移动路线
+    optional uint32                   is_skip_fight = 7;         // 是否跳过战斗 0.否 1.是
+    optional uint32                   plot_id = 8;               // 地块id
+    optional uint32                   buildup_id = 9;            // 集结id
+    optional uint32                   far_army_id = 10;          // 远征军id
+    optional uint32                   deal_times = 11;           // 执行次数
+    optional uint32                   auto_back = 12;            // 自动回城
+}
+// ##begin##队伍下达指令##end##
+message scene_start_order_s2c {
+}
+
+// ##begin##队伍取消指令##end##
+message scene_cancel_order_c2s {
+    optional uint32                   team_id = 1;               // 队伍id
+}
+// ##begin##队伍取消指令##end##
+message scene_cancel_order_s2c {
+}
+
+// ##begin##广播队伍移动##end##
+message scene_broadcast_team_walk_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_team_walk              team_walks = 2;            // 移动队伍信息
+}
+
+// ##begin##广播队伍##end##
+message scene_broadcast_team_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_scene_team             scene_teams = 2;           // 场景队伍
+}
+
+// ##begin##广播队伍删除##end##
+message scene_broadcast_team_delete_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_scene_team_key         team_keys = 2;             // 队伍主键列表
+}
+
+// ##begin##场景队伍详细信息##end##
+message scene_team_info_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+}
+// ##begin##场景队伍详细信息##end##
+message scene_team_info_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    repeated p_scene_team             scene_teams = 2;           // 场景队伍
+    repeated p_team_walk              team_walks = 3;            // 移动队伍信息
+}
+
+// ##begin##屯田结束时间##end##
+message scene_cultivation_end_sec_s2c {
+    optional uint32                   plot_id = 1;               // 地块id
+    optional uint32                   team_id = 2;               // 队伍id
+    optional uint32                   end_sec = 3;               // 结束时间
+}
+
+// ##begin##点击查看战况##end##
+message scene_fight_detail_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##点击查看战况##end##
+message scene_fight_detail_s2c {
+    optional uint32                   fight_count = 1;           // 突袭队伍数量
+    optional uint32                   quick_times = 2;           // 冲锋次数
+    repeated p_fight_sort             fight_sorts = 3;           // 对战信息
+    repeated p_fight_log              fight_logs = 4;            // 战斗日志
+    repeated p_fight_queue            fight_queues = 5;          // 队列信息
+    repeated p_fight_buff             fight_buffs = 6;           // 战况对战buff信息
+    repeated p_scene_self             scene_selfs = 7;           // 战况对战信息
+}
+
+// ##begin##退出查看战况##end##
+message scene_fight_detail_close_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##退出查看战况##end##
+message scene_fight_detail_close_s2c {
+}
+
+// ##begin##突袭##end##
+message scene_add_fight_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   team_id = 3;               // 队伍id
+}
+// ##begin##突袭##end##
+message scene_add_fight_s2c {
+}
+
+// ##begin##冲锋##end##
+message scene_add_quick_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+}
+// ##begin##突袭##end##
+message scene_add_quick_s2c {
+}
+
+// ##begin##点击查看对战详情##end##
+message scene_look_fight_sort_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   fight_only_id = 3;         // 对战信息唯一id
+}
+// ##begin##点击查看对战详情##end##
+message scene_look_fight_sort_s2c {
+    repeated p_scene_self             scene_selfs = 1;           // 战况对战信息
+}
+
+// ##begin##退出查看对战详情##end##
+message scene_close_fight_sort_c2s {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   fight_only_id = 3;         // 对战信息唯一id
+}
+// ##begin##退出查看对战详情##end##
+message scene_close_fight_sort_s2c {
+}
+
+// ##begin##更新对战信息##end##
+message scene_update_fight_sort_s2c {
+    repeated p_fight_sort             fight_sorts = 1;           // 对战信息
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##删除对战信息##end##
+message scene_delete_fight_sort_s2c {
+    repeated uint32                   fight_only_ids = 1;        // 对战信息唯一id
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##更新战况对战信息##end##
+message scene_update_scene_self_s2c {
+    repeated p_scene_self             scene_selfs = 1;           // 战况对战信息
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##更新战况对战buff信息##end##
+message scene_update_fight_buff_s2c {
+    repeated p_fight_buff             fight_buffs = 1;           // 战况对战buff信息
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##更新战况日志##end##
+message scene_update_fight_log_s2c {
+    repeated p_fight_log              fight_logs = 1;            // 更新战斗日志
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##更新战况突袭次数##end##
+message scene_update_fight_count_s2c {
+    optional uint32                   fight_count = 1;           // 突袭队伍数量
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##更新战况冲锋次数##end##
+message scene_update_quick_times_s2c {
+    optional uint32                   quick_times = 1;           // 冲锋次数
+    optional uint32                   city_id = 2;               // 城池id
+}
+
+// ##begin##沙盘野怪信息##end##
+message scene_wild_mon_infos_c2s {
+}
+// ##begin##沙盘野怪信息##end##
+message scene_wild_mon_infos_s2c {
+    repeated p_city_wild_mon          city_wild_mons = 1;        // 城池沙盘野怪
+}
+
+// ##begin##沙盘野怪详情##end##
+message scene_wild_mon_detail_c2s {
+    optional uint32                   city_id = 1;               // 城池id
+    optional uint32                   point = 2;                 // 坐标(x * 10000 + y)
+}
+// ##begin##沙盘野怪详情##end##
+message scene_wild_mon_detail_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    optional uint32                   point = 2;                 // 坐标(x * 10000 + y)
+    repeated p_public_mon_info        public_mon_infos = 3;      // 公共怪物信息
+}
+
+// ##begin##沙盘野怪状态更新##end##
+message scene_wild_mon_update_s2c {
+    repeated p_city_wild_mon          city_wild_mons = 1;        // 城池沙盘野怪
+}
+
+// ##begin##采挖地块信息##end##
+message scene_caiwa_plots_infos_c2s { 
+}
+// ##begin##采挖地块信息##end##
+message scene_caiwa_plots_infos_s2c {
+    repeated p_city_caiwa_plot        city_caiwa_plots = 1;       // 采挖地块
+}
+
+// ##begin##采挖地块开启##end##
+message scene_caiwa_plots_open_s2c {
+    optional uint32                   plot_id = 1;                // 地块id
+    optional uint32                   city_id = 2;                // 城池id 
+    optional uint32                   open_sec = 3;               // 开启时间  
+}
+
+// ##begin##采挖地块关闭##end##
+message scene_caiwa_plots_close_s2c {
+    optional uint32                   plot_id = 1;                // 地块id
+    optional uint32                   city_id = 2;                // 城池id 
+}
+
+// ##begin##采挖玩家开始##end##
+message scene_caiwa_role_start_s2c {
+    optional uint32                   role_id = 1;                // 玩家id
+    optional uint32                   plot_id = 2;                // 地块id
+    optional uint32                   city_id = 3;                // 城池id
+    optional uint32                   start_sec = 4;              // 开始时间              
+}
+
+// ##begin##采挖玩家结束##end##
+message scene_caiwa_role_end_s2c {
+    optional uint32                   role_id = 1;                // 玩家id
+    optional uint32                   plot_id = 2;                // 地块id
+    optional uint32                   city_id = 3;                // 城池id
+    optional uint32                   times = 4;                  // 采挖次数
+}
+
+// ##begin##增加队列信息##end##
+message scene_add_queue_s2c {
+    optional uint32                   city_id = 1;                // 城池id
+    repeated p_fight_queue            fight_queues = 2;           // 队列信息
+}
+
+// ##begin##删除队列信息##end##
+message scene_delete_queue_s2c {
+    optional uint32                   city_id = 1;                // 城池id
+    repeated p_fight_queue            fight_queues = 2;           // 队列信息
+}
+
+// ##begin##清空队列信息##end##
+message scene_clear_queue_s2c {
+    optional uint32                   city_id = 1;                // 城池id
+    optional uint32                   queue_type = 2;             // 队列类型
+}
+
+// ##begin##采挖加成##end##
+message scene_caiwa_effect_c2s {
+}
+
+// ##begin##采挖加成##end##
+message scene_caiwa_effect_s2c {
+    optional uint32                   effect = 1;                 // 加成值(转化为万分比使用)
+}
+
+// ##begin##补给信息##end##
+message scene_supply_info_c2s {
+    optional uint32                   team_id = 1;                // 队伍id
+}
+// ##begin##补给信息##end##
+message scene_supply_info_s2c {
+    repeated p_supply_info            supply_infos = 1;           // 补给信息
+}
+
+// ##begin##开始补给##end##
+message scene_supply_begin_c2s {
+    optional uint32                   team_id = 1;                // 队伍id
+    repeated p_begin_supply           begin_supplys = 2;          // 补给信息
+}
+// ##begin##开始补给##end##
+message scene_supply_begin_s2c {
+    repeated p_supply_info            supply_infos = 1;           // 补给信息
+}
+
+// ##begin##补给一键取消##end##
+message scene_supply_all_stop_c2s {
+    optional uint32                   team_id = 1;                // 队伍id
+}
+// ##begin##补给一键取消##end##
+message scene_supply_all_stop_s2c {
+}
+
+// ##begin##补给取消##end##
+message scene_supply_stop_c2s {
+    optional uint32                   team_id = 1;                // 队伍id
+    optional uint32                   supply_type = 2;            // 1.补兵队列 2.补血队列
+    optional uint32                   only_id = 3;                // 武将唯一id
+}
+// ##begin##补给取消##end##
+message scene_supply_stop_s2c {
+}
+
+// ##begin##行军抵达##end##
+message scene_team_reach_s2c {
+    optional uint32                   team_id  = 1;               // 队伍id
+    optional uint32                   city_id = 2;                // 城池id 
+}
+
+// ##begin##更新单个城池民心附加效果##end##
+message scene_city_minxin_add_effect_update_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated p_minxin_add_effect      minxin_add_effects = 2;    // 民心附加效果
+}
+
+// ##begin##更新单个城池城池令附加效果##end##
+message scene_city_ccl_add_effect_update_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated p_ccl_add_effect         ccl_add_effects = 2;       // 民心附加效果
+}
+
+// ##begin##删除单个城池城池令附加效果##end##
+message scene_city_ccl_add_effect_delete_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    optional uint32                   policy_token_id = 2;       // 城池令id
+}
+
+// ##begin##广播民心变动##end##
+message scene_broadcast_minxin_belong_change_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional uint32                   city_id = 2;               // 城池id
+    optional uint32                   minxin_camp_id = 3;        // 民心国家id
+    optional uint32                   minxin = 4;                // 民心
+}
+
+// ##begin##更新单个城池自卫军信息##end##
+message scene_city_defense_update_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated p_city_mon_info          defense_mons = 2;          // 自卫军信息
+    optional uint32                   defense_mon_sec = 3;       // 自卫军反攻时间
+}
+
+// ##begin##删除单个城池自卫军信息##end##
+message scene_city_defense_delete_s2c {
+    optional uint32                   city_id = 1;               // 城池id
+    repeated uint32                   team_ids = 2;              // 自卫军队伍id
+}
+
+// ##begin##npc攻城广播##end##
+message scene_broadcast_npc_attack_city_s2c {
+    optional uint32                   map_id = 1;                // 地图id
+    optional p_city_npc_attack        npc_attack_city = 2;       // npc攻城信息
+}
+
+// ##begin##新增辎重车##end##
+message scene_broadcast_baggage_car_add_s2c {
+    repeated p_baggage_car            baggage_cars = 1;          // 辎重车信息
+}
+
+// ##begin##删除辎重车##end##
+message scene_broadcast_baggage_car_delete_s2c {
+    repeated p_baggage_car            baggage_cars = 1;          // 辎重车信息
+}

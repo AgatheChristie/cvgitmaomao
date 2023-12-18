@@ -1,0 +1,49 @@
+import "common.proto";
+// ##model_begin##成就模块##model_end##
+// ##begin##成就信息##end##
+message achieve_info_c2s {
+
+}
+// ##begin##成就信息##end##
+message achieve_info_s2c {
+    repeated uint32                        award_ids = 1;                 // 已领奖励id列表
+    repeated p_achieve_info                achieve_infos = 2;             // 成就信息列表
+}
+
+// ##begin##提交成就##end##
+message achieve_commit_c2s {
+    optional uint32                        achieve_type = 1;              // 成就类型
+    optional uint32                        achieve_id = 2;                // 成就id
+}
+// ##begin##提交成就##end##
+message achieve_commit_s2c {
+}
+
+// ##begin##领取成就点奖励##end##
+message achieve_point_award_c2s {
+    optional uint32                        award_id = 1;                  // 奖励id
+}
+// ##begin##领取成就点奖励##end##
+message achieve_point_award_s2c {
+}
+
+// ##begin##增加成就##end##
+message achieve_add_s2c {
+    optional uint32                        achieve_type = 1;              // 成就类型
+    repeated p_achieve                     achieves = 2;                  // 成就列表
+}
+
+// ##begin##更新成就##end##
+message achieve_update_s2c {
+    optional uint32                        achieve_type = 1;              // 成就类型
+    repeated p_achieve                     achieves = 2;                  // 成就列表
+}
+
+
+// ##begin##删除成就##end##
+message achieve_delete_s2c {
+    optional uint32                        achieve_type = 1;              // 成就类型
+    optional uint32                        achieve_id = 2;                // 删除成就id
+}
+
+

@@ -1,0 +1,19 @@
+import "common.proto";
+// ##model_begin##其他人模块##model_end##
+// ##begin##其他人信息##end##
+message other_simple_info_c2s {
+    optional uint32                     role_id = 1;            // 玩家id
+}
+// ##begin##其他人信息##end##
+message other_simple_info_s2c {
+    optional p_common_role              role_info = 1;          // 玩家信息
+}
+
+// ##begin##查看他人详细信息##end##
+message other_detail_info_c2s {
+    optional uint32                     role_id = 1;            // 玩家id
+}
+// ##begin##查看他人详细信息##end##
+message other_detail_info_s2c {
+    repeated p_other_actor              actor_infos = 1;        // 角色栏信息
+}

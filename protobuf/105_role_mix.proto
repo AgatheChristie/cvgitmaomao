@@ -1,0 +1,276 @@
+import "common.proto";
+// ##model_begin##玩家杂项模块##model_end##
+// ==========================================================================================
+// 打点信息
+//
+// ==========================================================================================
+// ##begin##前端更新提示##end##
+message role_mix_client_s2c {
+    optional string                    client_version = 1;                    // 客户端版本号
+}
+
+
+// ==========================================================================================
+// 引导信息
+//
+// ==========================================================================================
+// ##begin##获取引导信息##end##
+message role_mix_guide_info_c2s {
+}
+// ##begin##获取引导信息##end##
+message role_mix_guide_info_s2c {
+    repeated p_guide_group             guide_groups = 1;                      // 引导组信息
+}
+
+// ##begin##记录引导信息##end##
+message role_mix_complete_guide_c2s {
+    optional uint32                   guide_id = 1;                          // 引导id
+}
+// ##begin##记录引导信息##end##
+message role_mix_complete_guide_s2c {
+}
+
+// ##begin##跳过引导##end##
+message role_mix_skip_guide_s2c {
+    optional uint32                    is_success = 1;                        // 是否成功
+}
+
+// ==========================================================================================
+// 玩家打点信息
+//
+// ==========================================================================================
+// ##begin##玩家打点信息##end##
+message role_mix_collect_log_c2s {
+    optional uint32                   type = 1;                              // 日志类型
+    optional string                   key = 2;                               // 数据结构列表
+    optional string                   value = 3;                             // 数据结构列表
+    optional string                   extra = 4;                             // 数据结构列表
+}
+// ##begin##玩家打点信息##end##
+message role_mix_collect_log_s2c {
+}
+
+
+// ==========================================================================================
+// 政令信息
+//
+// ==========================================================================================
+// ##begin##购买政令操作##end##
+message role_mix_buy_decree_deal_c2s {
+    optional uint32                   buy_id = 1;                            // 购买id
+}
+// ##begin##购买政令操作##end##
+message role_mix_buy_decree_deal_s2c {
+}
+
+// ##begin##购买政令更新##end##
+message role_mix_buy_decree_update_s2c {
+    repeated p_buy_decree             buy_decrees = 1;                       // 政令信息
+}
+
+// ##begin##购买政令更新##end##
+message role_mix_recovery_decree_update_s2c {
+    optional uint32                   recovery_sec = 1;                      // 下次政令恢复时间
+}
+// ==========================================================================================
+// 资源互换
+//
+// ==========================================================================================
+// ##begin##资源互换##end##
+message role_mix_resource_swap_c2s {
+    optional uint32                    reduce_resource_type = 1;              // 减少的资源类型
+    optional uint32                    reduce_num = 2;                        // 减少的数量
+    optional uint32                    add_resource_type = 3;                 // 增加的资源类型
+}
+// ##begin##资源互换##end##
+message role_mix_resource_swap_s2c {
+}
+
+// ==========================================================================================
+// 日常活跃
+//
+// ==========================================================================================
+// ##begin##日常活跃信息##end##
+message role_mix_daily_info_c2s {
+
+}
+// ##begin##日常活跃信息##end##
+message role_mix_daily_info_s2c {
+    optional uint32                    daily_point = 1;                       // 活跃点
+    repeated uint32                    award_ids = 2;                         // 已领奖励id列表
+}
+
+
+// ##begin##领取活跃点奖励##end##
+message role_mix_daily_point_award_c2s {
+    optional uint32                    award_id = 1;                          // 奖励id
+}
+// ##begin##领取活跃点奖励##end##
+message role_mix_daily_point_award_s2c {
+}
+
+
+// ##begin##更新活跃点##end##
+message role_mix_daily_point_update_s2c {
+    optional uint32                    daily_point = 1;                       // 活跃点
+}
+
+// ==========================================================================================
+// 月卡信息
+//
+// ==========================================================================================
+// ##begin##月卡信息更新##end##
+message role_mix_month_card_update_s2c {
+    repeated p_month_card              month_cards = 1;                       // 月卡信息
+}
+
+// ##begin##月卡信息##end##
+message role_mix_month_card_c2s {
+
+}
+// ##begin##月卡信息##end##
+message role_mix_month_card_s2c {
+    repeated p_month_card              month_cards = 1;                       // 月卡信息
+}
+
+// ##begin##月卡领奖##end##
+message role_mix_month_card_receive_c2s {
+    optional uint32                    card_id = 1;                           // 月卡id
+}
+// ##begin##月卡领奖##end##
+message role_mix_month_card_receive_s2c {
+}
+
+// ##begin##加成信息##end##
+message role_mix_add_info_c2s {
+    repeated p_add_ask                 add_asks = 1;                          // 加成信息id
+}
+// ##begin##加成信息##end##
+message role_mix_add_info_s2c {
+    repeated p_add_info                add_infos = 1;                         // 加成信息
+}
+
+// ##begin##加成效果更新##end##
+message role_mix_add_update_s2c {
+    optional p_add_info                add_info = 1;                         // 加成信息
+}
+// ==========================================================================================
+// 维护
+//
+// ==========================================================================================
+// ##begin##前端更新提示##end##
+message role_mix_maintain_s2c {
+    optional uint32                  type = 1;                               // 1踢人 2版本更新
+    optional uint32                  self_type = 2;                          // 1重新登录 2掉线重连
+    optional string                  string_value = 3;                       // 客户端版本号
+}
+
+// ##begin##更新功勋##end##
+message role_mix_gongxun_update_s2c {
+    optional uint32                  total_gongxun = 1;                      // 总功勋
+}
+
+// ==========================================================================================
+// 个人标记
+//
+// ==========================================================================================
+// ##begin##个人标记信息##end##
+message role_mix_sign_info_c2s {
+}
+// ##begin##个人标记信息##end##
+message role_mix_sign_info_s2c {
+    repeated p_sign_info                sign_infos = 1;                       // 个人标记信息
+}
+
+// ##begin##个人标记增加##end##
+message role_mix_sign_add_c2s {
+    optional uint32                    city_id = 1;                           // 城池id
+    optional string                    describe = 2;                          // 描述
+}
+// ##begin##个人标记增加##end##
+message role_mix_sign_add_s2c {
+    repeated p_sign_info                sign_infos = 1;                       // 个人标记信息
+}
+
+// ##begin##个人标记删除##end##
+message role_mix_sign_del_c2s {
+    optional uint32                    city_id = 1;                           // 城池id
+}
+// ##begin##个人标记##end##
+message role_mix_sign_del_s2c {
+    optional uint32                    city_id = 1;                           // 城池id
+}
+
+// ==========================================================================================
+// 武将劝降
+//
+// ==========================================================================================
+// ##begin##武将劝降信息##end##
+message role_mix_actor_capitulate_info_c2s {
+}
+
+// ##begin##武将劝降信息##end##
+message role_mix_actor_capitulate_info_s2c {
+    repeated p_actor_capitulate        actor_capitulates = 1;                  // 武将劝降信息
+}
+
+// ##begin##武将劝降更新##end##
+message role_mix_actor_capitulate_update_s2c {
+    optional p_actor_capitulate        actor_capitulate = 1;                   // 武将劝降信息
+}
+
+// ##begin##武将劝降##end##
+message role_mix_actor_capitulate_c2s {
+    optional uint32                    id = 1;                                 // id
+    optional uint32                    is_capitulate = 2;                      // 是否劝降 0:否 1:是
+}
+
+// ##begin##武将劝降##end##
+message role_mix_actor_capitulate_s2c {
+    optional uint32                    result = 1;                             // 0:失败 1:成功 2:释放
+}
+
+// ==========================================================================================
+// 名将挑战
+//
+// ==========================================================================================
+// ##begin##名将挑战信息##end##
+message role_mix_mj_challenge_info_c2s {
+    optional uint32                       icon_id = 1;                          // 图标id
+}
+
+// ##begin##名将挑战信息##end##
+message role_mix_mj_challenge_info_s2c {
+    repeated p_mj_challenge_term          mj_challenge_terms = 1;               // 名将挑战子项信息
+    repeated p_mj_challenge_rank          mj_challenge_ranks = 2;               // 名将挑战排名信息
+}
+
+// ##begin##名将挑战开启战役##end##
+message role_mix_mj_challenge_battle_c2s {
+    optional uint32                       icon_id = 1;                              // 图标id
+    optional uint32                       term_id = 2;                              // 子项id
+    optional uint32                       only_id = 3;                              // 武将唯一id
+    optional uint32                       is_skip_fight = 4;                        // 是否跳过战斗 0.否 1.是
+}
+
+// ##begin##名将挑战开启战役##end##
+message role_mix_mj_challenge_battle_s2c {
+    optional string                       battle_id = 1;                            // 战役唯一标识
+}
+
+
+// ##begin##名将挑战更新##end##
+message role_mix_mj_challenge_update_s2c {
+    optional uint32                       icon_id = 1;                              // 图标id
+    optional uint32                       term_id = 2;                              // 子项id
+    optional uint32                       is_reward = 3;                            // 是否领奖 0:否 1:是
+}
+
+
+// ##begin##名将挑战结果##end##
+message role_mix_mj_challenge_end_s2c {
+    optional string                       battle_id = 1;                            // 战役唯一标识
+    optional uint32                       fight_result = 2;                         // 战斗结果 0:胜利 1:失败 2:撤退
+    optional uint32                       score = 3;                                // 积分
+    repeated p_summary_self               summary_selfs = 4;                        // 自定义结算
+}

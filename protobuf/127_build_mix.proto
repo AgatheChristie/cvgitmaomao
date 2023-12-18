@@ -1,0 +1,118 @@
+import "common.proto";
+// ##model_begin##城建杂项模块##model_end##
+// ##begin##查看征兵信息##end##
+message build_mix_zhengbing_info_c2s {
+}
+// ##begin##查看征兵信息##end##
+message build_mix_zhengbing_info_s2c {
+    optional uint32                        available_num = 1;              // 可用兵力
+    optional uint32                        max_num = 2;                    // 可征的最大兵力
+    optional uint32                        queue_num = 3;                  // 征兵队列中剩余数量
+    optional uint32                        finish_all_sec = 4;             // 全部结束所需要的时间
+    optional uint32                        zhengbing_num = 5;              // 征兵数量
+    optional uint32                        auto_type = 6;                  // 0.非自动 1.自动
+}
+
+// ##begin##点击征兵##end##
+message build_mix_zhengbing_action_c2s {
+    optional uint32                        zhengbing_num = 1;              // 征兵数量
+}
+// ##begin##点击征兵##end##
+message build_mix_zhengbing_action_s2c {
+    optional uint32                        finish_all_sec = 1;             // 全部结束所需要的时间
+}
+
+// ##begin##取消征兵##end##
+message build_mix_zhengbing_cancel_c2s {
+}
+// ##begin##点击征兵##end##
+message build_mix_zhengbing_cancel_s2c {
+}
+
+// ##begin##更新征兵数量##end##
+message build_mix_zhengbing_update_s2c {
+    optional uint32                        available_num = 1;              // 可用兵力
+}
+
+// ##begin##更新征兵队列剩余兵力##end##
+message build_mix_zhengbing_queue_update_s2c {
+    optional uint32                        queue_num = 1;                  // 征兵队列中剩余数量
+}
+
+// ##begin##更新征兵剩余时间##end##
+message build_mix_zhengbing_finish_sec_update_s2c {
+    optional uint32                        finish_sec = 1;                 // 全部结束所需要的时间
+}
+
+// ##begin##自动征兵##end##
+message build_mix_zhengbing_auto_c2s {
+    optional uint32                        auto_type = 1;                  // 0.非自动 1.自动
+}
+// ##begin##自动征兵##end##
+message build_mix_zhengbing_auto_s2c {
+}
+
+// ##begin##更新自动征兵##end##
+message build_mix_zhengbing_auto_update_s2c {
+    optional uint32                        auto_type = 1;                  // 0.非自动 1.自动
+}
+
+// ==========================================================================================
+// 赋税信息
+//
+// ==========================================================================================
+// ##begin##查看赋税信息##end##
+message build_mix_taxes_info_c2s {
+}
+// ##begin##查看赋税信息##end##
+message build_mix_taxes_info_s2c {
+    optional uint32                        max_free_times = 1;             // 最大免费次数
+    optional uint32                        use_free_times = 2;             // 已用免费次数
+    optional uint32                        max_taxes_times = 3;            // 最大强征次数
+    optional uint32                        use_taxes_times = 4;            // 已用强征次数
+    optional uint32                        build_fix_add = 5;              // 城建铜币绝对值加成
+    optional uint32                        build_dp_add = 6;               // 城建铜币百分比加成(已转绝对值)
+    optional uint32                        taxes_value = 7;                // 强征铜币值
+    optional uint32                        free_taxes_value = 8;           // 上次免费强征值
+    optional uint32                        jinzhu_taxes_value = 9;         // 上次金珠强征值
+}
+
+// ##begin##强征##end##
+message build_mix_levy_c2s {
+    optional uint32                        type = 1;                       // 0.免费强征 1.金珠强征
+}
+// ##begin##强征##end##
+message build_mix_levy_s2c {
+    optional uint32                        type = 1;                       // 0.免费强征 1.金珠强征
+    optional uint32                        taxes_value = 2;                // 强征值
+}
+
+// ##begin##更新强征可用次数##end##
+message build_mix_taxes_use_update_s2c {
+    optional uint32                        type = 1;                       // 0.免费强征 1.金珠强征
+    optional uint32                        use_times = 2;                  // 已用次数
+}
+
+// ##begin##更新强征最大次数##end##
+message build_mix_taxes_num_update_s2c {
+    optional uint32                        max_taxes_times = 1;            // 最大金珠强征次数
+    optional uint32                        use_times = 2;                  // 已用金珠强征次数
+}
+
+// ##begin##更新城建杂项上限值##end##
+message build_mix_max_value_update_s2c {
+    optional uint32                        type = 1;                       // 1.仓库 2.药材 3.征兵 4.役工
+    optional uint32                        num = 2;                        // 上限值
+}
+
+
+
+
+
+
+
+
+
+
+
+
