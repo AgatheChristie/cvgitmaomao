@@ -73,6 +73,33 @@ s2c_pack2(MsgId, MsgCode, SendMsg) ->
             {NewMsgId, NewProtobuf, NewEncodeFun, NewRecord}
     end.
 
+%% 对s2c进行解码,记录track日志使用
+unpack_s2c([], Result) ->
+    Result;
+unpack_s2c([BinData | TBinDatas], Result) ->
+    {ok, MsgId, MsgSeq, DataBin} = protobuf:unpack_s2c(BinData),
+    NewResult = Result ++ [{MsgId, MsgSeq, DataBin}],
+    unpack_s2c(TBinDatas, NewResult).
+
+unpack_s2c(BinData) ->
+    <<_Len:?PROTOBUF_MSG_LEN, MsgSeq:?PROTOBUF_SEQ_LEN, MsgId:?PROTOBUF_MSG_ID, Rest/binary>> = BinData,
+    case catch check_unpack_s2c(MsgId, Rest) of
+        {ok, DataBin} ->
+            {ok, MsgId, MsgSeq, DataBin};
+        _E ->
+            ?ERROR("封包协议出错:~w ~w", [MsgId, _E]),
+            {ok, MsgId, MsgSeq, <<>>}
+    end.
+
+check_unpack_s2c(MsgId, Rest) ->
+    SysProtobufPb = pb_convert:get(MsgId),
+    #sys_protobuf_pb{
+        pb_mod = Protobuf,
+        decode_pb = DecodePb
+    } = SysProtobufPb,
+    DataBin = Protobuf:DecodePb(Rest),
+    {ok, DataBin}.
+
 %% 公共失败协议record
 s2c_failure_record(MsgCode, _MsgId) when is_integer(MsgCode) ->
     #public_failure_s2c{ecode = MsgCode};

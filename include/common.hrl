@@ -326,6 +326,16 @@
 
 -define(BATTLE_LEVEL, 24).										%% 战斗等级限制
 
+%% 封装处理try ... catch
+-define(TRY_CATCH(Fun),
+    try
+        (Fun)
+    catch
+        Class:Error ->
+            ?ERROR("try_catch_exception:~w:~w", [Class, Error]),
+            ok
+    end).
+
 -define(ETS_TASK_CONSIGN, ets_task_consign).                    %%委托任务
 
 

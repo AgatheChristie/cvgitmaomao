@@ -11,6 +11,7 @@
 -include("achieve.hrl").
 -include("hot_spring.hrl").
 -include("guild_info.hrl").
+-include("pb_model.hrl").
 
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -compile([export_all]).
@@ -86,7 +87,32 @@ init([PlayerId, _AccountId, Socket]) ->
 %% Cmd 命令号
 %% Socket socket id
 %% Bin 消息体
-routing(Cmd, Status, Bin, PlayerState) ->
+routing(MsgId, Player, Bin, PlayerState)->
+    %% 打印接收的协议信息
+    protobuf_print:try_c2s_print(Player#player.id, Player#player.last_login_ip, MsgId, 1, Bin),
+    %% 分发到对应的模块处理
+    MsgMod = protobuf:calc_msg_model(MsgId),
+    gateway_router_msg(MsgMod, MsgId, PlayerState, Bin, Player).
+
+%% 聊天模块
+gateway_router_msg(?PB_MODEL_CHAT, Cmd, _PlayerState, Bin, Status) ->
+    Result = pp_chat:handle(Cmd, Status, Bin),
+    Result;
+%% 玩家模块
+gateway_router_msg(?PB_MODEL_ROLE, Cmd, PlayerState, Bin, _State) ->
+    Result = pp_player:handle(Cmd, PlayerState, Bin),
+    Result;
+%% 背包模块
+gateway_router_msg(?PB_MODEL_BAG, Cmd, _PlayerState, Bin, Status) ->
+    Result = pp_goods:handle(Cmd, Status, Bin),
+    Result;
+
+%% 错误协议
+gateway_router_msg(MsgMod, MsgId, MsgSeq, Request, _State) ->
+    ?ERROR(("协议消息报错 MsgMod:~w MsgSeq:~w MsgId:~w Request:~w"), [MsgMod, MsgId, MsgSeq, Request]),
+    {error, "Routing failure"}.
+
+routingqqq(Cmd, Status, Bin, PlayerState) ->
     %% 取前面二位区分功能类型
     [H1, H2, _, _, _] = integer_to_list(Cmd),
 

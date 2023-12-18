@@ -234,7 +234,7 @@ do_parse_packet(Socket, Client) ->
                 {ok, BinData} ->
                     case routing(Client, Cmd, BinData) of
                         %%这里是处理游戏逻辑
-                        {ok, Data} ->
+                        {ok, _, Data} ->
                             %%处理子socket情况
                             case Client#client.player_pid of
                                 undefined ->
