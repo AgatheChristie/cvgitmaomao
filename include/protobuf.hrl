@@ -9,7 +9,7 @@
 -define(PROTOBUF_HRL, true).
 
 %% 协议中的bit长度
--define(PROTOBUF_MSG_LEN, 16).
+-define(PROTOBUF_MSG_LEN, 32).
 %% 协议中的bit序列号长度
 -define(PROTOBUF_SEQ_LEN, 16).
 %% 协议中的bit协议号长度

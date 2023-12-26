@@ -9,7 +9,8 @@
 -include("common.hrl").
 -include("record.hrl").
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -define(REFRESH_SHOP_GOODS, 24*3600*1000).   
 

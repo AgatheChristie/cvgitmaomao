@@ -15,7 +15,8 @@
 %% --------------------------------------------------------------------
 %% External exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -record(state, {
 				is_wedding = 0,		 %%婚宴是否正在举办,0此刻没有举办的婚宴，大于0正在举办的婚宴ID
 				wedding = undefined, %%正在进行的婚宴

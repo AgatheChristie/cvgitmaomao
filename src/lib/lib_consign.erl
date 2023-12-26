@@ -3,7 +3,8 @@
 %% Description: TODO: Add description to lib_consign
 -module(lib_consign).
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -include("common.hrl").
 -include("record.hrl").

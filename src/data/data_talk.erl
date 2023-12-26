@@ -6,7 +6,8 @@
 %%% @Description:  自动生成
 %%%---------------------------------------
 -module(data_talk).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 %% 0	npc	NPC对话内容
 %% 1	role	角色对话内容

@@ -10,28 +10,32 @@
 %%%----------------------------------------------------------------------
 -module(protobuf).
 
+
 -include("protobuf.hrl").
 -include("common.hrl").
 -include("pb_model.hrl").
 -include("pb_convert.hrl").
 -include("protobuf_pb.hrl").
 -include("ecode.hrl").
+-include("global.hrl").
 
 
 -compile(export_all).
+-compile(nowarn_export_all).
 
-s2c_pack(MsgId, SendMsg) ->
-    s2c_pack(MsgId, ?E_OK, SendMsg).
+
 %% 对消息进行编码,非心跳包处理
-s2c_pack(MsgId, MsgCode, SendMsg) ->
-    s2c_pack(MsgId, MsgCode, 0, SendMsg).
 s2c_pack(MsgId, MsgCode, _MsgSeq, SendMsg) ->
     try
-        {_NewMsgId, Protobuf, EncodeFun, NewRecord} = s2c_pack2(MsgId, MsgCode, SendMsg),
+        {NewMsgId, Protobuf, EncodeFun, NewRecord} = s2c_pack2(MsgId, MsgCode, SendMsg),
         Bin = Protobuf:EncodeFun(NewRecord),
-        L = iolist_size(Bin) + 8,
-        %% L = byte_size(Data) + 6,
-        {ok, <<L:32, MsgId:32, Bin/binary>>}
+        L = iolist_size(Bin) + ?HEADER_LENGTH,
+%%        ?DEBUG("L:~p end",[L]),
+%%        D = byte_size(Bin) + ?HEADER_LENGTH,
+%%        ?DEBUG("D:~p end",[D]),
+        S2CBin = <<L:32, NewMsgId:32, Bin/binary>>,
+        protobuf_print:try_s2c_print(67, S2CBin),
+        {ok, S2CBin}
     catch
         T:R ->
             ?ERROR(("编码时发生错误~w:~w MsgId:~w record:~p"), [T, R, MsgId, SendMsg]),
@@ -81,14 +85,13 @@ unpack_s2c([BinData | TBinDatas], Result) ->
     NewResult = Result ++ [{MsgId, MsgSeq, DataBin}],
     unpack_s2c(TBinDatas, NewResult).
 
-unpack_s2c(BinData) ->
-    <<_Len:?PROTOBUF_MSG_LEN, MsgSeq:?PROTOBUF_SEQ_LEN, MsgId:?PROTOBUF_MSG_ID, Rest/binary>> = BinData,
+unpack_s2c(<<_Len:?PROTOBUF_MSG_LEN, MsgId:?PROTOBUF_MSG_ID, Rest/binary>>) ->
     case catch check_unpack_s2c(MsgId, Rest) of
         {ok, DataBin} ->
-            {ok, MsgId, MsgSeq, DataBin};
+            {ok, MsgId, 0, DataBin};
         _E ->
             ?ERROR("封包协议出错:~w ~w", [MsgId, _E]),
-            {ok, MsgId, MsgSeq, <<>>}
+            {ok, MsgId, 0, <<>>}
     end.
 
 check_unpack_s2c(MsgId, Rest) ->

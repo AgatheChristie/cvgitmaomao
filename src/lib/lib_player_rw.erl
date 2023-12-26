@@ -16,7 +16,8 @@
 %% 	
 %% Exported Functions 	
 %% 	
--compile(export_all). 	
+ -compile(export_all).
+ -compile(nowarn_export_all).
   	
 %%获取用户信息(按[字段1,字段2,...])	
 %% handle_call({'PLAYER',  [x ,y]}, _from, Status)	

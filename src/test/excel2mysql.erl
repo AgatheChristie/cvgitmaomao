@@ -4,7 +4,8 @@
 %% Include files
 %%
 -include("common.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -define(CONFIG_FILE, "../config/gateway.config").
 

@@ -5,7 +5,8 @@
 %%% @Description:  坐骑配置
 %%%---------------------------------------
 -module(data_mount).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("record.hrl").  
 
 get_upgrade_exp(Level) ->

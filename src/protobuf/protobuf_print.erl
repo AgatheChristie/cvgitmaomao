@@ -29,7 +29,7 @@ try_s2c_print(_GwRoleId, _Bin) ->
 try_s2c_print(GwRoleId, Bin) ->
     ?TRY_CATCH(s2c_print(GwRoleId, Bin)).
 
-s2c_print(GwRoleId, [H | _T] = Bin) when is_binary(H) ->
+s2c_print(GwRoleId, Bin) when is_binary(Bin) ->
     {ok, MsgId, MsgSeq, Req} = protobuf:unpack_s2c(Bin),
     %% 打印接收的信息
     print(GwRoleId, <<"s2c">>, MsgId, MsgSeq, Req);
@@ -60,27 +60,27 @@ print2(_RoleId, _IP, _MsgMode, ?PUBLIC_SUCCESS_S2C, _MsgSeq, _R) ->
     next;
 print2(_RoleId, _IP, _MsgMode, ?PUBLIC_FAILURE_S2C, _MsgSeq, _R) ->
     next;
-print2(_RoleId, _IP, _MsgMode, ?NET_HEART_C2S, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, ?PB_MODEL_NET, _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?ROLE_UPDATE_MONEY_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?ROLE_UPDATE_ATTR_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?BAG_INFO_C2S = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?BAG_INFO_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?BAG_ADD_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?BAG_UPDATE_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-print2(_RoleId, _IP, _MsgMode, ?BAG_DELETE_S2C = _MsgId, _MsgSeq, _R) ->
-    next;
-
-print2(_RoleId, _IP, ?PB_MODEL_TEAM = _MsgMode, _MsgId, _MsgSeq, _R) ->
-    next;
+%%print2(_RoleId, _IP, _MsgMode, ?NET_HEART_C2S, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, ?PB_MODEL_NET, _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?ROLE_UPDATE_MONEY_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?ROLE_UPDATE_ATTR_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?BAG_INFO_C2S = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?BAG_INFO_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?BAG_ADD_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?BAG_UPDATE_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%print2(_RoleId, _IP, _MsgMode, ?BAG_DELETE_S2C = _MsgId, _MsgSeq, _R) ->
+%%    next;
+%%
+%%print2(_RoleId, _IP, ?PB_MODEL_TEAM = _MsgMode, _MsgId, _MsgSeq, _R) ->
+%%    next;
 %%print2(_RoleId, _Ip, _MsgMode, _MsgId, _MsgSeq, _R) ->
 %%    pass.
 

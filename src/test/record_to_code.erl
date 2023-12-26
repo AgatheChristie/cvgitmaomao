@@ -18,7 +18,8 @@
 %%
 %% Exported Functions
 %%
--compile(export_all). 
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -define(CONFIG_FILE, "../config/gateway.config").
 
@@ -99,7 +100,8 @@ convert_player() ->
 	file:write_file(File, "%% \t\n",[append]),
 	file:write_file(File, "%% Exported Functions \t\n",[append]),
 	file:write_file(File, "%% \t\n",[append]),
-	file:write_file(File, "-compile(export_all). \t\n",[append]),
+	file:write_file(File, " -compile(export_all).
+ -compile(nowarn_export_all).  \t\n",[append]),
 	file:write_file(File, "  \t\n",[append]),	
 
 	file:write_file(File, "%%获取用户信息(按[字段1,字段2,...])\t\n",[append]),

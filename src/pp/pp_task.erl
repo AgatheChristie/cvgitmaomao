@@ -5,7 +5,8 @@
 %%% @Description: 任务模块
 %%%------------------------------------
 -module(pp_task).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 -include("guild_info.hrl").

@@ -6,7 +6,8 @@
 %%%---------------------------------------------
 -module(test_client3).
 -include("common.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -define(HEAT_INTERVAL, 1*10*1000).
 

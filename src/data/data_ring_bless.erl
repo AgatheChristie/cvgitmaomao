@@ -5,7 +5,8 @@
 %%% @Description:  灵兽配置
 %%%---------------------------------------
 -module(data_ring_bless).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("record.hrl").
 
 %%紫戒指的最大祝福等级

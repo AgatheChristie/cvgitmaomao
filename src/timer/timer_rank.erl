@@ -13,7 +13,8 @@
         handle/1,       %% 处理状态变更回调
         terminate/2     %% 中止回调
     ]).
-%-compile(export_all).
+% -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 定时生成排行榜时间间隔，12小时（43200 = 12 * 3600 单位：秒）
 -define(RANK_TIME_SPAN, 12*60*60).     

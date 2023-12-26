@@ -25,7 +25,8 @@
 		 get_trade_limit/1
 		 ]).
 
- %%-compile([export_all]).
+ %% -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%
 %% API Functions

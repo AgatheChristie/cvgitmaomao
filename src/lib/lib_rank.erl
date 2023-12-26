@@ -11,7 +11,8 @@
 -include("guild_info.hrl").
 -include("achieve.hrl").
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 
 %% @doc  创建排行榜ETS表

@@ -10,6 +10,7 @@
 -define(NET_HEART_S2S , 1011001). %% 心跳
 -define(NET_BEFORE_S2S , 1011002). %% 登陆前期信息
 -define(NET_NIU_ROLE_LOGIN_S2S , 1011003). %% 登陆
+-define(NET_NIU_ROLE_ENTER_S2S , 1011004). %% 进入游戏
 -define(SETTING_ALL_S2S , 1021001). %% 获取设置
 -define(SETTING_SET_S2S , 1021002). %% 设置内容
 -define(SETTING_SET_MORE_S2S , 1021003). %% 批量设置内容
@@ -26,6 +27,7 @@
 -define(ROLE_CHANGE_RESUME_S2S , 1041013). %% 修改个人简介
 -define(ROLE_PLAYER_DETAIL_INFO_S2S , 1041018). %% 查看详细玩家实力
 -define(ROLE_ASK_ATTENDANCE_S2S , 1041020). %% 玩家请求签到
+-define(ROLE_NIU_INFO_S2S , 1041022). %% 玩家信息
 -define(ROLE_MIX_GUIDE_INFO_S2S , 1051002). %% 获取引导信息
 -define(ROLE_MIX_COMPLETE_GUIDE_S2S , 1051003). %% 记录引导信息
 -define(ROLE_MIX_COLLECT_LOG_S2S , 1051005). %% 玩家打点信息

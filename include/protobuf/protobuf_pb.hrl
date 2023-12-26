@@ -239,6 +239,7 @@
 -record(p_single_game, {single_game_key, sys_term_id = 0}).
 -record(p_single_game_key, {func_type = 0, only_id = 0}).
 -record(p_niu_role_info, {role_id = 0, status = 0, realm = 0, career = 0, sex = 0, lv = 0, nick_name = []}).
+-record(p_role_niu_batt_info, {type = 0, value = 0}).
 -record(public_success_s2c, {}).
 -record(public_failure_s2c, {ecode = 0, int_values = [], string_values = []}).
 -record(net_heart_c2s, {}).
@@ -246,7 +247,9 @@
 -record(net_before_c2s, {}).
 -record(net_before_s2c, {open_time = 0, merge_time = 0}).
 -record(net_niu_role_login_c2s, {sn = 0, acc_id = 0, acc_name = [], ts_tamp = 0, ticket = []}).
--record(net_niu_role_login_s2c, {is_success = 0, now_sec = 0}).
+-record(net_niu_role_login_s2c, {is_success = 0, now_sec = 0, niu_role_infos = []}).
+-record(net_niu_role_enter_c2s, {sn = 0, role_id = 0}).
+-record(net_niu_role_enter_s2c, {is_success = 0}).
 -record(setting_all_c2s, {group_id = 0}).
 -record(setting_all_s2c, {setting_infos = [], group_id = 0}).
 -record(setting_set_c2s, {id = 0, value = 0}).
@@ -293,6 +296,8 @@
 -record(role_ask_attendance_c2s, {}).
 -record(role_ask_attendance_s2c, {item_actors = []}).
 -record(role_update_devote_s2c, {total_devote = 0, now_devote = 0, today_devote = 0}).
+-record(role_niu_info_c2s, {}).
+-record(role_niu_info_s2c, {scene = 0, x = 0, y = 0, id = 0, hp = 0, hp_lim = 0, mp = 0, mp_lim = 0, sex = 0, lv = 0, exp = 0, exp_lim = 0, career = 0, nick_name = [], max_att = 0, min_att = 0, def = 0, forza = 0, physique = 0, agile = 0, wit = 0, hit = 0, dodge = 0, crit = 0, guild_id = 0, guild_name = [], guild_position = 0, realm = 0, gold = 0, cash = 0, coin = 0, bcoin = 0, att_area = 0, spirit = [], speed = 0, att_speed = 0, e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, mount = 0, pk_mode = 0, title = [], couple_name = [], position = [], evil = 0, realm_honor = 0, culture = 0, state = 0, anti_wind = 0, anti_fire = 0, anti_water = 0, anti_thunder = 0, anti_soil = 0, status = 0, stren = 0, suit_id = 0, change_reason = 0, arena = 0, vip = 0, vip_time = 0, mount_stren = 0, titles = [], ach_hp = 0, ach_mp = 0, ach_att = 0, ach_def = 0, ach_dod = 0, ach_hit = 0, ach_crit = 0, ach_anit = 0, is_spring = 0, g_post_str = [], batt_list = [], turned = 0, deputy_prof_lv = 0, honor_use = 0, honor_rift = 0, honor_cul = 0, honor_spt = 0, honor_pet = 0, full_stren = 0, fbyf_stren = 0, spyf_stren = 0}).
 -record(role_mix_client_s2c, {client_version = []}).
 -record(role_mix_guide_info_c2s, {}).
 -record(role_mix_guide_info_s2c, {guide_groups = []}).

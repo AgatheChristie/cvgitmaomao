@@ -1,6 +1,7 @@
 -module(data_words).
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 
 get_words_verlist() ->

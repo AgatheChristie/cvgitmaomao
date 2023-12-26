@@ -13,7 +13,8 @@
         handle/1,       %% 处理状态变更回调
         terminate/2     %% 中止回调
     ]).
-%-compile(export_all).
+% -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 邮件清理时间间隔，43200 = 12 * 3600，定为12小时清理一次
 -define(CLEAN_OVERDUE_SPAN, 12*60*60).

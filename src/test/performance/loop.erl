@@ -6,7 +6,8 @@
 %%% @Resule  : F2 比 F1 快20毫秒 不到10000基本可以忽略不计
 %%%---------------------------------------------
 -module(loop).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 
 

@@ -13,7 +13,8 @@
 %%
 %% Exported Functions
 %%
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 
 %%

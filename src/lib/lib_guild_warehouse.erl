@@ -25,7 +25,8 @@
 		 get_warehouse_goods_info/5,
 		 delete_warehouse_disband/1,
 		 insert_warehouse_flow_log/5]).
-%% -compile([export_all]).
+%%  -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%
 %% API Functions

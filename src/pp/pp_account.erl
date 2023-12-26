@@ -10,16 +10,22 @@
 -include("record.hrl").
 -include("pb_convert.hrl").
 -include("protobuf_pb.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
+
+
+
+to_p_role_infos(Infos) ->
+	[to_p_role_info(X)||X <- Infos].
+
+to_p_role_info([Pid, Status, Name, Sex, Lv, Realm, Career]) ->
+	#p_niu_role_info{role_id = Pid, status = Status, realm = Realm,
+		career = Career, sex = Sex, lv = Lv, nick_name = Name}.
 
 %%登陆验证
 handle(?NET_NIU_ROLE_LOGIN_C2S, [], #net_niu_role_login_c2s{sn = Sn, acc_id = Accid, acc_name = Accname,
 	ts_tamp = TsTamp, ticket = Ticket}) ->
-	?DEBUG("Sn:~p end",[Sn]),
-	?DEBUG("Accid:~p end",[Accid]),
-	?DEBUG("AccName:~p end",[Accname]),
-	?DEBUG("TsTamp:~p end",[TsTamp]),
-	?DEBUG("Ticket:~p end",[Ticket]),
+
 	Ret =
 		try is_bad_pass([Sn, Accid, Accname, TsTamp, Ticket]) of
 			true ->  true;
@@ -33,9 +39,11 @@ handle(?NET_NIU_ROLE_LOGIN_C2S, [], #net_niu_role_login_c2s{sn = Sn, acc_id = Ac
 		end,
 	case Ret of
 		true ->
-			_L = lib_account:get_role_list(Sn, Accid, Accname),
+			L = lib_account:get_role_list(Sn, Accid, Accname),
 			NowSec = util:unixtime(),
-			Reply = #net_niu_role_login_s2c{is_success = 1,now_sec = NowSec},
+
+			Reply = #net_niu_role_login_s2c{is_success = 1,now_sec = NowSec,
+				niu_role_infos = to_p_role_infos(L)},
 			{true, Reply, Sn, Accid, Accname};
 		_ -> false
 	end;

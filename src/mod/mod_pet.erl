@@ -7,7 +7,8 @@
 -module(mod_pet).
 -include("common.hrl").
 -include("record.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 %%刷新购买面板的元宝消费
 -define(Flush_Need_Gold,50).

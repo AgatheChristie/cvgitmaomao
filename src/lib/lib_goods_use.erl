@@ -9,7 +9,8 @@
 -include("record.hrl").
 -include("hot_spring.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%节日道具使用检查
 check_festivaltool(Player,GoodsStatus,GoodsId,GoodsNum,Nickname) ->

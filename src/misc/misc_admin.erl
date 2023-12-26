@@ -15,7 +15,8 @@
 %%
 %% Exported Functions
 %%
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 处理http请求【需加入身份验证或IP验证】
 treat_http_request(Socket, Packet0) ->

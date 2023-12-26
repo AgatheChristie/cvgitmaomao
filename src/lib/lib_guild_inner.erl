@@ -9,7 +9,8 @@
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
 -include("guild_info.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -export([handle_guild_upgrade_record/0]).
 
 %%=========================================================================

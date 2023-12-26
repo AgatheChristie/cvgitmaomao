@@ -8,7 +8,8 @@
 -include("common.hrl").
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%坐骑最大数
 -define(MAX_MOUNT,10).

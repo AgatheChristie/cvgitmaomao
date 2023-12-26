@@ -420,15 +420,15 @@ control_members(Content, [{Gid, GName, PlayerId, PlayerName, Career, Sex}|Rest])
 get_mon_name(MonId) ->
 	case MonId of
 		43101 ->
-			"地穴编织者";
+			?T("地穴编织者");
 		43102 ->
-			"吸血女妖";
+			?T("吸血女妖");
 		43103 ->
-			"冥巫";
+			?T("冥巫");
 		43104 ->
-			"路西法";
+			?T("路西法");
 		43105 ->
-			"哈迪斯"
+			?T("哈迪斯")
 	end.
 
 

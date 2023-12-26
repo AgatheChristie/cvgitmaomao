@@ -20,16 +20,16 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 -record(state, {
-			socket = undefined,
-			n = 0
-		}).
+    socket = undefined,
+    n = 0
+}).
 
 %% ====================================================================
 %% External functions
 %% ====================================================================
 
-start(Socket,N) ->
-	gen_server:start_link(?MODULE, [Socket,N], []).
+start(Socket, N) ->
+    gen_server:start_link(?MODULE, [Socket, N], []).
 %% ====================================================================
 %% Server functions
 %% ====================================================================
@@ -42,9 +42,9 @@ start(Socket,N) ->
 %%          ignore               |
 %%          {stop, Reason}
 %% --------------------------------------------------------------------
-init([Socket,N]) ->
-	process_flag(trap_exit, true),
-    {ok, #state{socket = Socket,n = N}}.
+init([Socket, N]) ->
+    process_flag(trap_exit, true),
+    {ok, #state{socket = Socket, n = N}}.
 
 %% --------------------------------------------------------------------
 %% Function: handle_call/3
@@ -77,14 +77,20 @@ handle_cast(_Msg, State) ->
 %%          {noreply, State, Timeout} |
 %%          {stop, Reason, State}            (terminate/2 is called)
 %% --------------------------------------------------------------------
-handle_info({send, Bin},State) ->
-    gen_tcp:send(State#state.socket, Bin),
-	{noreply,State};
+handle_info({send, MsgId, SendMsg}, State) ->
+    lib_send:protobuf_send(State#state.socket, MsgId, SendMsg),
+    %% gen_tcp:send(State#state.socket, Bin),
+    {noreply, State};
 
-handle_info({stop},State) ->
-	{stop,normal,State};
+handle_info({stop}, State) ->
+    {stop, normal, State};
+
+handle_info({send, <<_Len:32, Cmd:16, _Rest/binary>>}, State) ->
+    ?DEBUG("Cmd:~p unkown", [Cmd]),
+    {noreply, State};
 
 handle_info(_Info, State) ->
+    ?DEBUG("send:~p ERR!!!", [_Info]),
     {noreply, State}.
 
 %% --------------------------------------------------------------------

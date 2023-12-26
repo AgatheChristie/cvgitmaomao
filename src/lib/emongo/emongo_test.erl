@@ -5,7 +5,8 @@
 %%% @Description: mysql测试
 %%%---------------------------------------------
 -module(emongo_test).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -define(DB, mysql_conn_poll).
 -define(DB_HOST, "localhost").
 -define(DB_PORT, 3386).

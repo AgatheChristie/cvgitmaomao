@@ -15,7 +15,8 @@
 %%----------------------------------------------------
 
 -module(u).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include_lib("kernel/include/file.hrl").
 -include("common.hrl").
 -include("record.hrl").

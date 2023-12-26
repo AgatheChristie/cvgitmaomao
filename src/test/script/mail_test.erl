@@ -6,7 +6,8 @@
 %%%---------------------------------------------
 -module(mail_test).
 -export([start/0, login/1]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 排行榜测试
 start_rank() ->

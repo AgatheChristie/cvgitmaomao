@@ -5,7 +5,8 @@
 %%% @Description: 氏族后台定时服务 
 %%%------------------------------------
 -module(timer_sale).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 

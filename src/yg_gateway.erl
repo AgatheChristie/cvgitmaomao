@@ -10,13 +10,13 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -include("common.hrl").
 -include("record.hrl").
+-include("global.hrl").
 -record(gatewayinit, {
 	id = 1,				  	
 	init_time = 0,
 	async_time = 0
     }).	
-% 消息头长度
--define(HEADER_LENGTH, 6). 
+
 
 %%开启网关
 %%Node:节点

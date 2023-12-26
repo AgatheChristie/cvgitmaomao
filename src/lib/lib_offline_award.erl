@@ -11,7 +11,8 @@
 %%
 %% Exported Functions
 %%
-%% -compile(export_all).
+%%  -compile(export_all).
+ -compile(nowarn_export_all).
 -export([init_offline_award/2,
 		 offline/1,
 		 get_offline_award/1,

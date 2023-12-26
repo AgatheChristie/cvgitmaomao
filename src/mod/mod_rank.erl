@@ -9,7 +9,8 @@
 -include("common.hrl").
 -include("record.hrl").
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -define(RANK_INTERVAL, 1*60*1000).	  %% 每10分钟 排名一次(1-9分钟分别加载数据)
 -define(INIT_RANK_DELAY, 10*1000).    %% 初始化排行榜延时，10秒（10 * 1000 单位：毫秒）

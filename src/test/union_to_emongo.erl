@@ -5,7 +5,8 @@
 %%% @Description: emongo数据库合服处理模块
 %%%--------------------------------------
 -module(union_to_emongo).
--compile([export_all]). 
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 -define(SAVE_PATH, "../logs/").

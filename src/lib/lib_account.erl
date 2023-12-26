@@ -18,18 +18,19 @@
 ).
 -include("common.hrl").
 -include("record.hrl").
+-include("ecode.hrl").
 
 %% 检查账号是否存在
 check_account(PlayerId, Accid) ->
     case db_agent:get_accountid_by_id(PlayerId) of
         null ->
-            false;
+            ?E_NIU_ID_NOT_EXIT;
         AccountId ->
 			case AccountId =:= Accid of
                 true ->
                     true;
                 false ->
-                    false
+	                ?E_NIU_ACC_ID_MATCH
             end
     end.
 

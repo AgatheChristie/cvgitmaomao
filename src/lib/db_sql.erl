@@ -6,7 +6,8 @@
 %%%--------------------------------------
 -module(db_sql).
 -include("common.hrl").
--compile([export_all]).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 执行一个SQL查询,返回影响的行数
 execute(Sql) ->

@@ -153,7 +153,11 @@
  %%偷菜信息
 -define(ETS_MANOR_STEAL, ets_manor_steal).
 
+%% 中文
 -define(T(TEXT), <<(TEXT)/utf8>>).
+
+%% 错误码
+-define(C2SERR(R), throw({error, R})).
 
 %% ---------------------------------
 %% Logging mechanism

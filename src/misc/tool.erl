@@ -1,6 +1,7 @@
 -module(tool).
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% @doc get IP address string from Socket
 ip(Socket) ->

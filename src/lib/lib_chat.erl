@@ -5,7 +5,8 @@
 %%% @Description: 聊天  
 %%%-----------------------------------
 -module(lib_chat).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").

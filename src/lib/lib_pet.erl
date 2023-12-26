@@ -8,7 +8,8 @@
 -include("common.hrl").
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 
 -define(CHENGE_FRUIT_ID, 24106).%%化形果实ID

@@ -11,7 +11,8 @@
 %%
 %% Exported Functions
 %%
-%% -compile(export_all).
+%%  -compile(export_all).
+ -compile(nowarn_export_all).
 -export([online/1,
 		 offline/1,
 		 check_online_gift/1,

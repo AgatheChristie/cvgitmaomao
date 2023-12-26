@@ -6,7 +6,8 @@
 %%%-----------------------------------
 -module(yg_server).
 -export([start/1]).
--compile([export_all]).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 
 -define(YG_SERVER_NODE_ID_1, 1).

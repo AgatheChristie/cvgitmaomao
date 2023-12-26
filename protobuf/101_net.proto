@@ -32,5 +32,17 @@ message net_niu_role_login_c2s {
 message net_niu_role_login_s2c {
     optional uint32                      is_success = 1;
     optional uint32                      now_sec = 2;
+    repeated p_niu_role_info             niu_role_infos = 3;
+}
+
+// ##begin##进入游戏##end##
+message net_niu_role_enter_c2s {
+    optional uint32                      sn = 1;
+    optional uint32                      role_id = 2;
+}
+
+// ##begin##进入游戏##end##
+message net_niu_role_enter_s2c {
+    optional uint32                      is_success = 1;
 }
 

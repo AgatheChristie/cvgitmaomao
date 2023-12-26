@@ -5,7 +5,8 @@
 %%% @Description: 数据转换常用函数
 %%%----------------------------------------
 -module(data_agent).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").

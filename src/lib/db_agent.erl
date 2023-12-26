@@ -10,7 +10,8 @@
 -include("common.hrl").
 -include("record.hrl").
 
--compile(export_all).   
+ -compile(export_all).
+ -compile(nowarn_export_all).
  
 %%%%% begin lib_account
 

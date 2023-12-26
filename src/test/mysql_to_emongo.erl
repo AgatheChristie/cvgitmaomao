@@ -5,7 +5,8 @@
 %%% @Description: mysql->emongo数据库转换处理模块
 %%%--------------------------------------
 -module(mysql_to_emongo).
--compile([export_all]). 
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 
 -define(CONFIG_FILE, "../config/gateway.config").

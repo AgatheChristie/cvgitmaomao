@@ -7,7 +7,8 @@
 -module(db_mongo).
 -include("common.hrl").
 -include("record.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 findAndModify(Collection, Table_name, Key) ->
 	findAndModify(?MASTER_POOLID,Collection, Table_name, Key).

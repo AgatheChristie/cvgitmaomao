@@ -6,7 +6,8 @@
 %%%--------------------------------------
 
 -module(lib_relationship).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("record.hrl").
 -include("common.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").

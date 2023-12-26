@@ -8,7 +8,8 @@
 -include("record.hrl").
 -include("common.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 好友上限
 -define(MAX_FRIENDS, 50).

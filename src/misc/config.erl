@@ -3,7 +3,8 @@
 -include("common.hrl").
 -include_lib("stdlib/include/ms_transform.hrl"). 
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 获取 .config里的配置信息
 get_log_level(App) ->

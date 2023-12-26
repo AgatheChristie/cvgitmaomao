@@ -5,7 +5,8 @@
 %%% @Description:  灵兽配置
 %%%---------------------------------------
 -module(data_pet).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("record.hrl").
 
 %%资质升级概率和消耗

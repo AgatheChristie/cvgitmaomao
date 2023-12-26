@@ -7,7 +7,8 @@
 -module(lib_meridian).
 -include("record.hrl").
 -include("common.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %查看经脉信息
 check_meridian_info(PlayerStatus,PlayerId)->

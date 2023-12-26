@@ -6,14 +6,18 @@
 %%%-----------------------------------
 -module(yg_server_reader).
 -export([start_link/0, init/0]).
--include("common.hrl").
 -include("record.hrl").
+-include("common.hrl").
 -include("protobuf.hrl").
+-include("global.hrl").
 -include("pb_convert.hrl").
+-include("protobuf_pb.hrl").
+-include("ecode.hrl").
+
 -define(TCP_TIMEOUT, 1000). % 解析协议超时时间
 -define(HEART_TIMEOUT, 60000 * 1000). % 心跳包超时时间
 -define(HEART_TIMEOUT_TIME, 1).  % 心跳包超时次数
--define(HEADER_LENGTH, 8). % 消息头长度
+
 
 %% 记录客户端进程
 -record(client, {
@@ -74,8 +78,7 @@ login_parse_packet(Socket, Client) ->
                                                 accid = Accid,
                                                 accname = Accname
                                             },
-                                            {ok, BinData} = protobuf:s2c_pack(?NET_NIU_ROLE_LOGIN_S2C, L),
-                                            lib_send:send_one(Socket, BinData),
+                                            lib_send:protobuf_send(Socket, ?NET_NIU_ROLE_LOGIN_S2C, L),
                                             login_parse_packet(Socket, Client1);
                                         _ ->
                                             login_lost(Socket, Client, 2, "login fail")
@@ -110,24 +113,22 @@ login_parse_packet(Socket, Client) ->
                                             login_lost(Socket, Client, 5, "delete fail")
                                     end;
                                 %%进入游戏
-                                {ok, enter, [Sn, Id]} ->
+                                {ok, ?NET_NIU_ROLE_ENTER_C2S, Data} ->
                                     case Client#client.login == 1 of
                                         true ->
+                                            #net_niu_role_enter_c2s{sn = Sn, role_id = Id} = Data,
                                             case mod_login:login(start, [Id, Client#client.accid, Client#client.accname], Socket) of
                                                 {ok, Pid} ->
-                                                    {ok, BinData} = pt_10:write(10004, 1),
-                                                    lib_send:send_one(Socket, BinData),
+                                                    lib_send:protobuf_send(Socket, ?NET_NIU_ROLE_ENTER_S2C, #net_niu_role_enter_s2c{is_success = 1}),
                                                     do_parse_packet(Socket, Client#client{
                                                         sn = Sn,
                                                         player_pid = Pid,
                                                         player_id = Id,
                                                         socketN = 1
                                                     });
-                                                {error, Reason} ->
-                                                    ?DEBUG("Reason:~p end", [Reason]),
-                                                    %%告诉玩家登陆失败
-                                                    {ok, BinData} = pt_10:write(10004, 0),
-                                                    lib_send:send_one(Socket, BinData),
+                                                {error, ECode} ->
+                                                    ?DEBUG("ECode:~p end", [ECode]),
+                                                    lib_send:protobuf_send(Socket, ?NET_NIU_ROLE_ENTER_S2C, ECode, #net_niu_role_enter_s2c{}),
                                                     login_parse_packet(Socket, Client)
                                             end;
                                         false ->
@@ -202,6 +203,10 @@ login_parse_packet(Socket, Client) ->
                 false ->
                     login_parse_packet(Socket, Client#client{timeout = Client#client.timeout + 1})
             end;
+    %% 处理inet_reply为erlang:port_command的等待消息
+        {inet_reply, Socket, ok} ->
+            ?DEBUG("qqqqq:~p end", [xxxx]),
+            login_parse_packet(Socket, Client);
     %%用户断开连接或出错
         Other ->
             login_lost(Socket, Client, 12, Other)
@@ -267,15 +272,18 @@ do_parse_packet(Socket, Client) ->
                 false ->
                     do_parse_packet(Socket, Client#client{timeout = Client#client.timeout + 1})
             end;
+    %% 用户断开连接
+        {inet_async, Socket, Ref, {error, closed}} ->
+            do_lost(Socket, Client, Ref, {error, closed}, 5);
     %%用户断开连接或出错
         Other ->
             case Client#client.socketN of
                 1 ->
 %%					?DEBUG("~s do_parse_packet_6_/~p/~p/",[misc:time_format(now()),Socket, Other]),		
-                    do_lost(Socket, Client, 0, Other, 5);
+                    do_lost(Socket, Client, 0, Other, 7);
                 _ ->
 %%					?DEBUG("~s do_parse_packet_6_/~p/~p/",[misc:time_format(now()),Socket, Other]),		
-                    do_lost_child(Socket, Client, 0, Other, 5)
+                    do_lost_child(Socket, Client, 0, Other, 8)
             end
     end.
 
@@ -307,8 +315,6 @@ do_lost_child(_Socket, Client, Cmd, Reason, Location) ->
 
 %%退出游戏
 do_lost(_Socket, Client, Cmd, Reason, Location) ->
-    ?DEBUG("Cmd:~p Location:~p end", [Cmd, Location]),
-    ?DEBUG("Reason:~p end", [Reason]),
     case lists:member(Location, [3, 4, 5]) of
         true ->
             no_log;

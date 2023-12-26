@@ -8,7 +8,9 @@
 -export([login/3, logout/2, stop_all/0]).
 -include("common.hrl").
 -include("record.hrl").
--compile(export_all).
+-include("ecode.hrl").
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 init([ProcessName, Worker_id]) ->
@@ -42,17 +44,18 @@ code_change(_OldVsn, State, _Extra)->
 %%Arg:tcp的Socket进程,socket ID
 login(start, [PlayerId, AccountId, _Accname], Socket) ->
     case lib_account:check_account(PlayerId, AccountId) of
-        false ->
-            {error, fail1};
-        true ->
-			spawn(fun() -> check_duplicated_login(PlayerId) end),
-			case mod_player:start(PlayerId, AccountId, Socket) of 
-				{ok, Pid} ->
-					{ok, Pid};
-				_-> 
-					mod_player:delete_player_ets(PlayerId),
-					{error, fail2}
-			end
+	    true ->
+		    spawn(fun() -> check_duplicated_login(PlayerId) end),
+		    case mod_player:start(PlayerId, AccountId, Socket) of
+			    {ok, Pid} ->
+				    {ok, Pid};
+			    _->
+				    mod_player:delete_player_ets(PlayerId),
+				    {error, ?E_NIU_PLAYER_START_ERR}
+		    end;
+        Code ->
+            {error, Code}
+
     end.
 
 %% 检查此账号是否已经登录, 如果登录 则通知退出

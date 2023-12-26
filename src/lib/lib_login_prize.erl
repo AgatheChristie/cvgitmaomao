@@ -5,7 +5,8 @@
 %%% @Description:登录奖励包括登录奖励，登录补偿等
 %%%--------------------------------------
 -module(lib_login_prize).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl"). 
 

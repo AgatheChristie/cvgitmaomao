@@ -2,7 +2,8 @@
 %% Created: 2011-9-2
 %% Description: 评价模块
 -module(lib_appraise).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 %%
 %% Exported Functions
 %%

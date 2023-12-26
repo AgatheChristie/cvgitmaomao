@@ -5,7 +5,8 @@
 %%% @Description: 宠物后台定时服务 
 %%%------------------------------------
 -module(timer_pet).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
 

@@ -7,7 +7,8 @@
 -module(util).
 -include("common.hrl").
 -include("record.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 在List中的每两个元素之间插入一个分隔符
 implode(_S, [])->

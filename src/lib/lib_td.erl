@@ -5,7 +5,8 @@
 %%% @Description:塔防相关处理
 %%%--------------------------------------
 -module(lib_td).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl"). 
 

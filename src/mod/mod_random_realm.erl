@@ -13,7 +13,8 @@
 %%
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/0, start/0,stop/0,get_realm/0,select_pay_player/0]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%
 %% API Functions

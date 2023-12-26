@@ -4,7 +4,8 @@
 %% Description: TODO: 师徒关系逻辑处理
 %%%-----------------------------------
 -module(lib_master_apprentice).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -include("common.hrl").
 -include("record.hrl").

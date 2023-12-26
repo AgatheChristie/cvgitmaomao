@@ -3,7 +3,8 @@
 %% Description: TODO: 跨服单人竞技记录
 -module(lib_war2).
 
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -include("common.hrl").
 -include("record.hrl").

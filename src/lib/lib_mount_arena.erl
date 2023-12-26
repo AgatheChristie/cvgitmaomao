@@ -13,7 +13,8 @@
 %% Exported Functions
 %%
 -export([]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -define(MAX_RECENT,5).  %%近况保存的最大记录
 -define(RANK_NUM,20).   %%斗兽排行榜需要显示的记录数
 -define(MAX_ROUND,30).		%%最大回合数

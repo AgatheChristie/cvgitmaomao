@@ -11,7 +11,8 @@
 %%
 %% Exported Functions
 %%
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 opt_mon_cost(Def, Map_type) ->
 	case [Def, Map_type] of

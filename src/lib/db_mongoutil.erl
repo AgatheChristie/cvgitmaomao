@@ -2,7 +2,8 @@
 %% Created: 2010-10-19 
 %% Description: TODO: Add description to emongo_tool
 -module(db_mongoutil).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 -include("common.hrl").
 -include("record.hrl").

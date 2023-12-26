@@ -12,9 +12,11 @@
 -define(NET_HEART_C2S , 1011001). %% 心跳
 -define(NET_BEFORE_C2S , 1011002). %% 登陆前期信息
 -define(NET_NIU_ROLE_LOGIN_C2S , 1011003). %% 登陆
+-define(NET_NIU_ROLE_ENTER_C2S , 1011004). %% 进入游戏
 -define(NET_HEART_S2C , 1012001). %% 心跳
 -define(NET_BEFORE_S2C , 1012002). %% 登陆前期信息
 -define(NET_NIU_ROLE_LOGIN_S2C , 1012003). %% 登陆
+-define(NET_NIU_ROLE_ENTER_S2C , 1012004). %% 进入游戏
 -define(SETTING_ALL_C2S , 1021001). %% 获取设置
 -define(SETTING_SET_C2S , 1021002). %% 设置内容
 -define(SETTING_SET_MORE_C2S , 1021003). %% 批量设置内容
@@ -40,6 +42,7 @@
 -define(ROLE_CHANGE_RESUME_C2S , 1041013). %% 修改个人简介
 -define(ROLE_PLAYER_DETAIL_INFO_C2S , 1041018). %% 查看详细玩家实力
 -define(ROLE_ASK_ATTENDANCE_C2S , 1041020). %% 玩家请求签到
+-define(ROLE_NIU_INFO_C2S , 1041022). %% 玩家信息
 -define(ROLE_INFO_S2C , 1042001). %% 玩家信息
 -define(ROLE_UPDATE_MONEY_S2C , 1042002). %% 货币协议
 -define(ROLE_UPDATE_ATTR_S2C , 1042003). %% 属性变动
@@ -61,6 +64,7 @@
 -define(ROLE_UPDATE_ATTENDANCE_INFO_S2C , 1042019). %% 更新玩家签到信息
 -define(ROLE_ASK_ATTENDANCE_S2C , 1042020). %% 玩家请求签到
 -define(ROLE_UPDATE_DEVOTE_S2C , 1042021). %% 玩家贡献度更新
+-define(ROLE_NIU_INFO_S2C , 1042022). %% 玩家信息
 -define(ROLE_MIX_GUIDE_INFO_C2S , 1051002). %% 获取引导信息
 -define(ROLE_MIX_COMPLETE_GUIDE_C2S , 1051003). %% 记录引导信息
 -define(ROLE_MIX_COLLECT_LOG_C2S , 1051005). %% 玩家打点信息

@@ -11,7 +11,8 @@
 %%
 %% Exported Functions
 %%
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%波数对应怪物刷新坐标
 get_mon_xy(Num)->

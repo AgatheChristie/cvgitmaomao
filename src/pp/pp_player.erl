@@ -9,6 +9,12 @@
 -include("common.hrl").
 -include("record.hrl").
 -include("guild_info.hrl").
+-include("pb_convert.hrl").
+
+
+%% 查询当前玩家信息
+handle(?ROLE_NIU_INFO_C2S, PlayerState, _) ->
+	lib_player:send_player_attribute(PlayerState#player_state.player, 0);
 
 %% 查询当前玩家信息
 handle(13001, PlayerState, _) ->	

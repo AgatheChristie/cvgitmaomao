@@ -5,7 +5,8 @@
 %%% @Description:  氏族配置
 %%%---------------------------------------
 -module(data_guild).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 %% 职位标志位意义
 %% 1族长
 %% 2、3长老

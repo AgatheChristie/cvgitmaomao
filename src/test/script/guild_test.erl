@@ -6,7 +6,8 @@
 %%%---------------------------------------------
 -module(guild_test).
 -include("common.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 for(Max, Max, _F, X) ->
     X;

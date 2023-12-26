@@ -9,7 +9,8 @@
 -include("common.hrl").
 -include("record.hrl").
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 -define(TIMER,60).
 -define(TIME1,259200).%%259200 %% 3天
 -define(TIME2,43200).%%43200 %% 半天

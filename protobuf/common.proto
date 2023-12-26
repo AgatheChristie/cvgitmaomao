@@ -2012,3 +2012,9 @@ message p_niu_role_info {
     optional string                        nick_name = 7;
 }
 
+// batt信息
+message p_role_niu_batt_info {
+    optional uint32                        type = 1;
+    optional uint32                        value = 2;
+}
+

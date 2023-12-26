@@ -194,3 +194,102 @@ message role_update_devote_s2c {
     optional uint32                             now_devote = 2;               // 本周贡献度
     optional uint32                             today_devote = 3;             // 今日贡献度
 }
+
+// ##begin##玩家信息##end##
+message role_niu_info_c2s {
+}
+// ##begin##玩家信息##end##
+message role_niu_info_s2c {
+    optional uint32               scene = 1;
+    optional uint32               x = 2;
+    optional uint32               y = 3;
+    optional uint32               id = 4;
+    optional uint32               hp = 5;
+    optional uint32               hp_lim = 6;
+    optional uint32               mp = 7;
+    optional uint32               mp_lim = 8;
+    optional uint32               sex = 9;
+    optional uint32               lv = 10;
+    optional uint32               exp = 11;
+    optional uint32               exp_lim = 12;
+    optional uint32               career = 13;
+    optional string               nick_name = 14;
+    optional uint32               max_att = 15;
+    optional uint32               min_att = 16;
+    optional uint32               def = 17;
+    optional uint32               forza = 18;
+    optional uint32               physique = 19;
+    optional uint32               agile = 20;
+    optional uint32               wit = 21;
+    optional uint32               hit = 22;
+    optional uint32               dodge = 23;
+    optional uint32               crit = 24;
+    optional uint32               guild_id = 25;
+    optional string               guild_name = 26;
+    optional uint32               guild_position = 27;
+    optional uint32               realm = 28;
+    optional uint32               gold = 29;
+    optional uint32               cash = 30;
+    optional uint32               coin = 31;
+    optional uint32               bcoin = 32;
+    optional uint32               att_area = 33;
+    optional string               spirit = 34;
+    optional uint32               speed = 35;
+    optional uint32               att_speed = 36;
+    optional uint32               e1 = 37;
+    optional uint32               e2 = 38;
+    optional uint32               e3 = 39;
+    optional uint32               e4 = 40;
+    optional uint32               e5 = 41;
+    optional uint32               mount = 42;
+    optional uint32               pk_mode = 43;
+    optional string               title = 44;
+    optional string               couple_name = 45;
+    optional string               position = 46;
+    optional uint32               evil = 47;
+    optional uint32               realm_honor = 48;
+    optional uint32               culture = 49;
+    optional uint32               state = 50;
+    optional uint32               anti_wind = 51;
+    optional uint32               anti_fire = 52;
+    optional uint32               anti_water = 53;
+    optional uint32               anti_thunder = 54;
+    optional uint32               anti_soil = 55;
+    optional uint32               status = 56;
+    optional uint32               stren = 57;
+    optional uint32               suit_id = 58;
+    optional uint32               change_reason = 59;
+    optional uint32               arena = 60;
+    optional uint32               vip = 61;
+    optional uint32               vip_time = 62;
+    optional uint32               mount_stren = 63;
+    optional string               titles = 64;
+    optional uint32               ach_hp = 65;
+    optional uint32               ach_mp = 66;
+    optional uint32               ach_att = 67;
+    optional uint32               ach_def = 68;
+    optional uint32               ach_dod = 69;
+    optional uint32               ach_hit = 70;
+    optional uint32               ach_crit = 71;
+    optional uint32               ach_anit = 72;
+    optional uint32               is_spring = 73;
+    optional string               g_post_str = 74;
+    repeated p_role_niu_batt_info batt_list = 75;
+    optional uint32               turned = 76;
+    optional uint32               deputy_prof_lv = 77;
+    optional uint32               honor_use = 78;
+    optional uint32               honor_rift = 79;
+    optional uint32               honor_cul = 80;
+    optional uint32               honor_spt = 81;
+    optional uint32               honor_pet = 82;
+    optional uint32               full_stren = 83;
+    optional uint32               fbyf_stren = 84;
+    optional uint32               spyf_stren = 85;
+}
+
+
+
+
+
+
+

@@ -6,7 +6,8 @@
 %%%-----------------------------------
 -module(log).
 -include("record.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %% 装备强化日志 
 log_stren(PlayerStatus, GoodsInfo,Ratio,Ram,Stren_fail, StoneId, RuneId,RuneNum,ProtId,Cost, Status) ->

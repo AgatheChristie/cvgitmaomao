@@ -11,7 +11,8 @@
 %%
 %% Exported Functions
 %%
-%% -compile(export_all).
+%%  -compile(export_all).
+ -compile(nowarn_export_all).
 -export([continuous_online_info/1,
 		 get_continuous_online_award/2,
 		 continuous_online_cash_info/1,

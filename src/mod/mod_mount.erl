@@ -7,7 +7,8 @@
 -module(mod_mount).
 -include("common.hrl").
 -include("record.hrl").
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 role_login(PlayerId) ->
 	lib_mount:init_mount(PlayerId).

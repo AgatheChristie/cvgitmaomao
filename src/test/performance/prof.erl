@@ -5,7 +5,8 @@
 %%% @Description: 性能测试工具
 %%%---------------------------------------------
 -module(prof).
--compile(export_all).
+ -compile(export_all).
+ -compile(nowarn_export_all).
 
 %%性能测试
 %%Fun:函数
