@@ -10,6 +10,8 @@ deps
 rebar3.crashdump
 _build/
 _checkouts/
+_*
+*~
 
 # Default ignored files
 *.beam
@@ -29,11 +31,8 @@ doc
 
 # cv self file
 *.dump
+erl_crash.dump
 ebin
-logs
-cvSelfLogs
-cvSaslLogs
-cvLoggerLogs
 var
 # dot file
 .eunit
