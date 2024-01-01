@@ -23,13 +23,14 @@ _*
 # IDEA file
 .idea
 *.iml
-*.log
-*.log.*
+
 
 # dir file
 _rel
 egame.d
 doc
+logs
+cvLoggerLogs
 
 # cv self file
 *.dump
