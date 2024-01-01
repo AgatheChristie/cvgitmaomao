@@ -27,6 +27,7 @@
 		 ensure_index/4, get_last_error/2, server_status/2]).
 
 -include("emongo.hrl").
+-include("common.hrl").
 
 get_last_error(Database, ReqId) ->
     %%Query = #emo_query{q=[{<<"getlasterror">>, 1}], limit=1},
@@ -70,13 +71,14 @@ do_query(Database, Collection, ReqID, Query) when is_record(Query, emo_query) ->
 	OptsSum = lists:foldl(fun(X, Acc) -> Acc+X end, 0, Query#emo_query.opts),
 	FullName = unicode:characters_to_binary([Database, ".", Collection]),
 	EncodedDocument = if 
-		is_binary(Query#emo_query.q) -> 
-%% 			io:format("do_query_1_~p ~n",[Query#emo_query.q]),
+		is_binary(Query#emo_query.q) ->
+%%			?DEBUG("do_query_1_~p ~n",[Query#emo_query.q]),
 			Query#emo_query.q; 
 		true -> 
-%% 			io:format("do_query_2_~p ~n",[Query#emo_query.q]),
+%% 			?DEBUG("do_query_2_~p ~n",[Query#emo_query.q]),
 			emongo_bson:encode(Query#emo_query.q)
 	end,
+%%	?DEBUG("EncodedDocument:~p ~n",[EncodedDocument]),
 	EncodedFieldSelector = if 
 		Query#emo_query.field_selector == [] -> <<>>; 
 		true -> emongo_bson:encode(Query#emo_query.field_selector) 

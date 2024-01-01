@@ -323,7 +323,7 @@ records_to_documents(DB_name,TableName,ColumnAndType,TableRecord) ->
 					emongo:ensure_index(tool:to_list(?MASTER_POOLID), TableName, LL)
 			end,
 			Mongo_count =
-				case emongo:count(tool:to_list(?MASTER_POOLID),tool:to_list(TableName),[]) of
+				case emongo:count(tool:to_list(?MASTER_POOLID),tool:to_list(TableName)) of
 					undefined -> 0;
 					Val -> Val
 				end,

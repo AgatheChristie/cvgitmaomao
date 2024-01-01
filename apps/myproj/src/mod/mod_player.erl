@@ -5529,7 +5529,7 @@ unload_player_info(PlayerState) ->
               end, lists:seq(1, ?SEND_MSG)),
 
     %% 处理防沉迷
-    case config:get_infant_ctrl(server) of
+    case config:get_infant_ctrl(myproj) of
         1 -> %%防沉迷开启
             Accid = NewPlayer#player.accid,
             case db_agent:get_idcard_status(NewPlayer#player.sn, Accid) of
@@ -5816,7 +5816,7 @@ save_player_table(Player) ->
 
 %%玩家登陆处理防沉迷信息
 check_idcard_status(Player) ->
-    case config:get_infant_ctrl(server) of
+    case config:get_infant_ctrl(myproj) of
         0 ->
             skip;
         1 ->

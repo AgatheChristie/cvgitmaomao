@@ -12,7 +12,7 @@
 -include_lib("stdlib/include/ms_transform.hrl").
 
 dungeon_get_id_list() ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
    			MS = ets:fun2ms(fun(T) -> T#dungeon.id	end),			
    			case (catch ets:select(?ETS_BASE_DUNGEON, MS)) of
@@ -26,7 +26,7 @@ dungeon_get_id_list() ->
 
 %%获取普通副本列表
 common_dungeon_get_id_list() ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
    			MS = ets:fun2ms(fun(T) when T#dungeon.id <998 -> T#dungeon.id	end),			
    			case (catch ets:select(?ETS_BASE_DUNGEON, MS)) of
@@ -39,7 +39,7 @@ common_dungeon_get_id_list() ->
 %% 	end.
 
 dungeon_get(Id) -> 
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
 			case ets:lookup(?ETS_BASE_DUNGEON, Id) of
    				[] -> [];
@@ -51,7 +51,7 @@ dungeon_get(Id) ->
 %% 	end.		
 
 mask_get(Id) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
    			MS = ets:fun2ms(fun(T) when T#ets_scene.sid =:= Id-> T#ets_scene.mask	end),
    			case ets:select(?ETS_BASE_SCENE, MS) of
@@ -64,7 +64,7 @@ mask_get(Id) ->
 %% 	end.			
 
 mon_get(Id) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
    			MS = ets:fun2ms(fun(T) when T#ets_mon.mid =:= Id -> T end),
 			case ets:select(?ETS_BASE_MON, MS) of
@@ -77,7 +77,7 @@ mon_get(Id) ->
 %% 	end.	
 
 npc_get(Id) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#ets_npc.nid =:= Id-> T end),
 			case ets:select(?ETS_BASE_NPC, MS) of
@@ -90,7 +90,7 @@ npc_get(Id) ->
 %% 	end.	
 
 scene_get_id_list() ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
    			MS = ets:fun2ms(fun(T) -> T#ets_scene.sid end),
    			ets:select(?ETS_BASE_SCENE, MS).			
@@ -99,7 +99,7 @@ scene_get_id_list() ->
 %% 	end.		
 
 scene_get(SceneId) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
 			case ets:lookup(?ETS_BASE_SCENE, SceneId) of
    				[] -> [];
@@ -112,7 +112,7 @@ scene_get(SceneId) ->
 
 %%获取挂机场景ID列表
 get_hook_scene_list()->[120,122,123,124,126].
-	%% 	case config:get_read_data_mode(server) of
+	%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
 %%    			MS = ets:fun2ms(fun(T) when T#ets_scene.type=:=10 -> T#ets_scene.sid end),
 %%    			ets:select(?ETS_BASE_SCENE, MS).			
@@ -133,7 +133,7 @@ scene_get_unique_mon(SceneId) ->
 %% 获取指定职业的所有技能
 %% Career 职业ID
 skill_get_id_list(Career) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#ets_skill.career =:= Career -> T#ets_skill.id	end),
    			ets:select(?ETS_BASE_SKILL, MS).			
@@ -145,7 +145,7 @@ skill_get_id_list(Career) ->
 %% Id 技能ID
 %% Lv 技能等级
 skill_get(Id, Lv) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
 			case ets:lookup(?ETS_BASE_SKILL, Id) of
    				[] -> [];
@@ -222,7 +222,7 @@ loop_goods_buff([{BlessLevel, BlessSkillId} | GoodsBlessList], GoodsBuffCD, Now,
 	 end.
 
 task_get_id_list() ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).		
@@ -231,7 +231,7 @@ task_get_id_list() ->
 %% 	end.	
 
 talk_get(Id) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#talk.id =:= Id -> T#talk.content end),
 			case ets:select(?ETS_BASE_TALK, MS) of
@@ -245,7 +245,7 @@ talk_get(Id) ->
 		
 %%新手任务id列表
 task_get_novice_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 4-> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).
@@ -255,7 +255,7 @@ task_get_novice_id_list()->
 	
 %%主线任务id列表
 task_get_main_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 0 orelse T#task.type =:= 4 -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).
@@ -265,7 +265,7 @@ task_get_main_id_list()->
 	
 %%支线任务id列表
 task_get_btanch_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 1 -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).		
@@ -275,7 +275,7 @@ task_get_btanch_id_list()->
 	
 %%日常任务id列表
 task_get_daily_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 2, T#task.child =/= 3-> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).
@@ -285,7 +285,7 @@ task_get_daily_id_list()->
 
 %%普通日常任务id列表(日常打怪，副本)
 task_get_normal_daily_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 2, (T#task.child=:=1 orelse T#task.child=:=6), T#task.kind=:=1-> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).				
@@ -295,7 +295,7 @@ task_get_normal_daily_id_list()->
 
 %%日常帮会id列表
 task_get_guild_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 3 -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).			
@@ -306,7 +306,7 @@ task_get_guild_id_list()->
 
 %%运镖任务id列表
 task_get_carry_id_list(Realm)->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 2, T#task.child =:= 3, (T#task.realm =:= Realm orelse T#task.realm =:= 0) -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).		
@@ -315,7 +315,7 @@ task_get_carry_id_list(Realm)->
 %% 	end.
 
 task_get_guild_carry_id_list(Realm)->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 2, T#task.child =:= 15, (T#task.realm =:= Realm orelse T#task.realm =:= 0) -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).
@@ -325,7 +325,7 @@ task_get_guild_carry_id_list(Realm)->
 
 %%运镖任务id列表
 task_get_business_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 2, T#task.child =:= 4 -> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).		
@@ -335,7 +335,7 @@ task_get_business_id_list()->
 
 %%循环任务列表
 task_get_cycle_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 5 ,T#task.child =:= 22-> T#task.id	end),
    			TaskList = ets:select(?ETS_BASE_TASK, MS),
@@ -346,7 +346,7 @@ task_get_cycle_id_list()->
 
 %%随机循环任务列表
 task_get_random_cycle_id_list()->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->	
    			MS = ets:fun2ms(fun(T) when T#task.type =:= 5 ,T#task.child =:= 21-> T#task.id	end),
    			ets:select(?ETS_BASE_TASK, MS).
@@ -360,7 +360,7 @@ task_get_hero_card_id_list()->
    			ets:select(?ETS_BASE_TASK, MS).
 
 task_get(Id) ->
-%% 	case config:get_read_data_mode(server) of
+%% 	case config:get_read_data_mode(myproj) of
 %% 		1 ->
 			case ets:lookup(?ETS_BASE_TASK, Id) of
    				[] -> [];

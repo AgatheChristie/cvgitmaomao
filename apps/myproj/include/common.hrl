@@ -143,6 +143,32 @@
 %%师傅未登陆时间
 -define(UNLOGIN_DAYS,3).
 
+%% @doc 协议顺序的优先级, 如果在一个请求内 返回的协议， normal 级别的协议 会在 low 级别的前面
+-define(PROTOCOL_ORDER_NORMAL, 1).
+-define(PROTOCOL_ORDER_LOW, 2).
+
+
+-define(IF(TrueOrFalse, A, B),
+    case TrueOrFalse of
+        true -> A;
+        false -> B
+    end
+).
+
+-define(IF(TrueOrFalse, A),
+    case TrueOrFalse of
+        true -> A;
+        false -> ok
+    end
+).
+
+-define(ASSERT(TrueOrFalse, ECode),
+    case TrueOrFalse of
+        true -> ignore;
+        false -> throw(ECode)
+    end
+).
+
 %%自然对数的底
 -define(E, 2.718281828459).
 

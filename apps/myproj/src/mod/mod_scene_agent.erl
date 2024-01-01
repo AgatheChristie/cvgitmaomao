@@ -57,8 +57,8 @@ init({SceneAgentProcessName, WorkerId}) ->
 					ok
 				end,
 				lists:seq(1, ?SCENE_WORKER_NUMBER)),
-			pg2:create(scene_agent),
-			pg2:join(scene_agent, self()),
+			mypg2:create(scene_agent),
+			mypg2:join(scene_agent, self()),
 			erlang:send_after(?CLEAR_ONLINE_PLAYER, self(), {event, clear_online_player});
 	   	true -> 
 			misc:register(local, tool:to_atom(SceneAgentProcessName), self()),

@@ -23,6 +23,8 @@ _*
 # IDEA file
 .idea
 *.iml
+*.log
+*.log.*
 
 # dir file
 _rel

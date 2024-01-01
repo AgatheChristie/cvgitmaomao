@@ -30,7 +30,7 @@ init([]) ->
     %%初始ets表
     ok = init_ets(),
     %%初始数据库
-	ok = yg:init_db(server),
+	ok = yg:init_db(myproj),
 	%% 加载基础数据 
 	ok = load_base_data(),
 	

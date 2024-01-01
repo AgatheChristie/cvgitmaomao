@@ -21,6 +21,14 @@ implode(S, [H | T], NList) ->
     L = [thing_to_list(H) | NList],
     implode(S, T, [S | L]).
 
+
+-spec ip_to_binary(tuple()) -> binary().
+%% Ip = ip()
+%% @doc  ip()转binary
+ip_to_binary({P1, P2, P3, P4}) ->
+	list_to_binary([integer_to_list(P1) ++ "." ++ integer_to_list(P2) ++ "." ++ integer_to_list(P3) ++ "." ++ integer_to_list(P4)]).
+
+
 %% 字符->列
 explode(S, B)->
     re:split(B, S, [{return, list}]).

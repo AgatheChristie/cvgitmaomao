@@ -21,7 +21,7 @@
 %% Local Functions
 %%
 cmd(Status,Data) ->
-	case config:get_can_gmcmd(server) of
+	case config:get_can_gmcmd(myproj) of
 		1 ->  do_cmd(Status,Data);
 		_ ->  no_cmd
 	end.

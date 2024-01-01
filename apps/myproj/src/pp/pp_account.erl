@@ -30,7 +30,7 @@ handle(?NET_NIU_ROLE_LOGIN_C2S, [], #net_niu_role_login_c2s{sn = Sn, acc_id = Ac
 		try is_bad_pass([Sn, Accid, Accname, TsTamp, Ticket]) of
 			true ->  true;
 			_ ->
-				case config:get_strict_md5(server) of
+				case config:get_strict_md5(myproj) of
 					1 -> false;
 					_ -> true
 				end
@@ -55,7 +55,7 @@ handle(10000, [], Data) ->
         	true ->  true;
         	_ ->
 		        ?DEBUG("is_bad_pass false:~p end",[qqqq]),
-				case config:get_strict_md5(server) of
+				case config:get_strict_md5(myproj) of
 					1 -> false;
 					_ -> true
 				end
@@ -146,7 +146,7 @@ get_player_id(Sn, Accid)->
         [Id, Nickname]->
 			{true, Accid, Id,  Nickname};
         []->
-			Ret = misc:get_http_content(config:get_guest_account_url(server)),
+			Ret = misc:get_http_content(config:get_guest_account_url(myproj)),
 			if Ret =:= "" andalso Sn =/= 9999  ->
 				   	{true, 0, 0,  <<>>};
 			   Sn == 9999 ->

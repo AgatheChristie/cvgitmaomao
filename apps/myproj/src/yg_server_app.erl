@@ -14,9 +14,9 @@ start(normal, []) ->
 	ping_gateway(),
 	Tabs = [?ETS_SYSTEM_INFO,?ETS_MONITOR_PID,?ETS_STAT_SOCKET,?ETS_STAT_DB],
 	init_ets(Tabs),	
-	[Port, Node_id, _Acceptor_num, _Max_connections] = config:get_tcp_listener(server),
-	[Ip] = config:get_tcp_listener_ip(server),
-	_Log_level = config:get_log_level(server),
+	[Port, Node_id, _Acceptor_num, _Max_connections] = config:get_tcp_listener(myproj),
+	[Ip] = config:get_tcp_listener_ip(myproj),
+	_Log_level = config:get_log_level(myproj),
 	%%loglevel:set(tool:to_integer(Log_level)),
     {ok, SupPid} = yg_server_sup:start_link(),
 	yg_timer:start(yg_server_sup),
@@ -29,7 +29,7 @@ stop(_State) ->
     void. 
 
 ping_gateway()->
-	case config:get_gateway_node(server) of
+	case config:get_gateway_node(myproj) of
 		undefined -> no_action;
 		Gateway_node ->	
 			catch net_adm:ping(Gateway_node)

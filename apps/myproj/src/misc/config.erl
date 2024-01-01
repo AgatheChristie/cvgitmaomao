@@ -20,6 +20,18 @@ get_infant_ctrl(App) ->
 	_ -> 0
     end.
 
+get_websocket_port(App) ->
+	case application:get_env(App, websocket_port) of
+		{ok, Mode} -> tool:to_integer(Mode);
+		_ -> throw(undefined)
+	end.
+
+get_websocket_ip(App) ->
+	case application:get_env(App, websocket_ip) of
+		{ok, Mode} -> tool:to_integer(Mode);
+		_ -> throw(undefined)
+	end.
+
 get_tcp_listener(App) ->
     case application:get_env(App, tcp_listener) of
  	{ok, false} -> throw(undefined);

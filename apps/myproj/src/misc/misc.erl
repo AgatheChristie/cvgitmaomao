@@ -498,10 +498,10 @@ replace_all(Subject,RE,Replacement,Options) ->
 	end.
 
 pg2_get_members(Pg2_name) ->
-    L = case pg2:get_members(Pg2_name) of 
+    L = case mypg2:get_members(Pg2_name) of
             {error, _} ->
                 timer:sleep(100),
-                pg2:get_members(Pg2_name);
+                mypg2:get_members(Pg2_name);
             Other when is_list(Other) ->
                 Other
         end,

@@ -29,8 +29,8 @@
 -export([pools/0, oid/0, add_pool/5, del_pool/1]).
 
 -export([fold_all/6,
-         find_all/2, find_all/3, find_all/4,
-         find_one/3, find_one/4]).
+    find_all/2, find_all/3, find_all/4,
+    find_one/3, find_one/4]).
 
 -export([insert/3, update/4, update/5, delete/2, delete/3]).
 
@@ -39,8 +39,8 @@
 -export([dec2hex/1, hex2dec/1]).
 
 -export([sequence/2, synchronous/0, no_response/0,
-         find_all_seq/3, fold_all_seq/5,
-         insert_seq/3, update_seq/5, delete_seq/3]).
+    find_all_seq/3, fold_all_seq/5,
+    insert_seq/3, update_seq/5, delete_seq/3]).
 
 -export([update_sync/5, delete_sync/3]).
 
@@ -48,7 +48,7 @@
 
 %% internal
 -export([start_link/0, init/1, handle_call/3, handle_cast/2,
-         handle_info/2, terminate/2, code_change/3]).
+    handle_info/2, terminate/2, code_change/3]).
 
 
 %%-define(WARNING_MSG(Format, Args),
@@ -99,7 +99,7 @@ sequence(PoolId, Sequence) ->
     {Pid, Database, ReqId} = get_pid_pool(PoolId, length(Sequence)),
     sequence(Sequence, Pid, Database, ReqId).
 
-sequence([Operation|Tail], Pid, Database, ReqId) ->
+sequence([Operation | Tail], Pid, Database, ReqId) ->
     Result = Operation(Pid, Database, ReqId),
     case Tail of
         [] -> Result;
@@ -111,10 +111,10 @@ synchronous() ->
 
 synchronous(Timeout) ->
     [fun(_, _, _) -> ok end,
-     fun(Pid, Database, ReqId) ->
-             PacketGetLastError = emongo_packet:get_last_error(Database, ReqId),
-             emongo_server:send_recv(Pid, ReqId, PacketGetLastError, Timeout)
-     end].
+        fun(Pid, Database, ReqId) ->
+            PacketGetLastError = emongo_packet:get_last_error(Database, ReqId),
+            emongo_server:send_recv(Pid, ReqId, PacketGetLastError, Timeout)
+        end].
 
 no_response() ->
     [].
@@ -151,12 +151,12 @@ find_all(PoolId, Collection, Selector, Options) ->
 
 
 find_all_seq(Collection, Selector, Options) ->
-    [Fun0,Fun1] = fold_all_seq(fun(I, A) -> [I | A] end, [], Collection, Selector, Options),
+    [Fun0, Fun1] = fold_all_seq(fun(I, A) -> [I | A] end, [], Collection, Selector, Options),
 
     [Fun0,
-     fun(Pid, Database, ReqId) ->
-             lists:reverse(Fun1(Pid, Database, ReqId))
-     end].
+        fun(Pid, Database, ReqId) ->
+            lists:reverse(Fun1(Pid, Database, ReqId))
+        end].
 
 %%------------------------------------------------------------------------------
 %% fold_all
@@ -169,27 +169,27 @@ fold_all_seq(F, Value, Collection, Selector, Options) ->
     Timeout = proplists:get_value(timeout, Options, ?TIMEOUT),
     Query = create_query(Options, Selector),
     [fun(_, _, _) -> ok end,
-     fun(Pid, Database, ReqId) ->
-             Packet = emongo_packet:do_query(Database, Collection, ReqId, Query),
+        fun(Pid, Database, ReqId) ->
+            Packet = emongo_packet:do_query(Database, Collection, ReqId, Query),
 
-             Resp = emongo_server:send_recv(Pid, ReqId, Packet, Timeout),
+            Resp = emongo_server:send_recv(Pid, ReqId, Packet, Timeout),
 
-             NewValue = fold_documents(F, Value, Resp),
+            NewValue = fold_documents(F, Value, Resp),
 
-             fold_more(F, NewValue, Collection, Resp#response{documents=[]}, Timeout)
-     end].
+            fold_more(F, NewValue, Collection, Resp#response{documents = []}, Timeout)
+        end].
 
 
-fold_more(_F, Value, _Collection, #response{cursor_id=0}, _Timeout) ->
+fold_more(_F, Value, _Collection, #response{cursor_id = 0}, _Timeout) ->
     Value;
 
-fold_more(F, Value, Collection, #response{pool_id=PoolId, cursor_id=CursorID}, Timeout) ->
+fold_more(F, Value, Collection, #response{pool_id = PoolId, cursor_id = CursorID}, Timeout) ->
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
     Packet = emongo_packet:get_more(Database, Collection, ReqId, 0, CursorID),
     Resp1 = emongo_server:send_recv(Pid, ReqId, Packet, Timeout),
 
     NewValue = fold_documents(F, Value, Resp1),
-    fold_more(F, NewValue, Collection, Resp1#response{documents=[]}, Timeout).
+    fold_more(F, NewValue, Collection, Resp1#response{documents = []}, Timeout).
 
 %%------------------------------------------------------------------------------
 %% find_one
@@ -207,10 +207,10 @@ find_one(PoolId, Collection, Selector, Options) ->
 insert(PoolId, Collection, Documents) ->
     sequence(PoolId, insert_seq(Collection, Documents, no_response())).
 
-insert_seq(Collection, [[_|_]|_]=Documents, Next) ->
+insert_seq(Collection, [[_ | _] | _] = Documents, Next) ->
     [fun(Pid, Database, ReqId) ->
-             Packet = emongo_packet:insert(Database, Collection, ReqId, Documents),
-             emongo_server:send(Pid, Packet)
+        Packet = emongo_packet:insert(Database, Collection, ReqId, Documents),
+        emongo_server:send(Pid, Packet)
      end | Next];
 insert_seq(Collection, Document, Next) ->
     insert_seq(Collection, [Document], Next).
@@ -227,8 +227,8 @@ update(PoolId, Collection, Selector, Document, Upsert) ->
 
 update_seq(Collection, Selector, Document, Upsert, Next) ->
     [fun(Pid, Database, ReqId) ->
-             Packet = emongo_packet:update(Database, Collection, ReqId, Upsert, Selector, Document),
-             emongo_server:send(Pid, Packet)
+        Packet = emongo_packet:update(Database, Collection, ReqId, Upsert, Selector, Document),
+        emongo_server:send(Pid, Packet)
      end | Next].
 
 
@@ -247,8 +247,8 @@ delete(PoolId, Collection, Selector) ->
 
 delete_seq(Collection, Selector, Next) ->
     [fun(Pid, Database, ReqId) ->
-             Packet = emongo_packet:delete(Database, Collection, ReqId, transform_selector(Selector)),
-             emongo_server:send(Pid, Packet)
+        Packet = emongo_packet:delete(Database, Collection, ReqId, transform_selector(Selector)),
+        emongo_server:send(Pid, Packet)
      end | Next].
 
 
@@ -270,23 +270,33 @@ count(PoolId, Collection) -> count(PoolId, Collection, []).
 
 count(PoolId, Collection, Selector) ->
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
-    Q = [{<<"count">>, Collection}, {<<"ns">>, Database},
-         {<<"query">>, transform_selector(Selector)}],
-    Query = #emo_query{q=Q, limit=1},
+%%    ?DEBUG("Collection:~p end",[Collection]),
+%%    ?DEBUG("PoolId:~p end",[PoolId]),
+    %%  ?DEBUG("Selector:~p end",[Selector]),
+    %%    ?DEBUG("Database:~p end",[Database]),
+    Q =
+        case Selector =/= [] andalso is_list(Selector) of
+            true ->
+                [{<<"count">>, Collection}, {<<"query">>, transform_selector(Selector)}];
+            false ->
+                [{<<"count">>, Collection}]
+
+        end,
+    Query = #emo_query{q = Q, limit = 1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[QCC]} = T ->
-            ?DEBUG("count T:~p end",[T]),
+        #response{documents = [QCC]} = T ->
+            ?DEBUG("count T:~p end", [T]),
             Count =
-                case lists:keyfind(<<"n">>,1,QCC) of
-                    {_,TmpNum} ->
+                case lists:keyfind(<<"n">>, 1, QCC) of
+                    {_, TmpNum} ->
                         TmpNum;
                     false ->
                         0
                 end,
             round(Count);
         _E ->
-            ?DEBUG("count _E:~p end",[_E]),
+            ?DEBUG("count _E:~p end", [_E]),
             undefined
     end.
 
@@ -296,46 +306,47 @@ distinct(PoolId, Collection, Key) -> distinct(PoolId, Collection, Key, []).
 distinct(PoolId, Collection, Key, Selector) ->
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
     Q = [{<<"distinct">>, Collection}, {<<"key">>, Key}, {<<"ns">>, Database},
-         {<<"query">>, transform_selector(Selector)}],
-    Query = #emo_query{q=Q, limit=1},
+        {<<"query">>, transform_selector(Selector)}],
+    Query = #emo_query{q = Q, limit = 1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[[{<<"values">>, {array, Vals}} | _]]} = T ->
-            ?DEBUG("distinct T:~p end",[T]),
+        #response{documents = [[{<<"values">>, {array, Vals}} | _]]} = T ->
+            ?DEBUG("distinct T:~p end", [T]),
             Vals;
         _E ->
-            ?DEBUG("distinct _E:~p end",[_E]),
+            ?DEBUG("distinct _E:~p end", [_E]),
             undefined
     end.
 
 findAndModify(PoolId, Collection, Name, Key) ->
-    %%?DEBUG("Key:~p end",[Key]),
-    %%?DEBUG("Collection:~p end",[Collection]),
-    %%?DEBUG("Name:~p end",[Name]),
-	Key1 = tool:to_binary(Key),
+    Key1 = tool:to_binary(Key),
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
-    Q = [{<<"findandmodify">>, Collection}, {<<"ns">>, Database},
-         {<<"update">>, [{"$inc", [{Key1,1}]}]},
-		 {<<"query">>,[{"name", Name}]},
-		 {<<"new">>, true},
-		 {<<"upsert">>, true}],
-    Query = #emo_query{q=Q, limit=1},
+%%    ?DEBUG("Database:~p end",[Database]),
+%%    ?DEBUG("Key:~p end",[Key]),
+%%    ?DEBUG("Collection:~p end",[Collection]),
+%%    ?DEBUG("Name:~p end",[Name]),
+    Q = [{<<"findandmodify">>, Collection},
+        {<<"update">>, [{"$inc", [{Key1, 1}]}]},
+        {<<"query">>, [{"name", Name}]},
+        {<<"new">>, true},
+        {<<"upsert">>, true}],
+    Query = #emo_query{q = Q, limit = 1},
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
-        #response{documents=[QCC]} = T ->
-            %%?DEBUG("T:~p end",[T]),
-                case lists:keyfind(<<"value">>,1,QCC) of
-                    {_,Record} ->
-                        case lists:keyfind(Key1, 1, Record) of
-                            {Key1, Val} -> Val;
-                            _-> undefined
-                        end;
-                    false ->
-                        undefined
-                end;
-      %%  #response{documents=[[{<<"value">>, Record} | _]]}  = T->
+        #response{documents = [QCC]} = T ->
+            ?DEBUG("T:~p end", [T]),
+            case lists:keyfind(<<"value">>, 1, QCC) of
+                {_, Record} ->
+                    case lists:keyfind(Key1, 1, Record) of
+                        {Key1, Val} -> Val;
+                        _ -> undefined
+                    end;
+                false ->
+                    undefined
+            end;
+        %%  #response{documents=[[{<<"value">>, Record} | _]]}  = T->
         _E ->
-            ?DEBUG("findAndModify _E:~p end",[_E]),
+            ?DEBUG("findAndModify _E:~p end", [_E]),
             undefined
     end.
 
@@ -353,8 +364,8 @@ findAndModify(PoolId, Collection, Name, Key) ->
 %%--------------------------------------------------------------------
 init(_) ->
     {ok, HN} = inet:gethostname(),
-    <<HashedHN:3/binary,_/binary>> = erlang:md5(HN),
-    {ok, #state{oid_index=1, hashed_hostn=HashedHN}}.
+    <<HashedHN:3/binary, _/binary>> = erlang:md5(HN),
+    {ok, #state{oid_index = 1, hashed_hostn = HashedHN}}.
 
 %%--------------------------------------------------------------------
 %% Function: %% handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -368,7 +379,7 @@ init(_) ->
 handle_call(oid, _From, State) ->
     {Total_Wallclock_Time, _} = erlang:statistics(wall_clock),
     Front = Total_Wallclock_Time rem 16#ffffffff,
-    <<_:20/binary,PID:2/binary,_/binary>> = term_to_binary(self()),
+    <<_:20/binary, PID:2/binary, _/binary>> = term_to_binary(self()),
     Index = State#state.oid_index rem 16#ffffff,
     {reply, <<Front:32, (State#state.hashed_hostn)/binary, PID/binary, Index:24>>, State#state{oid_index = State#state.oid_index + 1}};
 
@@ -414,7 +425,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%--------------------------------------------------------------------
 get_pid_pool(PoolId, RequestCount) ->
     case emongo_sup:worker_pid(PoolId, emongo_sup:pools(), RequestCount) of
-        undefined -> ?WARNING_MSG("emongo error: ~p/~p/~p/~p~n",[erlang:localtime(),PoolId,  emongo_sup:pools(), RequestCount]),throw(emongo_busy);
+        undefined ->
+            ?WARNING_MSG("emongo error: ~p/~p/~p/~p~n", [erlang:localtime(), PoolId, emongo_sup:pools(), RequestCount]),
+            throw(emongo_busy);
         Val -> Val
     end.
 
@@ -430,7 +443,7 @@ fold_documents(F, Value, Resp) ->
 
 kill_cursor(_, 0) ->
     ok;
-kill_cursor(PoolId, CursorID)  ->
+kill_cursor(PoolId, CursorID) ->
     {Pid, _Database, ReqId} = get_pid_pool(PoolId, 1),
     Packet = emongo_packet:kill_cursors(ReqId, [CursorID]),
     emongo_server:send(Pid, ReqId, Packet).
@@ -439,9 +452,9 @@ kill_cursor(PoolId, CursorID)  ->
 dec2hex(Dec) ->
     dec2hex(<<>>, Dec).
 
-dec2hex(N, <<I:8,Rem/binary>>) ->
+dec2hex(N, <<I:8, Rem/binary>>) ->
     dec2hex(<<N/binary, (hex0((I band 16#f0) bsr 4)):8, (hex0((I band 16#0f))):8>>, Rem);
-dec2hex(N,<<>>) ->
+dec2hex(N, <<>>) ->
     N.
 
 hex2dec(Hex) when is_list(Hex) ->
@@ -450,9 +463,9 @@ hex2dec(Hex) when is_list(Hex) ->
 hex2dec(Hex) ->
     hex2dec(<<>>, Hex).
 
-hex2dec(N,<<A:8,B:8,Rem/binary>>) ->
+hex2dec(N, <<A:8, B:8, Rem/binary>>) ->
     hex2dec(<<N/binary, ((dec0(A) bsl 4) + dec0(B)):8>>, Rem);
-hex2dec(N,<<>>) ->
+hex2dec(N, <<>>) ->
     N.
 
 create_query(Options, Selector) ->
@@ -460,33 +473,34 @@ create_query(Options, Selector) ->
     create_query(Options, #emo_query{}, Selector1, []).
 
 create_query([], QueryRec, QueryDoc, []) ->
-    QueryRec#emo_query{q=QueryDoc};
+    QueryRec#emo_query{q = QueryDoc};
 
 create_query([], QueryRec, [], OptDoc) ->
-    QueryRec#emo_query{q=OptDoc};
+    QueryRec#emo_query{q = OptDoc};
 
 create_query([], QueryRec, QueryDoc, OptDoc) ->
-    QueryRec#emo_query{q=(OptDoc ++ [{<<"query">>, QueryDoc}])};
+    QueryRec#emo_query{q = (OptDoc ++ [{<<"query">>, QueryDoc}])};
 
-create_query([{limit, Limit}|Options], QueryRec, QueryDoc, OptDoc) ->
-    QueryRec1 = QueryRec#emo_query{limit=Limit},
+create_query([{limit, Limit} | Options], QueryRec, QueryDoc, OptDoc) ->
+    QueryRec1 = QueryRec#emo_query{limit = Limit},
     create_query(Options, QueryRec1, QueryDoc, OptDoc);
 
-create_query([{offset, Offset}|Options], QueryRec, QueryDoc, OptDoc) ->
-    QueryRec1 = QueryRec#emo_query{offset=Offset},
+create_query([{offset, Offset} | Options], QueryRec, QueryDoc, OptDoc) ->
+    QueryRec1 = QueryRec#emo_query{offset = Offset},
     create_query(Options, QueryRec1, QueryDoc, OptDoc);
 
-create_query([{orderby, Orderby}|Options], QueryRec, QueryDoc, OptDoc) ->
-    Orderby1 = [{Key, case Dir of desc -> -1; _ -> 1 end}|| {Key, Dir} <- Orderby],
-    OptDoc1 = [{<<"orderby">>, Orderby1}|OptDoc],
+create_query([{orderby, Orderby} | Options], QueryRec, QueryDoc, OptDoc) ->
+    Orderby1 = [{Key, case Dir of desc -> -1; _ -> 1 end} || {Key, Dir} <- Orderby],
+    OptDoc1 = [{<<"orderby">>, Orderby1} | OptDoc],
     create_query(Options, QueryRec, QueryDoc, OptDoc1);
 
-create_query([{fields, Fields}|Options], QueryRec, QueryDoc, OptDoc) ->
-    QueryRec1 = QueryRec#emo_query{field_selector=[{Field, 1} || Field <- Fields]},
+create_query([{fields, Fields} | Options], QueryRec, QueryDoc, OptDoc) ->
+    QueryRec1 = QueryRec#emo_query{field_selector = [{Field, 1} || Field <- Fields]},
     create_query(Options, QueryRec1, QueryDoc, OptDoc);
 
-create_query([_|Options], QueryRec, QueryDoc, OptDoc) ->
+create_query([_ | Options], QueryRec, QueryDoc, OptDoc) ->
     create_query(Options, QueryRec, QueryDoc, OptDoc).
+
 
 transform_selector(Selector) ->
     transform_selector(Selector, []).
@@ -494,10 +508,10 @@ transform_selector(Selector) ->
 transform_selector([], Acc) ->
     lists:reverse(Acc);
 
-transform_selector([{where, Val}|Tail], Acc) when is_list(Val) ->
-    transform_selector(Tail, [{<<"$where">>, Val}|Acc]);
+transform_selector([{where, Val} | Tail], Acc) when is_list(Val) ->
+    transform_selector(Tail, [{<<"$where">>, Val} | Acc]);
 
-transform_selector([{Key, [{_,_}|_]=Vals}|Tail], Acc) ->
+transform_selector([{Key, [{_, _} | _] = Vals} | Tail], Acc) ->
     Vals1 =
         [case Operator of
              O when O == '>'; O == gt ->
@@ -525,10 +539,10 @@ transform_selector([{Key, [{_,_}|_]=Vals}|Tail], Acc) ->
              _ ->
                  {Operator, Val}
          end || {Operator, Val} <- Vals],
-    transform_selector(Tail, [{Key, Vals1}|Acc]);
+    transform_selector(Tail, [{Key, Vals1} | Acc]);
 
-transform_selector([Other|Tail], Acc) ->
-    transform_selector(Tail, [Other|Acc]).
+transform_selector([Other | Tail], Acc) ->
+    transform_selector(Tail, [Other | Acc]).
 
 dec0($a) -> 10;
 dec0($b) -> 11;
@@ -544,4 +558,4 @@ hex0(12) -> $c;
 hex0(13) -> $d;
 hex0(14) -> $e;
 hex0(15) -> $f;
-hex0(I) ->  $0 + I.
+hex0(I) -> $0 + I.

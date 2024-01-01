@@ -20,19 +20,32 @@ start([Ip, Port, Node_id]) ->
 
     inets:start(),
 
-    ok = start_kernel(),                            %% 开启核心服务
-    ok = start_rand(),                                %% 随机种子
-    ok = start_mon(),                                %% 开启怪物监控树
-    ok = start_npc(),                                %% 开启npc监控树
-    ok = start_task(),                                %% 开启任务监控树
-    ok = start_mail(),                                %% 开启邮件监控树
-    ok = start_client(),                            %% 开启客户端连接监控树
+
+    myproj_app:start_supervisor(mod_kernel),
+    myproj_app:start_supervisor(mod_rand),
+    myproj_app:start_supervisor(mod_mon_create),
+    myproj_app:start_supervisor(mod_npc_create),
+    myproj_app:start_supervisor(mod_task_cache),
+    myproj_app:start_supervisor(mod_mail),
+    myproj_app:start_supervisor(yg_tcp_client_sup),
+%%    ok = start_kernel(),                            %% 开启核心服务
+%%    ok = start_rand(),                                %% 随机种子
+%%    ok = start_mon(),                                %% 开启怪物监控树
+%%    ok = start_npc(),                                %% 开启npc监控树
+%%    ok = start_task(),                                %% 开启任务监控树
+%%    ok = start_mail(),                                %% 开启邮件监控树
+%%    ok = start_client(),                            %% 开启客户端连接监控树
     ok = start_flash_843(),                            %% 开启 flash策略文件请求服务
     ok = start_tcp(Port),                            %% 开启tcp listener监控树
     ok = start_scene_agent(),                        %% 开启场景代理监控树
-    ok = start_box(),                                %% 开启诛邪系统进程监控树,
-    ok = start_box_log(),                            %% 开启诛邪系统日志进程;	
-    ok = start_random_realm(),                        %% 开启选择部落监控树	
+   %% ok = start_box(),                                %% 开启诛邪系统进程监控树,
+   %% ok = start_box_log(),                            %% 开启诛邪系统日志进程;
+    %% ok = start_random_realm(),                        %% 开启选择部落监控树
+    myproj_app:start_supervisor(mod_box),
+    myproj_app:start_supervisor(mod_box_log),
+    myproj_app:start_supervisor(mod_random_realm),
+
+
     ok = start_disperse([Ip, Port, Node_id]),        %% 开启服务器路由，连接其他节点	
     ok = start_scene(),                                %% 开启本节点场景(按照配置文件)
     ok = start_local_cache(),                        %% 开启本节点缓存进程
@@ -241,7 +254,7 @@ start_scene() ->
     lists:foreach(fun(SId) ->
         mod_scene:get_scene_pid(SId, undefined, undefined)
                   end,
-        config:get_scene_here(server)),
+        config:get_scene_here(myproj)),
     ok.
 
 %%开启师徒关系监控树 

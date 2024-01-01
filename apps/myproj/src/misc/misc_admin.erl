@@ -556,7 +556,7 @@ node_info() ->
  	{ok, Info}.
 
 get_node_info() ->
-	Info_log_level = config:get_log_level(server),
+	Info_log_level = config:get_log_level(myproj),
 	SceneUserCount = ets:info(ets_online_scene,size),
 	[Host_tcp,Port_tcp,Start_time] = 
 	case catch(ets:match(?ETS_SYSTEM_INFO,{'_',tcp_listener,'$3'})) of
