@@ -18,7 +18,7 @@
 %% -----------------------------------------------------------------
 %% 敏感词处理
 %% -----------------------------------------------------------------
-words_filter([Words_for_filter]) -> Words_for_filter.
+words_filter(Words_for_filter) -> Words_for_filter.
 %%words_filter(Words_for_filter) ->
 %%	Words_List = data_words:get_words_verlist(),
 %%	binary:bin_to_list(lists:foldl(fun(Kword, Words_for_filter0)->

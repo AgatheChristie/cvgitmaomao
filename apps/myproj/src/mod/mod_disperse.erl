@@ -14,6 +14,7 @@
             server_id/0,
             server_list/0,
             send_to_all/1,
+	        protobuf_broadcast_to_world/3,
             broadcast_to_world/2,
 			broadcast_to_realm/3,
 			boradcast_box_goods_msg/3,
@@ -326,6 +327,12 @@ code_change(_OldVsn, State, _Extra)->
 
 
 %% ----------------------- 私有函数 ---------------------------------
+
+%% 广播到其它节点的世界频道
+protobuf_broadcast_to_world([], _MsgId, _Data) -> ok;
+protobuf_broadcast_to_world([H | T], MsgId, Data) ->
+	rpc:cast(H#server.node, lib_send, protobuf_send_to_local_all, [MsgId, Data]),
+	protobuf_broadcast_to_world(T, MsgId, Data).
 
 %% 广播到其它节点的世界频道
 broadcast_to_world([], _Data) -> ok;

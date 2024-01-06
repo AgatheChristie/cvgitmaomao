@@ -561,3 +561,10 @@ old_integer_to_hex(I) when I<16 ->
 old_integer_to_hex(I) when I>=16 ->
     N = trunc(I/16),
     old_integer_to_hex(N) ++ old_integer_to_hex(I rem 16).
+
+check_apply_lock(OnlyId, LockTime, Code) ->
+	OldMap = ?DEFAULT(get(apply_lock), #{}),
+	LastLockTime = maps:get(OnlyId, OldMap, 0),
+	NowSec = unixtime(),
+	?ASSERT(NowSec >= LastLockTime, Code),
+	put(apply_lock, OldMap#{OnlyId => NowSec + LockTime}).

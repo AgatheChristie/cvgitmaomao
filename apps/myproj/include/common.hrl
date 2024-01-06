@@ -66,7 +66,8 @@
 
 -define(ALL_SERVER_PLAYERS, 10000).
 
-
+-include("pb_convert.hrl").
+-include("protobuf_pb.hrl").
 
 %%数据库模块选择 (db_mysql 或 db_mongo)
 -define(DB_MODULE, db_mongo).			
@@ -182,8 +183,30 @@
 %% 中文
 -define(T(TEXT), <<(TEXT)/utf8>>).
 
-%% 错误码
--define(C2SERR(R), throw({error, R})).
+-define(FALSE, 0).
+-define(TRUE, 1).
+-define(UNDEF, undefined).
+-define(NULL,  null).
+
+%% @doc 调用锁
+-define(APPLY_DEFAULT_CD_TIME,              1).
+-define(APPLY_LOCK(Name, Sec, Code),        util:check_apply_lock({?MODULE, ?FUNCTION_NAME, Name}, Sec, Code)).
+-define(APPLY_LOCK(Sec, Code),              ?APPLY_LOCK(?UNDEF, Sec, Code)).
+-define(APPLY_LOCK(Sec),                    ?APPLY_LOCK(Sec, 5)).
+-define(APPLY_LOCK(),                       ?APPLY_LOCK(?APPLY_DEFAULT_CD_TIME)).
+
+-define(DEFAULT(_Data, _Default),     (
+        case _Data of
+            undefined ->
+                _Default;
+            false ->
+                _Default;
+            error ->
+                _Default;
+            _RetData ->
+                _RetData
+        end
+)).
 
 %% ---------------------------------
 %% Logging mechanism

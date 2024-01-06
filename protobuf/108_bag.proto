@@ -16,6 +16,68 @@ message bag_info_s2c {
    optional uint32                         total_grid = 3;               // 可用格子总数量
 }
 
+// ##begin##背包信息##end##
+message bag_niu_list_c2s {
+   optional uint32                         type = 1;                     // 0 当前装备 1 装备一，2 装备二，3 装备三, 4 背包，5 仓库  6 任务物品 7诛邪仓库 ，8氏族仓库，9临时矿包，10农场背包
+}
+// ##begin##背包信息##end##
+message bag_niu_list_s2c {
+   optional uint32                         location = 1;                     //
+   optional uint32                         cell_num = 2;                     //
+   optional uint32                         coin = 3;                        //
+   optional uint32                         bcoin = 4;                     //
+   optional uint32                         cash = 5;                      //
+   optional uint32                         gold = 6;                      //
+   optional uint32                         can_sell_bcoin_num = 7;           //
+   optional uint32                         can_sell_coin_num = 8;           //
+   repeated p_niu_item_info                item_list = 9;                  //
+}
+
+// ##begin##背包信息##end##
+message bag_niu_clean_c2s {
+
+}
+// ##begin##背包信息##end##
+message bag_niu_clean_s2c {
+   repeated p_niu_item_info                item_list = 1;                  //
+}
+
+// ##begin##背包信息##end##
+message bag_niu_shop_c2s {
+   optional uint32                         shop_type = 1;                     //
+   optional uint32                         shop_sub_type = 2;              //
+
+}
+// ##begin##背包信息##end##
+message bag_niu_shop_s2c {
+   optional uint32                         shop_type = 1;                     //
+   optional uint32                         shop_sub_type = 2;              //
+   repeated p_niu_shop_info                shop_list = 3;                  //
+   optional uint32                         result = 4;                  //
+}
+
+// ##begin##背包信息##end##
+message bag_niu_buy_c2s {
+   optional uint32                         goods_type_id = 1;                     //
+   optional uint32                         goods_num = 2;              //
+   optional uint32                         shop_type = 3;                     //
+   optional uint32                         shop_sub_type = 4;              //
+
+}
+// ##begin##背包信息##end##
+message bag_niu_buy_s2c {
+   optional uint32                         res = 1;                     //
+   optional uint32                         goods_type_id = 2;                     //
+   optional uint32                         goods_num = 3;              //
+   optional uint32                         shop_type = 4;                     //
+   optional uint32                         new_coin = 5;                     //
+   optional uint32                         new_bcoin = 6;                     //
+   optional uint32                         new_cash = 7;                     //
+   optional uint32                         new_gold = 8;                     //
+   optional uint32                         score = 9;                     //
+   repeated p_niu_item_info                item_list = 10;                  //
+}
+
 // ##begin##增加道具##end##
 message bag_add_s2c {
    optional uint32                         type = 1;                     // 选项id  

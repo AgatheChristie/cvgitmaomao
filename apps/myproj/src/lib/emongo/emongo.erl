@@ -270,7 +270,7 @@ count(PoolId, Collection) -> count(PoolId, Collection, []).
 
 count(PoolId, Collection, Selector) ->
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
-%%    ?DEBUG("Collection:~p end",[Collection]),
+    ?DEBUG("Collection:~p end",[Collection]),
 %%    ?DEBUG("PoolId:~p end",[PoolId]),
     %%  ?DEBUG("Selector:~p end",[Selector]),
     %%    ?DEBUG("Database:~p end",[Database]),
@@ -286,12 +286,12 @@ count(PoolId, Collection, Selector) ->
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
         #response{documents = [QCC]} = T ->
-            ?DEBUG("count T:~p end", [T]),
             Count =
                 case lists:keyfind(<<"n">>, 1, QCC) of
                     {_, TmpNum} ->
                         TmpNum;
                     false ->
+                        ?DEBUG("count T:~p end", [T]),
                         0
                 end,
             round(Count);
@@ -322,9 +322,11 @@ findAndModify(PoolId, Collection, Name, Key) ->
     Key1 = tool:to_binary(Key),
     {Pid, Database, ReqId} = get_pid_pool(PoolId, 2),
 %%    ?DEBUG("Database:~p end",[Database]),
-%%    ?DEBUG("Key:~p end",[Key]),
-%%    ?DEBUG("Collection:~p end",[Collection]),
-%%    ?DEBUG("Name:~p end",[Name]),
+
+%%      ?DEBUG("Key:~p end",[Key]),
+%%      ?DEBUG("Collection:~p end",[Collection]),
+%%      ?DEBUG("Name:~p end",[Name]),
+
     Q = [{<<"findandmodify">>, Collection},
         {<<"update">>, [{"$inc", [{Key1, 1}]}]},
         {<<"query">>, [{"name", Name}]},
@@ -334,7 +336,7 @@ findAndModify(PoolId, Collection, Name, Key) ->
     Packet = emongo_packet:do_query(Database, "$cmd", ReqId, Query),
     case emongo_server:send_recv(Pid, ReqId, Packet, ?TIMEOUT) of
         #response{documents = [QCC]} = T ->
-            ?DEBUG("T:~p end", [T]),
+            ?IF(Collection =/= "auto_ids",?DEBUG("T:~p end", [T])),
             case lists:keyfind(<<"value">>, 1, QCC) of
                 {_, Record} ->
                     case lists:keyfind(Key1, 1, Record) of

@@ -10,6 +10,12 @@
 -include("record.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
 
+
+handle(?CHAT_NIU_WORLD_C2S, Status, #chat_niu_world_c2s{msg = Msg} = _Req) ->
+	Data_filtered = lib_words_ver:words_filter(Msg),
+	lib_chat:chat_world(Status, Data_filtered);
+
+
 %%世界聊天
 handle(11010, Status, [Data]) when is_list(Data)->
 	Data_filtered = lib_words_ver:words_filter([Data]),

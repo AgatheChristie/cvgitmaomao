@@ -1,7 +1,7 @@
 
 %%===================================================
 %%作    者：泰奇  http://www.baidu.com  QQ：544682223
-%%创建时间：2023-12-20 22:13:41
+%%创建时间：2024-01-04 23:39:45
 %%备    注：此代码为工具生成 请勿手工修改
 %%===================================================
 
@@ -386,6 +386,12 @@
 -define(E_SHOP_TIMES_MAX, 1160013).  %%已达到可购买最大商店刷新次数
 -define(E_SHOP_ITEM_HAS_CHANGE, 1160014).  %%商店售卖信息已变,请重新打开
 -define(E_SHOP_NOT_REFRESH, 1160015).  %%该商店不能刷新
+-define(E_SHOP_NIU_1, 1160016).  %%购买物品数量必须大于0
+-define(E_SHOP_NIU_2, 1160017).  %%不是ets_shop结构
+-define(E_SHOP_NIU_3, 1160018).  %%不是ets_base_goods结构
+-define(E_SHOP_NIU_4, 1160019).  %%封神礼包只可以买一个
+-define(E_SHOP_NIU_5, 1160020).  %%购买次数限制
+-define(E_SHOP_NIU_6, 1160021).  %%ShopType1并且ShopSubtype7
 -define(E_TASK_TYPE_UNDEFINED_ERR, 1170001).  %%任务类型未定义
 -define(E_TASK_NOT_FINISH, 1170002).  %%任务未完成
 -define(E_TASK_NOT_ACCEPT, 1170003).  %%任务未领取

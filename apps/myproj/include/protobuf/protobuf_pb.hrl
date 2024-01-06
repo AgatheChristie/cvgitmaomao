@@ -240,6 +240,8 @@
 -record(p_single_game_key, {func_type = 0, only_id = 0}).
 -record(p_niu_role_info, {role_id = 0, status = 0, realm = 0, career = 0, sex = 0, lv = 0, nick_name = []}).
 -record(p_role_niu_batt_info, {type = 0, value = 0}).
+-record(p_niu_item_info, {goods_id = 0, type_id = 0, cell = 0, goods_num = 0, bind = 0, stren = 0, icon = 0}).
+-record(p_niu_shop_info, {type_id = 0, goods_num = 0, left_time = 0}).
 -record(public_success_s2c, {}).
 -record(public_failure_s2c, {ecode = 0, int_values = [], string_values = []}).
 -record(net_heart_c2s, {}).
@@ -298,6 +300,7 @@
 -record(role_update_devote_s2c, {total_devote = 0, now_devote = 0, today_devote = 0}).
 -record(role_niu_info_c2s, {}).
 -record(role_niu_info_s2c, {scene = 0, x = 0, y = 0, id = 0, hp = 0, hp_lim = 0, mp = 0, mp_lim = 0, sex = 0, lv = 0, exp = 0, exp_lim = 0, career = 0, nick_name = [], max_att = 0, min_att = 0, def = 0, forza = 0, physique = 0, agile = 0, wit = 0, hit = 0, dodge = 0, crit = 0, guild_id = 0, guild_name = [], guild_position = 0, realm = 0, gold = 0, cash = 0, coin = 0, bcoin = 0, att_area = 0, spirit = [], speed = 0, att_speed = 0, e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, mount = 0, pk_mode = 0, title = [], couple_name = [], position = [], evil = 0, realm_honor = 0, culture = 0, state = 0, anti_wind = 0, anti_fire = 0, anti_water = 0, anti_thunder = 0, anti_soil = 0, status = 0, stren = 0, suit_id = 0, change_reason = 0, arena = 0, vip = 0, vip_time = 0, mount_stren = 0, titles = [], ach_hp = 0, ach_mp = 0, ach_att = 0, ach_def = 0, ach_dod = 0, ach_hit = 0, ach_crit = 0, ach_anit = 0, is_spring = 0, g_post_str = [], batt_list = [], turned = 0, deputy_prof_lv = 0, honor_use = 0, honor_rift = 0, honor_cul = 0, honor_spt = 0, honor_pet = 0, full_stren = 0, fbyf_stren = 0, spyf_stren = 0}).
+-record(role_niu_update_coin_s2c, {hp = 0, hp_lim = 0, mp = 0, mp_lim = 0, gold = 0, cash = 0, coin = 0, bcoin = 0, change_reason = 0}).
 -record(role_mix_client_s2c, {client_version = []}).
 -record(role_mix_guide_info_c2s, {}).
 -record(role_mix_guide_info_s2c, {guide_groups = []}).
@@ -354,6 +357,8 @@
 -record(chat_info_delete_s2c, {type = 0, chat_ids = []}).
 -record(chat_world_c2s, {parts = []}).
 -record(chat_world_s2c, {}).
+-record(chat_niu_world_c2s, {msg = []}).
+-record(chat_niu_world_s2c, {id = 0, nick = [], lv = 0, realm = 0, sex = 0, vip = 0, state = 0, msg = []}).
 -record(chat_camp_c2s, {parts = []}).
 -record(chat_camp_s2c, {}).
 -record(chat_league_c2s, {parts = []}).
@@ -367,6 +372,14 @@
 -record(chat_private_read_s2c, {}).
 -record(bag_info_c2s, {type = 0}).
 -record(bag_info_s2c, {type = 0, bag_infos = [], total_grid = 0}).
+-record(bag_niu_list_c2s, {type = 0}).
+-record(bag_niu_list_s2c, {location = 0, cell_num = 0, coin = 0, bcoin = 0, cash = 0, gold = 0, can_sell_bcoin_num = 0, can_sell_coin_num = 0, item_list = []}).
+-record(bag_niu_clean_c2s, {}).
+-record(bag_niu_clean_s2c, {item_list = []}).
+-record(bag_niu_shop_c2s, {shop_type = 0, shop_sub_type = 0}).
+-record(bag_niu_shop_s2c, {shop_type = 0, shop_sub_type = 0, shop_list = [], result = 0}).
+-record(bag_niu_buy_c2s, {goods_type_id = 0, goods_num = 0, shop_type = 0, shop_sub_type = 0}).
+-record(bag_niu_buy_s2c, {res = 0, goods_type_id = 0, goods_num = 0, shop_type = 0, new_coin = 0, new_bcoin = 0, new_cash = 0, new_gold = 0, score = 0, item_list = []}).
 -record(bag_add_s2c, {type = 0, add_infos = []}).
 -record(bag_update_s2c, {type = 0, update_infos = []}).
 -record(bag_delete_s2c, {type = 0, delete_ids = []}).

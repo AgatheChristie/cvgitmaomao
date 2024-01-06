@@ -10,8 +10,7 @@
 -include("common.hrl").
 -include("protobuf.hrl").
 -include("global.hrl").
--include("pb_convert.hrl").
--include("protobuf_pb.hrl").
+
 -include("ecode.hrl").
 
 -define(TCP_TIMEOUT, 1000). % 解析协议超时时间
@@ -334,6 +333,7 @@ routing(_Client, MsgId, Binary) ->
         SysProtobufPb = pb_convert:get(MsgId),
         #sys_protobuf_pb{pb_mod = Protobuf, decode_pb = DecodePb} = SysProtobufPb,
         DataBin = Protobuf:DecodePb(Binary),
+
         {ok, MsgId, DataBin}
     catch
         T:R ->

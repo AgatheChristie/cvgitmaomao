@@ -10,7 +10,7 @@
 
 
 start() ->
-    ?DEBUG("qqq server:~p end", [qqq]), %% inets 这个在erl参数里面加了  说明inets启动的时候会帮我们启动  asn1 public_key？
+    %% inets 这个在erl参数里面加了  说明inets启动的时候会帮我们启动  asn1 public_key？
     %% ok = start_application(crypto), crypto 这个在erl参数里面加了
     %% ok = start_application(asn1),
     %%  ok = start_application(public_key),

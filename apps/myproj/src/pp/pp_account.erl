@@ -8,8 +8,7 @@
 -export([handle/3]).
 -include("common.hrl").
 -include("record.hrl").
--include("pb_convert.hrl").
--include("protobuf_pb.hrl").
+
  -compile(export_all).
  -compile(nowarn_export_all).
 

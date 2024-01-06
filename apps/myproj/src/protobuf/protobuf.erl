@@ -14,8 +14,7 @@
 -include("protobuf.hrl").
 -include("common.hrl").
 -include("pb_model.hrl").
--include("pb_convert.hrl").
--include("protobuf_pb.hrl").
+
 -include("ecode.hrl").
 -include("global.hrl").
 
@@ -33,6 +32,11 @@ s2c_pack(MsgId, MsgCode, _MsgSeq, SendMsg) ->
 %%        ?DEBUG("L:~p end",[L]),
 %%        D = byte_size(Bin) + ?HEADER_LENGTH,
 %%        ?DEBUG("D:~p end",[D]),
+%%         ?DEBUG("NewMsgId:~p end",[NewMsgId]),
+%%         ?DEBUG("Protobuf:~p end",[Protobuf]),
+%%         ?DEBUG("EncodeFun:~p end",[EncodeFun]),
+%%         ?DEBUG("NewRecord:~p end",[NewRecord]),
+
         S2CBin = <<L:32, NewMsgId:32, Bin/binary>>,
         protobuf_print:try_s2c_print(67, S2CBin),
         {ok, S2CBin}

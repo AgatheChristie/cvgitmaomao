@@ -32,8 +32,7 @@
 
 -include("common.hrl").
 -include("protobuf.hrl").
--include("pb_convert.hrl").
--include("protobuf_pb.hrl").
+
 
 
 -define(MAX_UNPROCESSED_MSG, 10).   %% requests_unprocessed 最大个数, 超过这个个数，active 设为false

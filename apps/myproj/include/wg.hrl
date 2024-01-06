@@ -10,7 +10,7 @@
 -ifndef(WG_HRL).
 -define(WG_HRL, true).
 
--include("common.hrl").
-
+-define(ERROR(F),io:format("%% [~w~w:~w] "++F++"~n",[self(),?MODULE,?LINE])).
+-define(ERROR(F,A),io:format("%% [~w~w:~w] "++F++"~n",[self(),?MODULE,?LINE|A])).
 
 -endif. % WG_HRL

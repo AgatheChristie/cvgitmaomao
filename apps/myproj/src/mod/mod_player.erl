@@ -2478,9 +2478,9 @@ handle_cast({'SOCKET_EVENT', Cmd, Bin}, PlayerState) ->
             ?DEBUG("_E:~p end", [_E]),
             {noreply, PlayerState}
     catch
-        throw: Code ->
-            {ok, BinData} = protobuf:s2c_pack(Cmd, Code, Bin),
-            lib_send:send_one(Player#player.other#player_other.pid_send, BinData),
+        throw : Code ->
+            {ok, BinData} = protobuf:s2c_pack(Cmd, Code, 0, Bin),
+            lib_send:send_one(Player#player.other#player_other.socket, BinData),
             {noreply, PlayerState};
         T:E:S ->
             ?ERROR("[~p]  handle cmd ~p msg ~p return error, ~p stacktrace ~p,~n",
@@ -5739,7 +5739,7 @@ save_online_diff(OldPlayer, NewPlayer) ->
     OvalList = lib_player_rw:get_player_info_fields(OldPlayer, Fields),
     NvalList = lib_player_rw:get_player_info_fields(NewPlayer, Fields),
     KeyValue = get_diff_val(OvalList, NvalList, Fields),
-%%	?DEBUG("~pKEY-VAL:~p~n",[util:unixtime(),KeyValue]),
+	?DEBUG("~p KEY-VAL:~p end",[util:unixtime(),KeyValue]),
     if
         length(KeyValue) > 0 ->
             ets:insert(?ETS_ONLINE, NewPlayer),

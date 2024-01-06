@@ -5,45 +5,29 @@
 %%% @Description: 聊天  
 %%%-----------------------------------
 -module(lib_chat).
- -compile(export_all).
- -compile(nowarn_export_all).
+-compile(export_all).
+-compile(nowarn_export_all).
 -include("common.hrl").
 -include("record.hrl").
+-include("ecode.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
 -define(SOCKET_CHAT, 3).
 %% 处理世界聊天
-chat_world(Status, [Data]) ->
-    ?DEBUG("cmd_~p ~n",[Data]),
+chat_world(Status, Data) ->
     case gmcmd:cmd(Status, Data) of
         is_cmd ->
             ok;
         _ ->
-            if Status#player.lv < 1 ->  %%检查等级
-                {ok, BinData} = pt_11:write(11011, [4, 14]),
-                lib_send:send_one(get_socket(Status), BinData),
-                ok;
-                true ->
-                    %%检查禁言情况
-                    [Can_chat, Ret] = check_donttalk(Status#player.id),
-                    case Can_chat of
-                        true ->    %%可以聊天
-                            %%检查聊天间隔
-                            case check_chat_interval(previous_chat_time_world, 10) of
-                                true ->
-                                    Data1 = [Status#player.id, Status#player.nickname, Status#player.career, Status#player.realm, Status#player.sex,
-                                        Status#player.vip, Status#player.state, Data],
-                                    {ok, BinData} = pt_11:write(11010, Data1),
-                                    lib_send:send_to_all(BinData, ?SOCKET_CHAT);
-                                false ->
-                                    {ok, BinData} = pt_11:write(11011, [1, 10]),
-                                    lib_send:send_one(get_socket(Status), BinData)
-                            end;
-                        _ ->    %%不能聊天
-                            {ok, BinData} = pt_11:write(11011, [Ret, 0]),
-                            lib_send:send_one(get_socket(Status), BinData),
-                            ok
-                    end
-            end
+            %%检查等级
+            ?ASSERT(Status#player.lv >= 1, ?E_ROLE_LEVEL_LIMIT),
+            %%检查禁言情况
+            [Can_chat, Ret] = check_donttalk(Status#player.id),
+            ?ASSERT(Can_chat, Ret),
+            ?APPLY_LOCK(10),
+            Msg = #chat_niu_world_s2c{id = Status#player.id, nick = Status#player.nickname,
+                lv = Status#player.career, realm = Status#player.realm, sex = Status#player.sex,
+                vip = Status#player.vip, state = Status#player.state, msg = Data},
+            lib_send:protobuf_send_to_all(?CHAT_NIU_WORLD_S2C, Msg, ?SOCKET_CHAT)
     end.
 
 %% 处理部落聊天
@@ -243,7 +227,7 @@ check_donttalk(PlayerId) ->
             undefined ->    %% 没有被禁言
                 [true, undefined];
             999999 ->        %% 永远禁言
-                [false, 3];
+                [false, ?E_CHAT_CONTENT_NOT_SEND];
             Val ->            %% 有禁言
                 TimeDiff = util:unixtime() - Stop_begin_time,
                 if
@@ -252,7 +236,7 @@ check_donttalk(PlayerId) ->
                         put(donttalk, [undefined, undefined]),
                         [true, undefined];
                     true ->
-                        [false, 2]
+                        [false, ?E_CHAT_NOT_SPEAK]
                 end
         end
     catch

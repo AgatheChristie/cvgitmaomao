@@ -27,10 +27,10 @@ cmd(Status,Data) ->
 	end.
 
 do_cmd(Status,Data) ->
+	?DEBUG("awda:~p end",[string:tokens(Data, " ")]),
 	 %% -------------------- 测试命令 ----------------
     case string:tokens(Data, " ") of
         ["-GMAddItem1",Id,Num] ->
-	     
             GoodsTypeInfo = goods_util:get_ets_info(?ETS_BASE_GOODS, list_to_integer(Id)),
 			if is_record(GoodsTypeInfo,ets_base_goods) ->
 				   NewInfo = goods_util:get_new_goods(GoodsTypeInfo),

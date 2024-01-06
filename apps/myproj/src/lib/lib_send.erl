@@ -319,6 +319,67 @@ send_to_ms(BinData, MS) ->
     do_broadcast(L, BinData, ?SOCKET_BROADCAST).
 
 
+%%=======================================================================================
+
+%% 发送信息到世界
+%% 添加指定socket接口
+protobuf_send_to_all(MsgId, Bin) ->
+    protobuf_send_to_all(MsgId, Bin, ?SOCKET_BROADCAST).
+
+protobuf_send_to_all(MsgId, Bin, SocketN) ->
+    protobuf_send_to_local_all(MsgId, Bin, SocketN),
+    mod_disperse:protobuf_broadcast_to_world(ets:tab2list(?ETS_SERVER), MsgId, Bin).
+
+protobuf_send_to_local_all(MsgId, Bin) ->
+    protobuf_send_to_local_all(MsgId, Bin, ?SOCKET_BROADCAST).
+
+protobuf_send_to_local_all(MsgId, Bin, SocketN) ->
+    MS = ets:fun2ms(fun(T) ->
+        [
+            T#player.other#player_other.pid_send,
+            T#player.other#player_other.pid_send2,
+            T#player.other#player_other.pid_send3
+        ]
+                    end),
+    L = ets:select(?ETS_ONLINE, MS),
+    protobuf_do_broadcast(L, MsgId, Bin, SocketN).
+
+%% 对列表中的所有socket进行广播
+protobuf_do_broadcast(L, MsgId, Bin, SocketN) ->
+    [spawn(fun() -> protobuf_send_to_sids(Sids, MsgId, Bin, SocketN) end) || Sids <- L].
+
+%% 发送到指定的socket pid 进程
+protobuf_send_to_sids([Pid_send1, _Pid_send2, _Pid_send3], MsgId, Bin, 1) ->
+    Pid = (catch misc:rand_to_process(Pid_send1)),
+    case is_pid(Pid) of
+        true ->
+            Pid ! {send, MsgId, Bin};
+        false ->
+            skip
+    end;
+protobuf_send_to_sids([Pid_send1, Pid_send2, Pid_send3], MsgId, Bin, 2) ->
+    Pid = (catch misc:rand_to_process(Pid_send2)),
+    case is_pid(Pid) of
+        true ->
+            Pid ! {send, MsgId, Bin};
+        false ->
+            protobuf_send_to_sids([Pid_send1, Pid_send2, Pid_send3], MsgId, Bin, 1)
+    end;
+protobuf_send_to_sids([Pid_send1, Pid_send2, Pid_send3], MsgId, Bin, 3) ->
+    Pid = (catch misc:rand_to_process(Pid_send3)),
+    case is_pid(Pid) of
+        true ->
+            Pid ! {send, MsgId, Bin};
+        false ->
+            protobuf_send_to_sids([Pid_send1, Pid_send2, Pid_send3], MsgId, Bin, 1)
+    end;
+protobuf_send_to_sids(_Q, _MsgId, _Bin, _E) ->
+    ?ERROR("_Q:~p _MsgId:~p _Bin:~p _E:~p end",[_Q, _MsgId, _Bin, _E]),
+    skip.
+
+%%=======================================================================================
+
+
 %% 发送信息到部落
 send_to_realm(Realm, Bin) ->
     send_to_realm(Realm, Bin, ?SOCKET_BROADCAST).

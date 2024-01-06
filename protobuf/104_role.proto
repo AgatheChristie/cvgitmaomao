@@ -287,6 +287,19 @@ message role_niu_info_s2c {
     optional uint32               spyf_stren = 85;
 }
 
+// ##begin##玩家贡献度更新##end##
+message role_niu_update_coin_s2c {
+    optional uint32                             hp = 1;             // 总贡献度
+    optional uint32                             hp_lim = 2;               // 本周贡献度
+    optional uint32                             mp = 3;             // 今日贡献度
+    optional uint32                             mp_lim = 4;             // 今日贡献度
+    optional uint32                             gold = 5;             // 今日贡献度
+    optional uint32                             cash = 6;             // 今日贡献度
+    optional uint32                             coin = 7;             // 今日贡献度
+    optional uint32                             bcoin = 8;             // 今日贡献度
+    optional uint32                             change_reason = 9;             // 今日贡献度
+}
+
 
 
 

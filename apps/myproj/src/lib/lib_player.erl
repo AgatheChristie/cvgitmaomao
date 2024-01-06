@@ -89,8 +89,6 @@
 ).
 -include("common.hrl").
 -include("record.hrl").
--include("protobuf_pb.hrl").
--include("pb_convert.hrl").
 -include("guild_info.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
 
@@ -914,8 +912,8 @@ count_player_attribute(Player) ->
 send_player_attribute(Status, ChangeReason) ->
 %% 	Status = lib_vip:check_vip_state(PlayerStatus),
     ExpLimit = next_lv_exp(Status#player.lv),
-    [E1,E2,E3,E4,E5] = Status#player.other#player_other.equip_current,
-    [HonorUse,HonorRift,HonorCul,HonorSpt,HonorPet] = Status#player.other#player_other.war_honor,
+    [E1, E2, E3, E4, E5] = Status#player.other#player_other.equip_current,
+    [HonorUse, HonorRift, HonorCul, HonorSpt, HonorPet] = Status#player.other#player_other.war_honor,
     [AchHp, AchMp, AchAtt, AchDef, AchDod, AchHit, AchCrit, AchAnti] =
         data_achieve:get_pearl_equiped_ornot(Status#player.other#player_other.ach_pearl),
     Msg = #role_niu_info_s2c{
@@ -951,7 +949,7 @@ send_player_attribute(Status, ChangeReason) ->
         coin = Status#player.coin,
         bcoin = Status#player.bcoin,
         att_area = Status#player.att_area,
-       %% spirit = Status#player.spirit,
+        %% spirit = Status#player.spirit,
         speed = Status#player.speed,
         att_speed = Status#player.att_speed,
         e1 = E1,
@@ -986,7 +984,7 @@ send_player_attribute(Status, ChangeReason) ->
         batt_list = to_p_niu_batt_infos(Status#player.other#player_other.batt_value),
         turned = Status#player.other#player_other.turned,
         deputy_prof_lv = Status#player.other#player_other.deputy_prof_lv,
-        honor_use = HonorUse,honor_rift = HonorRift,honor_cul = HonorCul,honor_spt = HonorSpt,honor_pet = HonorPet,
+        honor_use = HonorUse, honor_rift = HonorRift, honor_cul = HonorCul, honor_spt = HonorSpt, honor_pet = HonorPet,
         fbyf_stren = Status#player.other#player_other.fbyfstren,
         spyf_stren = Status#player.other#player_other.spyfstren
     },
@@ -994,7 +992,7 @@ send_player_attribute(Status, ChangeReason) ->
     ok.
 
 to_p_niu_batt_infos(Infos) ->
-    [to_p_niu_batt_info(X)||X <- Infos].
+    [to_p_niu_batt_info(X) || X <- Infos].
 
 to_p_niu_batt_info([Type, Value]) ->
     #p_role_niu_batt_info{type = Type, value = Value}.
@@ -1080,19 +1078,16 @@ to_p_niu_batt_info([Type, Value]) ->
 
 %% 发送角色属性改变通知
 send_player_attribute2(Player, ChangeReason) ->
-    AttrList = [
-        Player#player.hp,
-        Player#player.hp_lim,
-        Player#player.mp,
-        Player#player.mp_lim,
-        Player#player.gold,
-        Player#player.cash,
-        Player#player.coin,
-        Player#player.bcoin,
-        ChangeReason
-    ],
-    {ok, BinData} = pt_13:write(13011, AttrList),
-    lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData).
+    Msg = #role_niu_update_coin_s2c{hp = Player#player.hp, hp_lim = Player#player.hp_lim, mp = Player#player.mp,
+        mp_lim = Player#player.mp_lim, gold = Player#player.gold,
+        cash = Player#player.cash, coin = Player#player.coin,
+        bcoin = Player#player.bcoin, change_reason = ChangeReason},
+    lib_send:protobuf_send(Player#player.other#player_other.pid_send, ?ROLE_NIU_UPDATE_COIN_S2C, Msg),
+    ok.
+
+
+%%    {ok, BinData} = pt_13:write(13011, AttrList),
+%%    lib_send:send_to_sid(Player#player.other#player_other.pid_send, BinData).
 
 %%计算玩家战斗力值
 count_player_batt_value(Status) ->

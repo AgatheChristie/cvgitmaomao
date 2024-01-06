@@ -2018,3 +2018,20 @@ message p_role_niu_batt_info {
     optional uint32                        value = 2;
 }
 
+// 道具信息
+message p_niu_item_info {
+    optional uint32                        goods_id = 1;                //
+    optional uint32                        type_id = 2;                //
+    optional uint32                        cell = 3;               //
+    optional uint32                        goods_num = 4;            //
+    optional uint32                        bind = 5;            //
+    optional uint32                        stren = 6;            //
+    optional uint32                        icon = 7;            //
+}
+
+// 道具信息
+message p_niu_shop_info {
+    optional uint32                        type_id = 1;                //
+    optional uint32                        goods_num = 2;            //
+    optional uint32                        left_time = 3;            //
+}

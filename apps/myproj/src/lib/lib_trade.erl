@@ -21,8 +21,7 @@
 		 goods_undo/4,			%% 18012 拖出物品操作
 		 mark_trade_deal/13,		%%交易日志记录函数
 		 reload_goods_for_trade/3,
-		 trade_set_and_send/2,
-		 get_trade_limit/1
+		 trade_set_and_send/2
 		 ]).
 
  %% -compile(export_all).
@@ -669,18 +668,4 @@ check_diff_good(false, [GoodsId|RemainGoodsIdLists], GoodsIdLists) ->
 					   end, NewGoodsIdLists),
 	check_diff_good(Result, RemainGoodsIdLists, GoodsIdLists).
 
-%%获取交易的时限
-get_trade_limit(Type) ->
-	case get(Type) of
-		undefined ->
-			true;
-		Time ->
-			Now = util:unixtime(),
-			case (Now - Time) > 3 of
-				true ->
-					put(Type, undefined),
-					true;
-				false ->
-					false
-			end
-	end.
+

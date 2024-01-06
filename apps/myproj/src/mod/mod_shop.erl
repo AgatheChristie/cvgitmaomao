@@ -346,4 +346,8 @@ get_goods_num(Goods_id) ->
 %%是否特惠区开服物品
 is_opening_th_goods(Goods_id) ->
 	lists:member(Goods_id, ?OPGOODS).
+
+
+
+
 	
