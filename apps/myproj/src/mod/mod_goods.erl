@@ -1079,25 +1079,28 @@ handle_call({'pay', PlayerStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtype},
                 {ok, NewStatus} ->
                     %% 根据商店类型扣除对应属性值
                     Is_Fst_Shop = mod_fst:is_fst_shop(ShopType),
-                    if ShopType =:= 10219 ->
-                        NewPlayerStatus = lib_goods:cost_score(PlayerStatus, Cost, arena_score, 1219);
+                    NewPlayerStatus =
+                        if ShopType =:= 10219 ->
+                         lib_goods:cost_score(PlayerStatus, Cost, arena_score, 1219);
                         ShopType =:= 20207 ->
-                            {ok, NewPlayerStatus} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2007);
+                            {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2007),
+                            PS01;
                         ShopType =:= 21020 ->
-                            {ok, NewPlayerStatus} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2120);
+                            {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2120),
+                            PS01;
                         ShopType =:= 20800 ->
                             lib_td:cost_hor_td(PlayerStatus#player.id, Cost),
                             spawn(fun() ->
                                 db_agent:log_td_honor_consume([PlayerStatus#player.id, GoodsTypeId, GoodsNum, Cost, util:unixtime()]) end),
-                            NewPlayerStatus = PlayerStatus;
+                            PlayerStatus;
                         ShopType =:= 20802 ->%%活动面板的购买
-                            NewPlayerStatus = lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2882);
+                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2882);
                         ShopType =:= 1 andalso ShopSubtype =:= 9 ->
-                            NewPlayerStatus = lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561);
+                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561);
                         Is_Fst_Shop =:= true -> %%封神台神秘商店
-                            NewPlayerStatus = lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2151);
+                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2151);
                         true ->
-                            NewPlayerStatus = lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561)
+                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561)
                     end,
                     %% 购买某物品有附加物品
                     goods_util:pay_goods_addition(PlayerStatus, GoodsTypeId, GoodsNum, GoodsTypeInfo#ets_base_goods.max_overlap),
@@ -2861,11 +2864,12 @@ check_pay(PlayerStatus, GoodsStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtyp
     AAQQC = lib_goods:is_enough_backpack_cell(GoodsStatus, GoodsTypeInfo, GoodsNum),
     ?ASSERT(is_tuple(AAQQC), {fail, ?E_BAG_GRID_NOT_ENOUGH}),
     {enough, GoodsList, CellNum} = AAQQC,
+    %% AA = [1,2,3,4,5,6].  lists:sublist(AA, 2, length(AA) - 2). 返回 [2,3,4,5]
+    %% 这里这个BagNullCells返回了也没用到 不用看
     BagNullCells = lists:sublist(GoodsStatus#goods_status.null_cells, CellNum + 1,
         (length(GoodsStatus#goods_status.null_cells) - CellNum)),
-    AllowCoinNpc = [10102, 10105, 10107, 10109, 10119, 10202, 10203, 10206, 10213, 10306,
-        10307, 20110, 20117, 20120, 20121, 20223, 20226, 20245, 20251, 20308, 21001],
-    IsCoinNpc = lists:member(ShopType, AllowCoinNpc),
+    IsCoinNpc = lists:member(ShopType, [10102, 10105, 10107, 10109, 10119, 10202, 10203, 10206, 10213, 10306,
+        10307, 20110, 20117, 20120, 20121, 20223, 20226, 20245, 20251, 20308, 21001]),
     Is_Fst_Shop = mod_fst:is_fst_shop(ShopType),
     if
     %%注意优先匹配

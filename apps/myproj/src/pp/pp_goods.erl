@@ -76,8 +76,10 @@ handle(?BAG_NIU_SHOP_C2S, PlayerStatus, #bag_niu_shop_c2s{shop_type = ShopType, 
 handle(?BAG_NIU_BUY_C2S, PlayerStatus, #bag_niu_buy_c2s{goods_type_id = GoodsTypeId, goods_num = GoodsNum,
     shop_type = ShopType, shop_sub_type = ShopSubtype} = _Req) ->
     ?APPLY_LOCK(),
+    %% 玩家扣钱在pid_goods进程扣  奇怪 这个NewPlayerStatus是扣过钱的PlayerStatus
     [NewPlayerStatus, Res, GoodsList] = gen_server:call(PlayerStatus#player.other#player_other.pid_goods,
         {'pay', PlayerStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtype}),
+    ?ASSERT(Res == 1, Res),
     if
     %%增加特惠区购买记录
         ShopType =:= 1 andalso ShopSubtype =:= 6 andalso Res =:= 1 ->
@@ -90,7 +92,6 @@ handle(?BAG_NIU_BUY_C2S, PlayerStatus, #bag_niu_buy_c2s{goods_type_id = GoodsTyp
         true ->
             skip
     end,
-    ?ASSERT(Res == 1, Res),
     %商城购买的成就统计
     IsCount = lists:member({ShopType, ShopSubtype}, [{1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 6}, {9, 1}]),%%商城用元宝的地方，和购买时装
     case IsCount of

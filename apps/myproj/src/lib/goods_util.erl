@@ -2064,7 +2064,9 @@ get_goods_exp(Color) ->
 get_null_cell_num(GoodsList, MaxNum, GoodsNum) ->
     case MaxNum > 1 of
         true ->
-            TotalNum = lists:foldl(fun(X, Sum) -> X#goods.num + Sum end, 0, GoodsList),
+            TotalNum = lists:foldl(
+                fun(X, Sum) -> X#goods.num + Sum end,
+                0, GoodsList),
             CellNum = util:ceil((TotalNum + GoodsNum) / MaxNum),
 %%             ( CellNum - length(GoodsList) );
             %%返回数值经过修改--xiaomai
@@ -2160,9 +2162,11 @@ is_enough_tcsgold_fashion(Gold, TCSCost, GoodsPrice, GoodsTypeId, GoodsStatus, _
 
 %% 判断金钱是否充足，true为充足，false为不足
 is_enough_money(PlayerStatus, NewCost, Type) ->
-    if NewCost < 0 -> false;
+    if
+        NewCost < 0 ->
+            false;
         true ->
-%% 		   NewCost = Cost,
+            %% @doc 好多都是直接去数据库里面拿的 奇怪！
             case Type of
                 coin ->
                     if
@@ -2196,7 +2200,8 @@ is_enough_money(PlayerStatus, NewCost, Type) ->
                     end;
                 shop_score ->
                     is_enough_shop_score(PlayerStatus, NewCost);
-                _ -> false
+                _ ->
+                    false
             end
     end.
 
@@ -2230,29 +2235,32 @@ get_cost(PlayerStatus, Cost, Type) ->
     case Type of
         coin ->
             case PlayerStatus#player.bcoin < Cost of
-                false -> NewPlayerStatus = PlayerStatus#player{bcoin = (PlayerStatus#player.bcoin - NewCost)};
+                %% 如果BCoin不够 就拿铜币补上
+                false ->
+                    PlayerStatus#player{bcoin = (PlayerStatus#player.bcoin - NewCost)};
                 true ->
-                    NewPlayerStatus = PlayerStatus#player{bcoin = 0, coin = (PlayerStatus#player.bcoin + PlayerStatus#player.coin - NewCost)}
+                    PlayerStatus#player{bcoin = 0, coin = (PlayerStatus#player.bcoin + PlayerStatus#player.coin - NewCost)}
             end;
         coinonly ->
-            NewPlayerStatus = PlayerStatus#player{coin = (PlayerStatus#player.coin - NewCost)};
+            PlayerStatus#player{coin = (PlayerStatus#player.coin - NewCost)};
         cash ->
+            %% @doc 这里为什么要去数据库拿  玩家state身上的不行么？
             [_Gold, Cash] = db_agent:query_player_money(PlayerStatus#player.id),
-            NewPlayerStatus = PlayerStatus#player{cash = (Cash - NewCost)};
+            PlayerStatus#player{cash = (Cash - NewCost)};
         gold ->
             [Gold, _Cash] = db_agent:query_player_money(PlayerStatus#player.id),
-            NewPlayerStatus = PlayerStatus#player{gold = (Gold - NewCost)};
+            PlayerStatus#player{gold = (Gold - NewCost)};
         bcoin ->
-            NewPlayerStatus = PlayerStatus#player{bcoin = (PlayerStatus#player.bcoin - NewCost)};
+            PlayerStatus#player{bcoin = (PlayerStatus#player.bcoin - NewCost)};
         shop_score ->
-            if PlayerStatus#player.other#player_other.shop_score > NewCost ->
-                ShopScore = PlayerStatus#player.other#player_other.shop_score - NewCost;
-                true ->
-                    ShopScore = PlayerStatus#player.other#player_other.shop_score
-            end,
-            NewPlayerStatus = PlayerStatus#player{other = PlayerStatus#player.other#player_other{shop_score = ShopScore}}
-    end,
-    NewPlayerStatus.
+            ShopScore =
+                if PlayerStatus#player.other#player_other.shop_score > NewCost ->
+                    PlayerStatus#player.other#player_other.shop_score - NewCost;
+                    true ->
+                        PlayerStatus#player.other#player_other.shop_score
+                end,
+            PlayerStatus#player{other = PlayerStatus#player.other#player_other{shop_score = ShopScore}}
+    end.
 
 %% 添加金钱
 add_money(PlayerStatus, Sum, Type) ->
@@ -2848,6 +2856,8 @@ pay_goods_addition(Player, GoodsType, GoodsNum, MaxOverlap) ->
         true ->
             skip
     end.
+
+
 handle_pay_goods_addition(PlayerName, GiveGoods, 2, GoodsNum, Title, Cont, MaxOverlap) ->
     case GoodsNum =< 0 of
         false ->
