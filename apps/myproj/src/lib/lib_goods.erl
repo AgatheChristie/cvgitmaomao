@@ -564,29 +564,32 @@ sell_goods(PlayerStatus, Status, GoodsInfo, GoodsNum, SellType) ->
 %% @spec equip_goods(PlayerId, GoodsInfo) -> {ok, 1, Effect} | Error
 equip_goods(PlayerStatus, Status, GoodsInfo, Location, Cell) ->
     OldGoodsInfo = goods_util:get_goods_by_cell(PlayerStatus#player.id, Location, Cell),
+    %% [武器, 衣服, 坐骑]
     [Wq, Yf, Fbyf, Spyf, Zq] = Status#goods_status.equip_current,
-    case is_record(GoodsInfo, goods) of
-        true ->
-            if GoodsInfo#goods.subtype >= 9 andalso GoodsInfo#goods.subtype < 14 ->%%武器法宝
-                CurrentEquip = [GoodsInfo#goods.goods_id, Yf, Fbyf, Spyf, Zq];
-                GoodsInfo#goods.subtype =:= 24 ->%%时装
-                    %%如果时装有使用过变化效果的，拿icon字段显示
-                    if
-                        GoodsInfo#goods.icon > 0 ->
-                            CurrentEquip = [Wq, GoodsInfo#goods.icon, Fbyf, Spyf, Zq];
-                        true ->
-                            CurrentEquip = [Wq, GoodsInfo#goods.goods_id, Fbyf, Spyf, Zq]
-                    end;
-                GoodsInfo#goods.subtype =:= 26 ->%%法宝时装
-                    CurrentEquip = [Wq, Yf, GoodsInfo#goods.goods_id, Spyf, Zq];
-                GoodsInfo#goods.subtype =:= 27 ->%%饰品时装
-                    CurrentEquip = [Wq, Yf, Fbyf, GoodsInfo#goods.goods_id, Zq];
-                true ->
-                    CurrentEquip = [Wq, Yf, Fbyf, Spyf, Zq]
-            end;
-        false ->
-            CurrentEquip = [Wq, Yf, Fbyf, Spyf, Zq]
-    end,
+    CurrentEquip =
+        case is_record(GoodsInfo, goods) of
+            true ->
+                if
+                    GoodsInfo#goods.subtype >= 9 andalso GoodsInfo#goods.subtype < 14 ->%%武器法宝
+                        [GoodsInfo#goods.goods_id, Yf, Fbyf, Spyf, Zq];
+                    GoodsInfo#goods.subtype =:= 24 ->%%时装
+                        %%如果时装有使用过变化效果的，拿icon字段显示
+                        if
+                            GoodsInfo#goods.icon > 0 ->
+                                [Wq, GoodsInfo#goods.icon, Fbyf, Spyf, Zq];
+                            true ->
+                                [Wq, GoodsInfo#goods.goods_id, Fbyf, Spyf, Zq]
+                        end;
+                    GoodsInfo#goods.subtype =:= 26 ->%%法宝时装
+                        [Wq, Yf, GoodsInfo#goods.goods_id, Spyf, Zq];
+                    GoodsInfo#goods.subtype =:= 27 ->%%饰品时装
+                        [Wq, Yf, Fbyf, GoodsInfo#goods.goods_id, Zq];
+                    true ->
+                        [Wq, Yf, Fbyf, Spyf, Zq]
+                end;
+            false ->
+                [Wq, Yf, Fbyf, Spyf, Zq]
+        end,
     case is_record(OldGoodsInfo, goods) of
         %% 存在已装备的物品，则替换
         true ->
@@ -601,7 +604,7 @@ equip_goods(PlayerStatus, Status, GoodsInfo, Location, Cell) ->
             EquipSuit = goods_util:change_equip_suit(Status#goods_status.equip_suit, OldGoodsInfo#goods.suit_id, GoodsInfo#goods.suit_id),
             %%空格子为NullCells2
             NewStatus = Status#goods_status{null_cells = NullCells2, equip_suit = EquipSuit, equip_current = CurrentEquip};
-        %% 不存在
+        %% 不存在 老的装备槽是空的
         false ->
             NewOldGoodsInfo = OldGoodsInfo,
             %%直接装上吧
@@ -656,17 +659,18 @@ unequip_goods(PlayerStatus, Status, GoodsInfo) ->
     NewGoodsInfo = change_goods_cell(GoodsInfo, 4, Cell),
     %% 检查是否是武器、衣服
     [Wq, Yf, Fbyf, Spyf, Zq] = Status#goods_status.equip_current,
-    if NewGoodsInfo#goods.subtype =:= 10 ->
-        CurrentEquip = [0, Yf, Fbyf, Spyf, Zq];
-        NewGoodsInfo#goods.subtype =:= 24 ->
-            CurrentEquip = [Wq, 0, Fbyf, Spyf, Zq];
-        NewGoodsInfo#goods.subtype =:= 26 ->
-            CurrentEquip = [Wq, Yf, 0, Spyf, Zq];
-        NewGoodsInfo#goods.subtype =:= 27 ->
-            CurrentEquip = [Wq, Yf, Fbyf, 0, Zq];
-        true ->
-            CurrentEquip = [Wq, Yf, Fbyf, Spyf, Zq]
-    end,
+    CurrentEquip =
+        if NewGoodsInfo#goods.subtype =:= 10 ->
+            [0, Yf, Fbyf, Spyf, Zq];
+            NewGoodsInfo#goods.subtype =:= 24 ->
+                [Wq, 0, Fbyf, Spyf, Zq];
+            NewGoodsInfo#goods.subtype =:= 26 ->
+                [Wq, Yf, 0, Spyf, Zq];
+            NewGoodsInfo#goods.subtype =:= 27 ->
+                [Wq, Yf, Fbyf, 0, Zq];
+            true ->
+                [Wq, Yf, Fbyf, Spyf, Zq]
+        end,
     EquipSuit = goods_util:change_equip_suit(Status#goods_status.equip_suit, GoodsInfo#goods.suit_id, 0),
     NewStatus = Status#goods_status{null_cells = NullCells, equip_current = CurrentEquip, equip_suit = EquipSuit},
 
@@ -2215,7 +2219,7 @@ cost_money(PlayerStatus, Cost, Type, PointId) ->
                     db_agent:cost_money(PlayerStatus, NewCost, Type, PointId),
                     NewPlayerStatus;
                 false ->
-                     PlayerStatus
+                    PlayerStatus
             end;
         true ->
             PlayerStatus
@@ -2247,15 +2251,16 @@ cost_score(PlayerStatus, Cost, Type, PointId) ->
 %% 物品绑定
 bind_goods(GoodsInfo) ->
     %%坐骑绑定
-    if GoodsInfo#goods.type == 10 andalso GoodsInfo#goods.subtype == 22 ->
-        MountCount = length(goods_util:get_mount_cell(GoodsInfo#goods.player_id, 4)),
-        %%将坐骑放入到cell 200之后，间接在背包里隐藏坐骑
-        if MountCount == 0 ->
-            NewCell = 200;
-            true ->
-                NewCell = 200 + MountCount
-        end,
-        NewGoodsInfo = GoodsInfo#goods{bind = 2, trade = 1, cell = NewCell};
+    if
+        GoodsInfo#goods.type == 10 andalso GoodsInfo#goods.subtype == 22 ->
+            MountCount = length(goods_util:get_mount_cell(GoodsInfo#goods.player_id, 4)),
+            %%将坐骑放入到cell 200之后，间接在背包里隐藏坐骑
+            if MountCount == 0 ->
+                NewCell = 200;
+                true ->
+                    NewCell = 200 + MountCount
+            end,
+            NewGoodsInfo = GoodsInfo#goods{bind = 2, trade = 1, cell = NewCell};
         true ->
             NewGoodsInfo = GoodsInfo#goods{bind = 2, trade = 1}
     end,

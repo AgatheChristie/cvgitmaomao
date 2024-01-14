@@ -29,6 +29,185 @@ handle(?BAG_NIU_CLEAN_C2S, PlayerStatus, #bag_niu_clean_c2s{} = _Req) ->
 
     ok;
 
+%%卸下装备
+handle(?BAG_NIU_DROP_EQUIP_C2S, PlayerStatus, #bag_niu_drop_equip_c2s{goods_id = GoodsId} = _Req) ->
+    [NewPlayerStatus, Res, GoodsInfo] = gen_server:call(PlayerStatus#player.other#player_other.pid_goods, {'unequip', PlayerStatus, GoodsId}),
+    {TypeId, Cell} =
+        case is_record(GoodsInfo, goods) of
+            true ->
+                {GoodsInfo#goods.goods_id,
+                    GoodsInfo#goods.cell};
+            false ->
+                {0, 0}
+        end,
+    Msg = #bag_niu_drop_equip_s2c{res = Res,
+        goods_id = GoodsId, type_id = TypeId, cell = Cell},
+    lib_send:protobuf_send(NewPlayerStatus#player.other#player_other.pid_send, ?BAG_NIU_DROP_EQUIP_S2C, Msg),
+
+%%    {ok, BinData} = pt_15:write(15031, [Res, GoodsId, TypeId, Cell]),
+%%    spawn(fun() -> lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData) end),
+    spawn(fun() -> lib_player:send_player_attribute(NewPlayerStatus, 3) end),
+
+
+    case is_record(GoodsInfo, goods) andalso false of
+        true ->
+            %% 气血 改变广播
+            Is_Equip = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13, 19]),
+            if
+                NewPlayerStatus#player.hp_lim =/= PlayerStatus#player.hp_lim orelse Is_Equip ->
+                    {ok, BinData1} = pt_12:write(12013, [NewPlayerStatus#player.id, GoodsInfo#goods.goods_id, GoodsInfo#goods.subtype, NewPlayerStatus#player.hp, NewPlayerStatus#player.hp_lim]);
+                true ->
+                    BinData1 = <<>>
+            end,
+            %% 法宝强化效果广播
+            Is_FB = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13]),
+            Is_SP = GoodsInfo#goods.subtype == 27,
+            Is_FByf = GoodsInfo#goods.subtype == 26,
+            if
+                Is_FB ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 4, 0]);
+                Is_SP ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 3, 0]);
+                Is_FByf ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 6, 0]);
+                true ->
+                    BinData2 = <<>>
+            end,
+            %% 套装效果广播
+
+            {ok, BinData3} = pt_12:write(12032, [NewPlayerStatus#player.id, 2, NewPlayerStatus#player.other#player_other.suitid]),
+
+            %% 全身强化效果
+            {ok, BinData4} = pt_12:write(12032, [NewPlayerStatus#player.id, 5, NewPlayerStatus#player.other#player_other.fullstren]),
+            %%时装穿卸人物模形改变通知客户端
+            if
+                GoodsInfo#goods.subtype =:= 24 ->
+                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, 0}]]);
+                GoodsInfo#goods.subtype =:= 26 ->
+                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{9, 0}]]);
+                GoodsInfo#goods.subtype =:= 27 ->
+                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{10, 0}]]);
+                true ->
+                    Bin12042 = <<>>
+            end,
+            TotalBin = <<BinData1/binary, BinData2/binary, BinData3/binary, BinData4/binary, Bin12042/binary>>,
+            mod_scene_agent:send_to_area_scene(NewPlayerStatus#player.scene, NewPlayerStatus#player.x, NewPlayerStatus#player.y, TotalBin);
+        _ ->
+            skip
+    end,
+    {ok, NewPlayerStatus};
+
+
+%%装备物品
+handle(?BAG_NIU_WEAR_EQUIP_C2S, PlayerStatus, #bag_niu_wear_equip_c2s{goods_id = GoodsId, cell = Cell} = _Req) ->
+    TempInfo = goods_util:get_goods(GoodsId),
+    ?ASSERT(is_record(TempInfo, goods), ?E_UNKONW_DATA),
+    ?APPLY_LOCK(),
+    [NewPlayerStatus, Res, GoodsInfo, OldGoodsInfo, Effect, AchResult] =
+        gen_server:call(PlayerStatus#player.other#player_other.pid_goods, {'equip', PlayerStatus, GoodsId, Cell}),
+    ?ASSERT(Res == 1, Res),
+
+    {OldGoodsId, OldGoodsTypeId, OldGoodsCell} =
+        case is_record(OldGoodsInfo, goods) of
+            true ->
+                {OldGoodsInfo#goods.id,
+                    OldGoodsInfo#goods.goods_id,
+                    OldGoodsInfo#goods.cell};
+            false ->
+                {0, 0, 0}
+        end,
+    [Hp, Mp, MaxAtt, MinAtt, Def, Hit, Dodge, Crit, Anti_wind, Anti_fire, Anti_water, Anti_thunder, Anti_soil, _Anti_rift]
+        = case length(Effect) =:= 14 of
+              true ->
+                  Effect;
+              false ->
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          end,
+    Msg = #bag_niu_wear_equip_s2c{res = Res,
+        goods_id = GoodsId, old_goods_id = OldGoodsId, old_goods_type_id = OldGoodsTypeId, old_goods_cell = OldGoodsCell,
+        hp = Hp, mp = Mp, max_att = MaxAtt, min_att = MinAtt, def = Def,
+        hit = Hit, dodge = Dodge, crit = Crit,
+        anti_wind = Anti_wind, anti_fire = Anti_fire, anti_water = Anti_water,
+        anti_thunder = Anti_thunder, anti_soil = Anti_soil},
+    lib_send:protobuf_send(NewPlayerStatus#player.other#player_other.pid_send, ?BAG_NIU_WEAR_EQUIP_S2C, Msg),
+
+%%    {ok, BinData} = pt_15:write(15030, [Res, GoodsId, OldGoodsId, OldGoodsTypeId, OldGoodsCell, Effect]),
+%%    spawn(fun() -> lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData) end),
+    spawn(fun() -> lib_player:send_player_attribute(NewPlayerStatus, 3) end),
+%%    case is_record(GoodsInfo, goods) andalso Res =:= 1 of
+    case is_record(GoodsInfo, goods) andalso false of
+        true ->
+            %% 气血 改变广播
+            Is_Equip = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13, 19]),
+            if
+                NewPlayerStatus#player.hp_lim =/= PlayerStatus#player.hp_lim orelse Is_Equip ->
+                    {ok, BinData1} = pt_12:write(12012, [NewPlayerStatus#player.id, GoodsInfo#goods.goods_id, GoodsInfo#goods.subtype, NewPlayerStatus#player.hp, NewPlayerStatus#player.hp_lim]);
+                true ->
+                    BinData1 = <<>>
+            end,
+            %% 强化效果广播
+            Is_FB = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13]),
+            Is_SP = GoodsInfo#goods.subtype == 27,
+            Is_FByf = GoodsInfo#goods.subtype == 26,
+            if
+                Is_FB ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 4, GoodsInfo#goods.stren]);
+                Is_SP ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 3, GoodsInfo#goods.stren]);
+                Is_FByf ->
+                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 6, GoodsInfo#goods.stren]);
+                true ->
+                    BinData2 = <<>>
+            end,
+
+            %% 套装效果广播
+            {ok, BinData3} = pt_12:write(12032, [NewPlayerStatus#player.id, 2, NewPlayerStatus#player.other#player_other.suitid]),
+
+            %% 全身强化效果
+            {ok, BinData4} = pt_12:write(12032, [NewPlayerStatus#player.id, 5, NewPlayerStatus#player.other#player_other.fullstren]),
+
+            %%时装穿卸人物模形改变通知客户端
+            if
+                GoodsInfo#goods.subtype =:= 24 ->
+                    [_Player_Id, _ShieldRole, _ShieldSkill, _ShieldRela, _ShieldTeam, _ShieldChat, _Music, _SoundEffect, Fasheffect, _Smelt] = lib_syssetting:query_player_sys_setting(PlayerStatus#player.id),
+                    case Fasheffect == 1 of
+                        true ->
+                            {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, 0}]]);
+                        false ->
+                            if
+                                GoodsInfo#goods.icon > 0 ->
+                                    ShowFace = GoodsInfo#goods.icon;
+                                true ->
+                                    ShowFace = GoodsInfo#goods.goods_id
+                            end,
+                            {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, ShowFace}]])
+                    end;
+                GoodsInfo#goods.subtype =:= 26 ->
+                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{9, GoodsInfo#goods.goods_id}]]);
+                GoodsInfo#goods.subtype =:= 27 ->
+                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{10, GoodsInfo#goods.goods_id}]]);
+                true ->
+                    Bin12042 = <<>>
+            end,
+            TotalBin = <<BinData1/binary, BinData2/binary, BinData3/binary, BinData4/binary, Bin12042/binary>>,
+            mod_scene_agent:send_to_area_scene(NewPlayerStatus#player.scene, NewPlayerStatus#player.x, NewPlayerStatus#player.y, TotalBin),
+            %%做物品装备的成就反馈
+            case AchResult of
+                [] ->
+                    skip;
+                _ ->
+                    lists:foreach(fun(Elem) ->
+                        {AchNum, Num} = Elem,
+                        lib_achieve:check_achieve_finish(NewPlayerStatus#player.other#player_other.pid_send,
+                            NewPlayerStatus#player.id, AchNum, [Num])
+                                  end, AchResult)
+            end;
+        _ ->
+            skip
+    end,
+    {ok, NewPlayerStatus};
+
+
 %% 取商店物品列表
 handle(?BAG_NIU_SHOP_C2S, PlayerStatus, #bag_niu_shop_c2s{shop_type = ShopType, shop_sub_type = ShopSubtype} = _Req) ->
 %%	?DEBUG("ShopType:~p, ShopSubtype:~p", [ShopType, ShopSubtype]),
@@ -255,65 +434,6 @@ handle(15017, PlayerStatus, [Location]) ->
             Location}),
     ok;
 
-
-%%购买物品
-handle(15020, PlayerStatus, [GoodsTypeId, GoodsNum, ShopType, ShopSubtype]) ->
-    Is_operate_ok = tool:is_operate_ok(pp_15020, 1),
-    case Is_operate_ok of
-        true ->
-            [NewPlayerStatus, Res, GoodsList] = gen_server:call(PlayerStatus#player.other#player_other.pid_goods, {'pay', PlayerStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtype}),
-            if
-            %%增加特惠区购买记录
-                ShopType =:= 1 andalso ShopSubtype =:= 6 andalso Res =:= 1 ->
-                    case misc:whereis_name({global, mod_shop_process}) of
-                        Pid when is_pid(Pid) ->
-                            gen_server:cast(Pid, {'th_sell_add', GoodsTypeId});
-                        _ ->
-                            skip
-                    end;
-                true ->
-                    skip
-            end;
-        _ ->
-            [NewPlayerStatus, Res, GoodsList] = [PlayerStatus, 0, []]
-    end,
-    case Res of
-        1 ->
-            %商城购买的成就统计
-            IsCount = lists:member({ShopType, ShopSubtype}, [{1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 6}, {9, 1}]),%%商城用元宝的地方，和购买时装
-            case IsCount of
-                true ->
-                    lib_achieve:check_achieve_finish(NewPlayerStatus#player.other#player_other.pid_send,
-                        NewPlayerStatus#player.id, 505, [GoodsNum]);
-                false ->
-                    skip
-            end,
-            %%活跃度判断
-            case (IsCount =:= true andalso ShopSubtype =/= 6) %%去掉特惠区
-                orelse (ShopType =:= 1 andalso ShopSubtype =:= 5) %%补上礼券区
-                orelse (ShopType =:= 1 andalso ShopSubtype =:= 0) of%%不上快速购买
-                true ->
-                    lib_task:event(buy_anything, null, PlayerStatus),
-                    lib_activity:update_activity_data(shop, PlayerStatus#player.other#player_other.pid, PlayerStatus#player.id, 1);%%添加玩家活跃度统计
-                false ->
-                    skip
-            end;
-        _Other ->
-            skip
-    end,
-    %%更新玩家的商城积分(独立协议)
-%% 	if ShopType =:= 1 andalso ShopSubtype =:= 7 ->
-%% 		   %%通知客户端(独立协议)
-%% 		   ShopScore = lib_player:get_11_17_pay_gold(PlayerStatus#player.id),
-%% 		   {ok,BinData13054} = pt_13:write(13054,ShopScore),
-%% 		   lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData13054);
-%% 	   true ->
-%% 		   skip
-%% 	end,
-    {ok, BinData} = pt_15:write(15020, [Res, GoodsTypeId, GoodsNum, ShopType, NewPlayerStatus#player.coin, NewPlayerStatus#player.bcoin, NewPlayerStatus#player.cash, NewPlayerStatus#player.gold, NewPlayerStatus#player.arena_score, GoodsList]),
-    lib_send:send_to_sid(NewPlayerStatus#player.other#player_other.pid_send, BinData),
-    {ok, NewPlayerStatus};
-
 %%出售物品
 handle(15021, PlayerStatus, [GoodsId, GoodsNum]) ->
     [NewPlayerStatus, Res] = gen_server:call(PlayerStatus#player.other#player_other.pid_goods, {'sell', PlayerStatus, GoodsId, GoodsNum}),
@@ -339,172 +459,6 @@ handle(15023, PlayerStatus, [GoodsId, Num, Pos]) ->
     lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData),
     {ok, NewPlayerStatus};
 
-%%装备物品
-handle(15030, PlayerStatus, [GoodsId, Cell]) ->
-    TempInfo = goods_util:get_goods(GoodsId),
-    if
-        is_record(TempInfo, goods) ->
-            %%防止短时间发包
-            DefCell = goods_util:get_equip_cell(PlayerStatus, TempInfo#goods.subtype),
-            Is_operate_ok = tool:is_operate_ok(lists:concat([pp_15030_, DefCell]), 1),
-            if
-                Is_operate_ok == true ->
-                    [NewPlayerStatus, Res, GoodsInfo, OldGoodsInfo, Effect, AchResult] =
-                        gen_server:call(PlayerStatus#player.other#player_other.pid_goods,
-                            {'equip', PlayerStatus, GoodsId, Cell}),
-                    case is_record(OldGoodsInfo, goods) of
-                        true ->
-                            OldGoodsId = OldGoodsInfo#goods.id,
-                            OldGoodsTypeId = OldGoodsInfo#goods.goods_id,
-                            OldGoodsCell = OldGoodsInfo#goods.cell;
-                        false ->
-                            OldGoodsId = 0,
-                            OldGoodsTypeId = 0,
-                            OldGoodsCell = 0
-                    end,
-                    {ok, BinData} = pt_15:write(15030, [Res, GoodsId, OldGoodsId, OldGoodsTypeId, OldGoodsCell, Effect]),
-                    spawn(fun() -> lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData) end),
-                    spawn(fun() -> lib_player:send_player_attribute(NewPlayerStatus, 3) end),
-                    case is_record(GoodsInfo, goods) andalso Res =:= 1 of
-                        true ->
-                            %% 气血 改变广播
-                            Is_Equip = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13, 19]),
-                            if
-                                NewPlayerStatus#player.hp_lim =/= PlayerStatus#player.hp_lim orelse Is_Equip ->
-                                    {ok, BinData1} = pt_12:write(12012, [NewPlayerStatus#player.id, GoodsInfo#goods.goods_id, GoodsInfo#goods.subtype, NewPlayerStatus#player.hp, NewPlayerStatus#player.hp_lim]);
-                                true ->
-                                    BinData1 = <<>>
-                            end,
-                            %% 强化效果广播
-                            Is_FB = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13]),
-                            Is_SP = GoodsInfo#goods.subtype == 27,
-                            Is_FByf = GoodsInfo#goods.subtype == 26,
-                            if
-                                Is_FB ->
-                                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 4, GoodsInfo#goods.stren]);
-                                Is_SP ->
-                                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 3, GoodsInfo#goods.stren]);
-                                Is_FByf ->
-                                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 6, GoodsInfo#goods.stren]);
-                                true ->
-                                    BinData2 = <<>>
-                            end,
-
-                            %% 套装效果广播
-                            {ok, BinData3} = pt_12:write(12032, [NewPlayerStatus#player.id, 2, NewPlayerStatus#player.other#player_other.suitid]),
-
-                            %% 全身强化效果
-                            {ok, BinData4} = pt_12:write(12032, [NewPlayerStatus#player.id, 5, NewPlayerStatus#player.other#player_other.fullstren]),
-
-                            %%时装穿卸人物模形改变通知客户端
-                            if
-                                GoodsInfo#goods.subtype =:= 24 ->
-                                    [_Player_Id, _ShieldRole, _ShieldSkill, _ShieldRela, _ShieldTeam, _ShieldChat, _Music, _SoundEffect, Fasheffect, _Smelt] = lib_syssetting:query_player_sys_setting(PlayerStatus#player.id),
-                                    case Fasheffect == 1 of
-                                        true ->
-                                            {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, 0}]]);
-                                        false ->
-                                            if
-                                                GoodsInfo#goods.icon > 0 ->
-                                                    ShowFace = GoodsInfo#goods.icon;
-                                                true ->
-                                                    ShowFace = GoodsInfo#goods.goods_id
-                                            end,
-                                            {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, ShowFace}]])
-                                    end;
-                                GoodsInfo#goods.subtype =:= 26 ->
-                                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{9, GoodsInfo#goods.goods_id}]]);
-                                GoodsInfo#goods.subtype =:= 27 ->
-                                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{10, GoodsInfo#goods.goods_id}]]);
-                                true ->
-                                    Bin12042 = <<>>
-                            end,
-                            TotalBin = <<BinData1/binary, BinData2/binary, BinData3/binary, BinData4/binary, Bin12042/binary>>,
-                            mod_scene_agent:send_to_area_scene(NewPlayerStatus#player.scene, NewPlayerStatus#player.x, NewPlayerStatus#player.y, TotalBin),
-                            %%做物品装备的成就反馈
-                            case AchResult of
-                                [] ->
-                                    skip;
-                                _ ->
-                                    lists:foreach(fun(Elem) ->
-                                        {AchNum, Num} = Elem,
-                                        lib_achieve:check_achieve_finish(NewPlayerStatus#player.other#player_other.pid_send,
-                                            NewPlayerStatus#player.id, AchNum, [Num])
-                                                  end, AchResult)
-                            end;
-                        _ ->
-                            skip
-                    end,
-                    {ok, NewPlayerStatus};
-                true ->
-                    {ok, PlayerStatus}
-            end;
-        true ->
-            {ok, PlayerStatus}
-    end;
-
-
-%%卸下装备
-handle(15031, PlayerStatus, GoodsId) ->
-    [NewPlayerStatus, Res, GoodsInfo] = gen_server:call(PlayerStatus#player.other#player_other.pid_goods, {'unequip', PlayerStatus, GoodsId}),
-    case is_record(GoodsInfo, goods) of
-        true ->
-            TypeId = GoodsInfo#goods.goods_id,
-            Cell = GoodsInfo#goods.cell;
-        false ->
-            TypeId = 0,
-            Cell = 0
-    end,
-    {ok, BinData} = pt_15:write(15031, [Res, GoodsId, TypeId, Cell]),
-    spawn(fun() -> lib_send:send_to_sid(PlayerStatus#player.other#player_other.pid_send, BinData) end),
-    spawn(fun() -> lib_player:send_player_attribute(NewPlayerStatus, 3) end),
-    case is_record(GoodsInfo, goods) andalso Res =:= 1 of
-        true ->
-            %% 气血 改变广播
-            Is_Equip = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13, 19]),
-            if
-                NewPlayerStatus#player.hp_lim =/= PlayerStatus#player.hp_lim orelse Is_Equip ->
-                    {ok, BinData1} = pt_12:write(12013, [NewPlayerStatus#player.id, GoodsInfo#goods.goods_id, GoodsInfo#goods.subtype, NewPlayerStatus#player.hp, NewPlayerStatus#player.hp_lim]);
-                true ->
-                    BinData1 = <<>>
-            end,
-            %% 法宝强化效果广播
-            Is_FB = lists:member(GoodsInfo#goods.subtype, [9, 10, 11, 12, 13]),
-            Is_SP = GoodsInfo#goods.subtype == 27,
-            Is_FByf = GoodsInfo#goods.subtype == 26,
-            if
-                Is_FB ->
-                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 4, 0]);
-                Is_SP ->
-                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 3, 0]);
-                Is_FByf ->
-                    {ok, BinData2} = pt_12:write(12032, [NewPlayerStatus#player.id, 6, 0]);
-                true ->
-                    BinData2 = <<>>
-            end,
-            %% 套装效果广播
-
-            {ok, BinData3} = pt_12:write(12032, [NewPlayerStatus#player.id, 2, NewPlayerStatus#player.other#player_other.suitid]),
-
-            %% 全身强化效果
-            {ok, BinData4} = pt_12:write(12032, [NewPlayerStatus#player.id, 5, NewPlayerStatus#player.other#player_other.fullstren]),
-            %%时装穿卸人物模形改变通知客户端
-            if
-                GoodsInfo#goods.subtype =:= 24 ->
-                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{2, 0}]]);
-                GoodsInfo#goods.subtype =:= 26 ->
-                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{9, 0}]]);
-                GoodsInfo#goods.subtype =:= 27 ->
-                    {ok, Bin12042} = pt_12:write(12042, [NewPlayerStatus#player.id, [{10, 0}]]);
-                true ->
-                    Bin12042 = <<>>
-            end,
-            TotalBin = <<BinData1/binary, BinData2/binary, BinData3/binary, BinData4/binary, Bin12042/binary>>,
-            mod_scene_agent:send_to_area_scene(NewPlayerStatus#player.scene, NewPlayerStatus#player.x, NewPlayerStatus#player.y, TotalBin);
-        _ ->
-            skip
-    end,
-    {ok, NewPlayerStatus};
 
 %%修理装备
 handle(15033, PlayerStatus, GoodsId) ->

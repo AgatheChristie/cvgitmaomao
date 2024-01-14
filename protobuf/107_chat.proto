@@ -47,6 +47,13 @@ message chat_niu_world_s2c {
     optional string                         msg = 8;                     // 聊天类型
 }
 
+
+// ##begin##世界聊天信息##end##
+message chat_niu_sys_s2c {
+    optional uint32                         type = 1;                     // 聊天类型
+    optional string                         msg = 2;                     // 聊天类型
+}
+
 // ##begin##势力聊天信息##end##
 message chat_camp_c2s {
     repeated p_chat_part                    parts = 1;                    // 聊天内容

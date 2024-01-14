@@ -58,6 +58,24 @@ send_to_niu_sid(PidSend, MsgId, SendMsg) ->
             skip
     end.
 
+%% 发送信息给指定玩家ID.
+%% PlayerId 玩家ID
+%% BinData 二进制数据.
+protobuf_send_to_uid(PlayerId, MsgId, BinData) ->
+    PlayerSendName = misc:create_process_name(pid_send, [PlayerId, 2]),
+    case misc:whereis_name({global, PlayerSendName}) of
+        PidSend when is_pid(PidSend) ->
+            PidSend ! {send, MsgId, BinData};
+        _ ->
+            PlayerProcessName = misc:player_process_name(PlayerId),
+            case misc:whereis_name({global, PlayerProcessName}) of
+                Pid when is_pid(Pid) ->
+                    gen_server:cast(Pid, {protobuf_send_to_sid, MsgId, BinData});
+                _ ->
+                    skip
+            end
+    end.
+
 %% 发送信息给指定sid玩家
 %% PidSend 游戏发送进程PidSend
 %% BinData 二进制数据

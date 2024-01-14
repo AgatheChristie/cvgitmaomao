@@ -242,6 +242,7 @@
 -record(p_role_niu_batt_info, {type = 0, value = 0}).
 -record(p_niu_item_info, {goods_id = 0, type_id = 0, cell = 0, goods_num = 0, bind = 0, stren = 0, icon = 0}).
 -record(p_niu_shop_info, {type_id = 0, goods_num = 0, left_time = 0}).
+-record(p_friend_niu_info, {online = 0, id_b = 0, lv = 0, sex = 0, career = 0, nick = [], id = 0, close = 0, vip = 0}).
 -record(public_success_s2c, {}).
 -record(public_failure_s2c, {ecode = 0, int_values = [], string_values = []}).
 -record(net_heart_c2s, {}).
@@ -359,6 +360,7 @@
 -record(chat_world_s2c, {}).
 -record(chat_niu_world_c2s, {msg = []}).
 -record(chat_niu_world_s2c, {id = 0, nick = [], lv = 0, realm = 0, sex = 0, vip = 0, state = 0, msg = []}).
+-record(chat_niu_sys_s2c, {type = 0, msg = []}).
 -record(chat_camp_c2s, {parts = []}).
 -record(chat_camp_s2c, {}).
 -record(chat_league_c2s, {parts = []}).
@@ -374,6 +376,10 @@
 -record(bag_info_s2c, {type = 0, bag_infos = [], total_grid = 0}).
 -record(bag_niu_list_c2s, {type = 0}).
 -record(bag_niu_list_s2c, {location = 0, cell_num = 0, coin = 0, bcoin = 0, cash = 0, gold = 0, can_sell_bcoin_num = 0, can_sell_coin_num = 0, item_list = []}).
+-record(bag_niu_wear_equip_c2s, {goods_id = 0, cell = 0}).
+-record(bag_niu_wear_equip_s2c, {res = 0, goods_id = 0, old_goods_id = 0, old_goods_type_id = 0, old_goods_cell = 0, hp = 0, mp = 0, max_att = 0, min_att = 0, def = 0, hit = 0, dodge = 0, crit = 0, anti_wind = 0, anti_fire = 0, anti_water = 0, anti_thunder = 0, anti_soil = 0}).
+-record(bag_niu_drop_equip_c2s, {goods_id = 0}).
+-record(bag_niu_drop_equip_s2c, {res = 0, goods_id = 0, type_id = 0, cell = 0}).
 -record(bag_niu_clean_c2s, {}).
 -record(bag_niu_clean_s2c, {item_list = []}).
 -record(bag_niu_shop_c2s, {shop_type = 0, shop_sub_type = 0}).
@@ -872,6 +878,12 @@
 -record(training_leave_info_s2c, {}).
 -record(friend_info_c2s, {type = 0}).
 -record(friend_info_s2c, {type = 0, friend_infos = []}).
+-record(friend_niu_info_c2s, {}).
+-record(friend_niu_info_s2c, {friend_infos = []}).
+-record(friend_niu_apply_c2s, {type = 0, id = 0, name = []}).
+-record(friend_niu_apply_s2c, {type = 0, id = 0, lv = 0, career = 0, name = []}).
+-record(friend_niu_huiy_c2s, {type = 0, res = 0, id = 0}).
+-record(friend_niu_huiy_s2c, {recer = 0, res = 0, id = 0, lv = 0, career = 0, name = []}).
 -record(friend_abandon_c2s, {type = 0, abandon_ids = []}).
 -record(friend_abandon_s2c, {}).
 -record(friend_delete_s2c, {type = 0, friend_ids = []}).

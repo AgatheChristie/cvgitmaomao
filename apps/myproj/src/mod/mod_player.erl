@@ -107,6 +107,10 @@ gateway_router_msg(?PB_MODEL_ROLE, Cmd, PlayerState, Bin, _State) ->
 gateway_router_msg(?PB_MODEL_BAG, Cmd, _PlayerState, Bin, Status) ->
     Result = pp_goods:handle(Cmd, Status, Bin),
     Result;
+%% 好友模块
+gateway_router_msg(?PB_MODEL_FRIEND, Cmd, PlayerState, Bin, Status) ->
+    Result = pp_relationship:handle(Cmd, Status, Bin, PlayerState),
+    Result;
 
 %% 错误协议
 gateway_router_msg(MsgMod, MsgId, MsgSeq, Request, _State) ->
@@ -1156,6 +1160,12 @@ handle_cast({'buff_AddHPMP', GoodsInfo}, PlayerState) ->
         true ->
             {noreply, PlayerState}
     end;
+
+%% 发送信息到socket端口
+handle_cast({protobuf_send_to_sid, MsgId, Bin}, PlayerState) ->
+    Player = PlayerState#player_state.player,
+    lib_send:send_to_niu_sid(Player#player.other#player_other.pid_send, MsgId, Bin),
+    {noreply, PlayerState};
 
 %% 发送信息到socket端口
 handle_cast({send_to_sid, Bin}, PlayerState) ->

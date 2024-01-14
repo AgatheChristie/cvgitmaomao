@@ -10,6 +10,46 @@ message friend_info_s2c {
 	repeated p_friend_info            friend_infos = 2;          // 好友信息
 }
 
+// ##begin##好友信息##end##
+message friend_niu_info_c2s {
+
+}
+// ##begin##好友信息##end##
+message friend_niu_info_s2c {
+	repeated p_friend_niu_info            friend_infos = 2;          // 好友信息
+}
+
+// ##begin##申请好友##end##
+message friend_niu_apply_c2s {
+	optional uint32                   type = 1;             // 好友id列表
+	optional uint32                   id = 2;             // 好友id列表
+	optional string                   name = 3;             // 好友id列表
+}
+// ##begin##申请好友##end##
+message friend_niu_apply_s2c {
+	optional uint32                   type = 1;             // 好友id列表
+	optional uint32                   id = 2;             // 好友id列表
+	optional uint32                   lv = 3;             // 好友id列表
+	optional uint32                   career = 4;             // 好友id列表
+	optional string                   name = 5;             // 好友id列表
+}
+
+// ##begin##申请好友##end##
+message friend_niu_huiy_c2s {
+	optional uint32                   type = 1;             // 好友id列表
+	optional uint32                   res = 2;             // 好友id列表
+	optional uint32                   id = 3;             // 好友id列表
+}
+// ##begin##申请好友##end##
+message friend_niu_huiy_s2c {
+	optional uint32                   recer = 1;             // 好友id列表
+	optional uint32                   res = 2;             // 好友id列表
+	optional uint32                   id = 3;             // 好友id列表
+	optional uint32                   lv = 4;             // 好友id列表
+	optional uint32                   career = 5;             // 好友id列表
+	optional string                   name = 6;             // 好友id列表
+}
+
 // ##begin##删除好友##end##
 message friend_abandon_c2s {
 	optional uint32                   type = 1;                  // 类型 1.好友列表 2.黑名单列表 3.收到申请列表 4.发送申请列表

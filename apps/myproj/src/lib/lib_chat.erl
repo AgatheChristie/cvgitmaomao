@@ -249,9 +249,11 @@ chat_in_blacklist(Id, Sid) ->
     lib_send:send_to_sid(Sid, BinData).
 
 %%发送系统信息给某个玩家
-send_sys_msg_one(Socket, Msg) ->
-    {ok, BinData} = pt_11:write(11080, Msg),
-    lib_send:send_one(Socket, BinData).
+send_sys_msg_one(Socket, Content) ->
+    Msg = #chat_niu_sys_s2c{type = 1, msg = Content},
+    lib_send:protobuf_send(Socket, ?CHAT_NIU_SYS_S2C, Msg).
+%%    {ok, BinData} = pt_11:write(11080, Msg),
+%%    lib_send:send_one(Socket, BinData).
 
 %%发送系统信息(Type=1:系统；2:传闻; 3:开封印)
 broadcast_sys_msg(Type, Msg) ->

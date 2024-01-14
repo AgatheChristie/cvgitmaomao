@@ -157,8 +157,8 @@ do_cmd(Status,Data) ->
 %%			is_cmd;
 		["-GMSetCoin1",Num] ->
 			N=abs(list_to_integer(Num)),
-			(catch db_agent:test_update_player_info([{cash,N},{gold,N},{coin,N},{bcion,N}],[{id,Status#player.id}])),
-			Status1=Status#player{gold=N,coin=N,bcoin=N,cash=N},
+			(catch db_agent:test_update_player_info([{cash,N},{coin_sum,N+N},{gold,N},{coin,N},{bcoin,N}],[{id,Status#player.id}])),
+			Status1=Status#player{gold=N,coin=N,bcoin=N,cash=N,coin_sum=N+N},
 			gen_server:cast(Status1#player.other#player_other.pid, {'SET_PLAYER', Status1}),
 			lib_player:send_player_attribute2(Status1, 3),
 			is_cmd;

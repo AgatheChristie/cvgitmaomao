@@ -2035,3 +2035,17 @@ message p_niu_shop_info {
     optional uint32                        goods_num = 2;            //
     optional uint32                        left_time = 3;            //
 }
+
+// 练兵信息
+message p_friend_niu_info {
+    optional uint32                        online = 1;                    //
+    optional uint32                        id_b = 2;                //
+    optional uint32                        lv = 3;                //
+    optional uint32                        sex = 4;                //
+    optional uint32                        career = 5;                //
+    optional string                        nick = 6;                //
+    optional uint32                        id = 7;                //
+    optional uint32                        close = 8;                //
+    optional uint32                        vip = 9;                //
+
+}

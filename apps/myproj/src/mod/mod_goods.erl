@@ -1081,27 +1081,27 @@ handle_call({'pay', PlayerStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtype},
                     Is_Fst_Shop = mod_fst:is_fst_shop(ShopType),
                     NewPlayerStatus =
                         if ShopType =:= 10219 ->
-                         lib_goods:cost_score(PlayerStatus, Cost, arena_score, 1219);
-                        ShopType =:= 20207 ->
-                            {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2007),
-                            PS01;
-                        ShopType =:= 21020 ->
-                            {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2120),
-                            PS01;
-                        ShopType =:= 20800 ->
-                            lib_td:cost_hor_td(PlayerStatus#player.id, Cost),
-                            spawn(fun() ->
-                                db_agent:log_td_honor_consume([PlayerStatus#player.id, GoodsTypeId, GoodsNum, Cost, util:unixtime()]) end),
-                            PlayerStatus;
-                        ShopType =:= 20802 ->%%活动面板的购买
-                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2882);
-                        ShopType =:= 1 andalso ShopSubtype =:= 9 ->
-                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561);
-                        Is_Fst_Shop =:= true -> %%封神台神秘商店
-                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2151);
-                        true ->
-                            lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561)
-                    end,
+                            lib_goods:cost_score(PlayerStatus, Cost, arena_score, 1219);
+                            ShopType =:= 20207 ->
+                                {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2007),
+                                PS01;
+                            ShopType =:= 21020 ->
+                                {ok, PS01} = lib_skyrush:deduct_player_feat(PlayerStatus, Cost, GoodsTypeId, GoodsNum, 2120),
+                                PS01;
+                            ShopType =:= 20800 ->
+                                lib_td:cost_hor_td(PlayerStatus#player.id, Cost),
+                                spawn(fun() ->
+                                    db_agent:log_td_honor_consume([PlayerStatus#player.id, GoodsTypeId, GoodsNum, Cost, util:unixtime()]) end),
+                                PlayerStatus;
+                            ShopType =:= 20802 ->%%活动面板的购买
+                                lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2882);
+                            ShopType =:= 1 andalso ShopSubtype =:= 9 ->
+                                lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561);
+                            Is_Fst_Shop =:= true -> %%封神台神秘商店
+                                lib_goods:cost_money(PlayerStatus, Cost, PriceType, 2151);
+                            true ->
+                                lib_goods:cost_money(PlayerStatus, Cost, PriceType, 1561)
+                        end,
                     %% 购买某物品有附加物品
                     goods_util:pay_goods_addition(PlayerStatus, GoodsTypeId, GoodsNum, GoodsTypeInfo#ets_base_goods.max_overlap),
                     NewGoodsList = goods_util:get_goods_list(PlayerStatus#player.id, 4),
@@ -1245,7 +1245,7 @@ handle_call({'equip', PlayerStatus, GoodsId, Cell}, _From, GoodsStatus) ->
         {ok, GoodsInfo, Location, NewCell} ->
             case (catch lib_goods:equip_goods(PlayerStatus, GoodsStatus, GoodsInfo, Location, NewCell)) of
                 {ok, NewPlayerStatus, NewStatus, OldGoodsInfo, Effect2, AchCheck} ->
-                    spawn(fun() -> lib_task:event(equip, {GoodsInfo#goods.goods_id}, PlayerStatus) end),
+                    %% spawn(fun() -> lib_task:event(equip, {GoodsInfo#goods.goods_id}, PlayerStatus) end),
                     {reply, [NewPlayerStatus, 1, GoodsInfo, OldGoodsInfo, Effect2, AchCheck], NewStatus};
                 Error ->
                     ?ERROR_MSG("mod_goods equip:~p", [Error]),
@@ -2935,7 +2935,7 @@ check_pay(PlayerStatus, GoodsStatus, GoodsTypeId, GoodsNum, ShopType, ShopSubtyp
             {ok, GoodsTypeInfo, GoodsList, Cost, PriceType, BagNullCells, GoodsStatus};
     %% 农场商店
         ShopType == 2 ->
-            CostQ = ?IF(lib_vip:check_vip(PlayerStatus),GoodsTypeInfo#ets_base_goods.price * GoodsNum * 0.8 ,
+            CostQ = ?IF(lib_vip:check_vip(PlayerStatus), GoodsTypeInfo#ets_base_goods.price * GoodsNum * 0.8,
                 GoodsTypeInfo#ets_base_goods.price * GoodsNum),
             Cost = round(CostQ),
             PriceType =
@@ -3275,9 +3275,13 @@ check_equip(PlayerStatus, GoodsId, Cell) ->
         GoodsInfo#goods.expire_time /= 0 andalso GoodsInfo#goods.expire_time < Now ->
             {fail, 10};
         true ->
-            if GoodsInfo#goods.grade == 50 andalso GoodsInfo#goods.spirit == 1 -> SkipCheck = true;
-                true -> SkipCheck = false
-            end,
+            SkipCheck =
+                if
+                    GoodsInfo#goods.grade == 50 andalso GoodsInfo#goods.spirit == 1 ->
+                        true;
+                    true ->
+                        false
+                end,
             case goods_util:can_equip(PlayerStatus, GoodsInfo#goods.goods_id, Cell, SkipCheck) of
                 %% 玩家条件不符
                 {false, E} ->

@@ -34,6 +34,46 @@ message bag_niu_list_s2c {
 }
 
 // ##begin##背包信息##end##
+message bag_niu_wear_equip_c2s {
+   optional uint32                         goods_id = 1;                     //
+   optional uint32                         cell = 2;                     //
+}
+// ##begin##背包信息##end##
+message bag_niu_wear_equip_s2c {
+   optional uint32                         res = 1;                     //
+   optional uint32                         goods_id = 2;                     //
+   optional uint32                         old_goods_id = 3;                        //
+   optional uint32                         old_goods_type_id = 4;                     //
+   optional uint32                         old_goods_cell = 5;                      //
+   optional uint32                         hp = 6;                      //
+   optional uint32                         mp = 7;                      //
+   optional uint32                         max_att = 8;                      //
+   optional uint32                         min_att = 9;                      //
+   optional uint32                         def = 10;                      //
+   optional uint32                         hit = 11;                      //
+   optional uint32                         dodge = 12;                      //
+   optional uint32                         crit = 13;                      //
+   optional uint32                         anti_wind = 14;           //
+   optional uint32                         anti_fire = 15;           //
+   optional uint32                         anti_water = 16;           //
+   optional uint32                         anti_thunder = 17;           //
+   optional uint32                         anti_soil = 18;           //
+}
+
+// ##begin##背包信息##end##
+message bag_niu_drop_equip_c2s {
+   optional uint32                         goods_id = 1;                     //
+}
+// ##begin##背包信息##end##
+message bag_niu_drop_equip_s2c {
+   optional uint32                         res = 1;                     //
+   optional uint32                         goods_id = 2;                     //
+   optional uint32                         type_id = 3;                        //
+   optional uint32                         cell = 4;                     //
+
+}
+
+// ##begin##背包信息##end##
 message bag_niu_clean_c2s {
 
 }
