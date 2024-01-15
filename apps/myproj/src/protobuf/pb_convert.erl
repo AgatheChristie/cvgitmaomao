@@ -941,4 +941,16 @@ get(1562001) -> {sys_protobuf_pb, protobuf_pb, encode_single_game_info_s2c, deco
 get(1562002) -> {sys_protobuf_pb, protobuf_pb, encode_single_game_result_s2c, decode_single_game_result_s2c, 1561002, 1, #single_game_result_s2c{}};
 get(1562003) -> {sys_protobuf_pb, protobuf_pb, encode_single_game_new_s2c, decode_single_game_new_s2c, 1561003, 0, #single_game_new_s2c{}};
 get(1562004) -> {sys_protobuf_pb, protobuf_pb, encode_single_game_delete_s2c, decode_single_game_delete_s2c, 1561004, 0, #single_game_delete_s2c{}};
+get(1571001) -> {sys_protobuf_pb, protobuf_pb, encode_guild_info_c2s, decode_guild_info_c2s, 1572001, 0, #guild_info_c2s{}};
+get(1571002) -> {sys_protobuf_pb, protobuf_pb, encode_guild_list_info_c2s, decode_guild_list_info_c2s, 1572002, 0, #guild_list_info_c2s{}};
+get(1571003) -> {sys_protobuf_pb, protobuf_pb, encode_guild_mem_list_c2s, decode_guild_mem_list_c2s, 1572003, 0, #guild_mem_list_c2s{}};
+get(1571004) -> {sys_protobuf_pb, protobuf_pb, encode_guild_apply_c2s, decode_guild_apply_c2s, 1572004, 0, #guild_apply_c2s{}};
+get(1571005) -> {sys_protobuf_pb, protobuf_pb, encode_guild_invite_c2s, decode_guild_invite_c2s, 1572005, 0, #guild_invite_c2s{}};
+get(1571006) -> {sys_protobuf_pb, protobuf_pb, encode_guild_invite_huiy_c2s, decode_guild_invite_huiy_c2s, 1572006, 0, #guild_invite_huiy_c2s{}};
+get(1572001) -> {sys_protobuf_pb, protobuf_pb, encode_guild_info_s2c, decode_guild_info_s2c, 1571001, 0, #guild_info_s2c{}};
+get(1572002) -> {sys_protobuf_pb, protobuf_pb, encode_guild_list_info_s2c, decode_guild_list_info_s2c, 1571002, 0, #guild_list_info_s2c{}};
+get(1572003) -> {sys_protobuf_pb, protobuf_pb, encode_guild_mem_list_s2c, decode_guild_mem_list_s2c, 1571003, 0, #guild_mem_list_s2c{}};
+get(1572004) -> {sys_protobuf_pb, protobuf_pb, encode_guild_apply_s2c, decode_guild_apply_s2c, 1571004, 0, #guild_apply_s2c{}};
+get(1572005) -> {sys_protobuf_pb, protobuf_pb, encode_guild_invite_s2c, decode_guild_invite_s2c, 1571005, 0, #guild_invite_s2c{}};
+get(1572006) -> {sys_protobuf_pb, protobuf_pb, encode_guild_invite_huiy_s2c, decode_guild_invite_huiy_s2c, 1571006, 0, #guild_invite_huiy_s2c{}};
 get(_Arg) -> ?ERROR("invalid arg:~p", [_Arg]), error(invalcmd_convert).

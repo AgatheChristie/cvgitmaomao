@@ -938,4 +938,16 @@
 -define(SINGLE_GAME_RESULT_S2C , 1562002). %% 小游戏结果
 -define(SINGLE_GAME_NEW_S2C , 1562003). %% 新增小游戏
 -define(SINGLE_GAME_DELETE_S2C , 1562004). %% 删除小游戏
+-define(GUILD_INFO_C2S , 1571001). %% 工会信息
+-define(GUILD_LIST_INFO_C2S , 1571002). %% 工会列表信息
+-define(GUILD_MEM_LIST_C2S , 1571003). %% 工会成员列表信息
+-define(GUILD_APPLY_C2S , 1571004). %% 工会申请加入
+-define(GUILD_INVITE_C2S , 1571005). %% 工会邀请加入
+-define(GUILD_INVITE_HUIY_C2S , 1571006). %% 工会邀请加入
+-define(GUILD_INFO_S2C , 1572001). %% 工会信息
+-define(GUILD_LIST_INFO_S2C , 1572002). %% 工会列表信息
+-define(GUILD_MEM_LIST_S2C , 1572003). %% 工会成员列表信息
+-define(GUILD_APPLY_S2C , 1572004). %% 工会申请加入
+-define(GUILD_INVITE_S2C , 1572005). %% 工会邀请加入
+-define(GUILD_INVITE_HUIY_S2C , 1572006). %% 工会邀请加入
 -endif. %% PB_CONVERT_HRL

@@ -111,6 +111,10 @@ gateway_router_msg(?PB_MODEL_BAG, Cmd, _PlayerState, Bin, Status) ->
 gateway_router_msg(?PB_MODEL_FRIEND, Cmd, PlayerState, Bin, Status) ->
     Result = pp_relationship:handle(Cmd, Status, Bin, PlayerState),
     Result;
+%% 工会模块
+gateway_router_msg(?PB_MODEL_GUILD, Cmd, PlayerState, Bin, Status) ->
+    Result = pp_guild:handle(Cmd, Status, Bin),
+    Result;
 
 %% 错误协议
 gateway_router_msg(MsgMod, MsgId, MsgSeq, Request, _State) ->
@@ -2484,6 +2488,8 @@ handle_cast({'SOCKET_EVENT', Cmd, Bin}, PlayerState) ->
         {ok, change_diff_player_state, NewPlayerState} ->
             save_online_diff(Player, NewPlayerState#player_state.player),
             {noreply, NewPlayerState};
+        ok ->
+            {noreply, PlayerState};
         _E ->
             ?DEBUG("_E:~p end", [_E]),
             {noreply, PlayerState}

@@ -64,5 +64,6 @@
 -define(PB_MODEL_GAME_WIN , 154). %% 游戏结算发奖模块
 -define(PB_MODEL_NZBZ , 155). %% 南征北战发奖模块
 -define(PB_MODEL_SINGLE_GAME , 156). %% 小游戏模块
--define(PB_MODEL_MAX , 156). %% 模块最小值
+-define(PB_MODEL_GUILD , 157). %% 工会模块
+-define(PB_MODEL_MAX , 157). %% 模块最小值
 -endif. %% PB_MODEL_HRL

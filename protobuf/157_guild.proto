@@ -1,0 +1,82 @@
+import "common.proto";
+// ##model_begin##工会模块##model_end##
+// ##begin##工会信息##end##
+message guild_info_c2s {
+    optional uint32                     guild_id = 1;                     //
+}
+// ##begin##工会信息##end##
+message guild_info_s2c {
+    optional uint32                     result = 1;                     //
+    optional uint32                     guild_id = 2;                     //
+    optional string                     name = 3;                     //
+    optional string                     announce = 4;                     //
+    optional uint32                     realm = 5;                     //
+    optional uint32                     level = 6;                     //
+    optional uint32                     exp = 7;                     //
+    optional uint32                     need_exp = 8;                     //
+    optional uint32                     member_num = 9;                     //
+    optional uint32                     member_capacity = 10;                     //
+    optional uint32                     chief_id = 11;                     //
+    optional string                     chief_name = 12;                     //
+    optional uint32                     funds = 13;                   //
+    optional uint32                     upgrade_need_time = 14;                           //
+    optional string                     depart_names = 15;                         //
+    optional string                     logs = 16;                          //
+    optional string                     alliances = 17;                          //
+}
+// ##begin##工会列表信息##end##
+message guild_list_info_c2s {
+    optional uint32                     realm = 1;                     //
+    optional uint32                     page = 2;                     //
+    optional uint32                     type = 3;                     //
+    optional string                     guild_name = 4;                     //
+    optional string                     chief_name = 5;                     //
+}
+// ##begin##工会列表信息##end##
+message guild_list_info_s2c {
+    optional uint32                     total = 1;                     //
+    optional uint32                     new_page = 2;                   //
+    repeated p_guild_info               guild_infos = 3;                  //
+}
+// ##begin##工会成员列表信息##end##
+message guild_mem_list_c2s {
+    optional uint32                     guild_id = 1;                     //
+}
+// ##begin##工会成员列表信息##end##
+message guild_mem_list_s2c {
+    optional uint32                     level = 1;                     //
+    repeated p_guild_mem_info           guild_mem_infos = 2;                  //
+}
+// ##begin##工会申请加入##end##
+message guild_apply_c2s {
+    optional uint32                     guild_id = 1;                     //
+}
+// ##begin##工会申请加入##end##
+message guild_apply_s2c {
+    optional uint32                     code = 1;                     //
+}
+// ##begin##工会邀请加入##end##
+message guild_invite_c2s {
+    optional string                     player_name = 1;                     //
+}
+// ##begin##工会邀请加入##end##
+message guild_invite_s2c {
+    optional uint32                     code = 1;                     //
+}
+// ##begin##工会邀请加入##end##
+message guild_invite_huiy_c2s {
+    optional uint32                     guild_id = 1;                     //
+    optional uint32                     response_result = 2;                     //
+}
+// ##begin##工会邀请加入##end##
+message guild_invite_huiy_s2c {
+    optional uint32                     code = 1;                     //
+    optional uint32                     response_result = 2;                     //
+    optional uint32                     guild_id = 3;                     //
+    optional string                     guild_name = 4;                     //
+    optional uint32                     guild_position = 5;                     //
+}
+
+
+
+

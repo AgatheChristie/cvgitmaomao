@@ -353,4 +353,10 @@
 -define(NZBZ_CAMP_RANK_S2S , 1551002). %% 南征北战国家排行榜
 -define(SINGLE_GAME_INFO_S2S , 1561001). %% 小游戏信息
 -define(SINGLE_GAME_RESULT_S2S , 1561002). %% 小游戏结果
+-define(GUILD_INFO_S2S , 1571001). %% 工会信息
+-define(GUILD_LIST_INFO_S2S , 1571002). %% 工会列表信息
+-define(GUILD_MEM_LIST_S2S , 1571003). %% 工会成员列表信息
+-define(GUILD_APPLY_S2S , 1571004). %% 工会申请加入
+-define(GUILD_INVITE_S2S , 1571005). %% 工会邀请加入
+-define(GUILD_INVITE_HUIY_S2S , 1571006). %% 工会邀请加入
 -endif. %% S2S_CONVERT_HRL

@@ -243,6 +243,8 @@
 -record(p_niu_item_info, {goods_id = 0, type_id = 0, cell = 0, goods_num = 0, bind = 0, stren = 0, icon = 0}).
 -record(p_niu_shop_info, {type_id = 0, goods_num = 0, left_time = 0}).
 -record(p_friend_niu_info, {online = 0, id_b = 0, lv = 0, sex = 0, career = 0, nick = [], id = 0, close = 0, vip = 0}).
+-record(p_guild_info, {guild_id = 0, guild_name = [], announce = [], realm = 0, level = 0, exp = 0, member_num = 0, member_capacity = 0, chief_id = 0, chief_name = 0, funds = 0}).
+-record(p_guild_mem_info, {player_id = 0, player_name = [], player_sex = 0, player_career = 0, player_level = 0, last_login_time = 0, guild_position = 0, donate_total = 0, online_flag = 0, donate_funds = 0, title = [], department_name = [], member_vip = 0}).
 -record(public_success_s2c, {}).
 -record(public_failure_s2c, {ecode = 0, int_values = [], string_values = []}).
 -record(net_heart_c2s, {}).
@@ -1174,3 +1176,15 @@
 -record(single_game_result_s2c, {}).
 -record(single_game_new_s2c, {single_game}).
 -record(single_game_delete_s2c, {single_game_key}).
+-record(guild_info_c2s, {guild_id = 0}).
+-record(guild_info_s2c, {result = 0, guild_id = 0, name = [], announce = [], realm = 0, level = 0, exp = 0, need_exp = 0, member_num = 0, member_capacity = 0, chief_id = 0, chief_name = [], funds = 0, upgrade_need_time = 0, depart_names = [], logs = [], alliances = []}).
+-record(guild_list_info_c2s, {realm = 0, page = 0, type = 0, guild_name = [], chief_name = []}).
+-record(guild_list_info_s2c, {total = 0, new_page = 0, guild_infos = []}).
+-record(guild_mem_list_c2s, {guild_id = 0}).
+-record(guild_mem_list_s2c, {level = 0, guild_mem_infos = []}).
+-record(guild_apply_c2s, {guild_id = 0}).
+-record(guild_apply_s2c, {code = 0}).
+-record(guild_invite_c2s, {player_name = []}).
+-record(guild_invite_s2c, {code = 0}).
+-record(guild_invite_huiy_c2s, {guild_id = 0, response_result = 0}).
+-record(guild_invite_huiy_s2c, {code = 0, response_result = 0, guild_id = 0, guild_name = [], guild_position = 0}).
