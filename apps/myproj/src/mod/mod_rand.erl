@@ -37,7 +37,7 @@ init([]) ->
 %% 返回一个随机数组合做为其它进程的随机数种子
 handle_call(get_seed, _From, State) ->
     case State#state.seed of
-        undefined -> random:seed(now());
+        undefined -> random:seed(erlang:timestamp());
         S -> random:seed(S)
     end,
     Seed = {random:uniform(99999), random:uniform(999999), random:uniform(999999)},

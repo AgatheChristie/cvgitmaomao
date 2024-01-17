@@ -1089,7 +1089,7 @@ in_finish(TaskId, PS)->
 
 %% 获取今天完成某任务的数量	
 get_today_count(TaskId, PS) ->
-    {M, S, MS} = now(),
+    {M, S, MS} = erlang:timestamp(),
     {_, Time} = calendar:now_to_local_time({M, S, MS}),
     TodaySec = M * 1000000 + S - calendar:time_to_seconds(Time),
     TomorrowSec = TodaySec + 86400,
@@ -3528,7 +3528,7 @@ check_condition({daily_limit, Num}, ThisTaskId, PS,TaskType) ->
 			TodayNom = get_today_count(ThisTaskId, PS),
 			TodayNom < Num
 	end;
-    %{M, S, MS} = now(),
+    %{M, S, MS} = erlang:timestamp(),
     %{_, Time} = calendar:now_to_local_time({M, S, MS}),
     %TodaySec = M * 1000000 + S - calendar:time_to_seconds(Time),
     %TomorrowSec = TodaySec + 86400,
@@ -5280,7 +5280,7 @@ recoup_coefficient(Day)->
 
 %%获取指定天数的零点时间戳
 get_timetick(Day)->
-	{M, S, MS} = now(),
+	{M, S, MS} = erlang:timestamp(),
     {_, Time} = calendar:now_to_local_time({M, S, MS}),
     TodaySec = M * 1000000 + S - calendar:time_to_seconds(Time),
 	{TodaySec - 86400*Day,TodaySec-86400*(Day-1)}.

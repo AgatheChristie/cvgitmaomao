@@ -52,11 +52,11 @@ log(T, F, A, Mod, Line) ->
 
 %% 取得当前的unix时间戳
 unixtime() ->
-    {MegaSecs, Secs, _MicroSecs} = erlang:now(),
+    {MegaSecs, Secs, _MicroSecs} = erlang:timestamp(),
  	MegaSecs * 1000000 + Secs.
 
 longunixtime() ->
-	{MegaSecs, Secs, MicroSecs} = erlang:now(),
+	{MegaSecs, Secs, MicroSecs} = erlang:timestamp(),
     (MegaSecs * 1000000000000 + Secs * 1000000 + MicroSecs) div 1000.
 
 %% 转换成HEX格式的md5
@@ -79,7 +79,7 @@ rand(Min, Max) ->
             		put("rand_seed", RandSeed);
         		_ -> skip
     		end,
-    		%% random:seed(erlang:now()),
+    		%% random:seed(erlang:timestamp()),
 			random:uniform(Max - M) + M
 	end.
 
@@ -106,7 +106,7 @@ random_string(N, D) ->
 	random_string(N-1, [random:uniform(26)-1+$a|D]).
 
 random_seed() ->
-	{_,_,X} = erlang:now(),
+	{_,_,X} = erlang:timestamp(),
 	{H,M,S} = time(),
 	H1 = H * X rem 32767,
 	M1 = M * X rem 32767,
@@ -304,7 +304,7 @@ get_diff_days(Seconds1, Seconds2) ->
 
 %% 获取从午夜到现在的秒数
 get_today_current_second() ->
-	{_, Time} = calendar:now_to_local_time(now()),
+	{_, Time} = calendar:now_to_local_time(erlang:timestamp()),
 	calendar:time_to_seconds(Time).
 
 %%判断今天星期几

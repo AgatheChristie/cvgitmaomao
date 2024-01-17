@@ -64,12 +64,12 @@ code_start(Master, Port, Fun, Max) ->
 	process_flag(trap_exit, true),
 	case gen_tcp:listen(Port, ?TCP_OPTIONS) of
             {ok, Listen} ->
-%%?DEBUG("~s listen_1_[~p]",[misc:time_format(now()),Listen]), 				
+%%?DEBUG("~s listen_1_[~p]",[misc:time_format(erlang:timestamp()),Listen]), 				
                 Master ! {self(), ok},
                 New = start_accept(Listen, Fun),
                 socket_loop(Listen, New, [], Fun, Max);
             Error ->
-%%?DEBUG("~s listen_2_[~p]",[misc:time_format(now()),Error]),				
+%%?DEBUG("~s listen_2_[~p]",[misc:time_format(erlang:timestamp()),Error]),				
                 Master ! {self(), Error}
     end.
 
@@ -114,7 +114,7 @@ possibly_start_another(false, Listen, Active, Fun, Max) ->
                 {message, "Connections maxed out"},
                 {maximum, Max},
                 {connected, length(Active)},
-                {now, now()}]),
+                {now, erlang:timestamp()}]),
         socket_loop(Listen, false, Active, Fun, Max)
     end.
 
@@ -126,10 +126,10 @@ start_accept(Listen, Fun) ->
 start_child(Parent, Listen, Fun) ->
     case gen_tcp:accept(Listen) of
         {ok, Socket} ->
-%%?DEBUG("~s accept_1_[~p]",[misc:time_format(now()),Socket]), 			
+%%?DEBUG("~s accept_1_[~p]",[misc:time_format(erlang:timestamp()),Socket]), 			
             Parent ! {istarted, self()},
             Fun(Socket);
         _Other ->
-%%?DEBUG("~s accept_2_[~p]",[misc:time_format(now()),Other]), 			
+%%?DEBUG("~s accept_2_[~p]",[misc:time_format(erlang:timestamp()),Other]), 			
             exit(oops)
     end.

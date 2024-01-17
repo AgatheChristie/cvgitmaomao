@@ -519,7 +519,7 @@ check_anti_pet_skill(DerInit, Aer, Der, PetSkillKey, Now) ->
 					case lists:keyfind(PetSkillKey, 1, PetBattSkill) of
 						{_PetSkillKey, PetSkillId, PetSkillRate} ->
 							%% 产生随机种子
-							random:seed(now()),
+							random:seed(erlang:timestamp()),
 							Rand = random:uniform(100),
 							if
 								Rand > PetSkillRate ->

@@ -32,6 +32,16 @@ get_websocket_ip(App) ->
 		_ -> throw(undefined)
 	end.
 
+%% @doc 判断是否是 跨服的中心服
+is_center(App) ->
+	case application:get_env(App, server_type) of
+		undefined ->
+			%% @doc 默认不是
+			false;
+		{ok, game_server} -> false;
+		{ok, center_server} -> true
+	end.
+
 get_tcp_listener(App) ->
     case application:get_env(App, tcp_listener) of
  	{ok, false} -> throw(undefined);
@@ -133,7 +143,7 @@ get_gateway_node(App) ->
     end.
 
 get_gateway_async_time() ->
-	case application:get_env(gateway,gateway_async_time) of
+	case application:get_env(myproj,gateway_async_time) of
 	{ok,Async_time} ->Async_time;
 		_ ->undefined
 	end.

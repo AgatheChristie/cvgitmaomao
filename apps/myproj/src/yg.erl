@@ -17,6 +17,7 @@
 		info/0, 
 		init_db/1,
 		server_safe_quit/1,
+		stop_applications/1,
 		server_hot_fix/1
 	]
 ).

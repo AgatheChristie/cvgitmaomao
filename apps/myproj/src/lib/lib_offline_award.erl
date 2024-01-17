@@ -170,7 +170,7 @@ update_offline_time(DataBag,Level)->
 
 %%获取每天零点到现在跑过的秒数
 get_seconds()->
-	{M, S, MS} = now(),
+	{M, S, MS} = erlang:timestamp(),
     {_, Time} = calendar:now_to_local_time({M, S, MS}),
     calendar:time_to_seconds(Time).
 

@@ -272,7 +272,7 @@ clearTempFile()->
 
 tables_to_record() ->
 	Bakfile = re:replace(
-		lists:flatten(lists:concat([?RECORD_FILENAME , "_", time_format(now())])),
+		lists:flatten(lists:concat([?RECORD_FILENAME , "_", time_format(erlang:timestamp())])),
 		"[ :]","_",[global,{return,list}]),
 
 	file:rename(?RECORD_FILENAME, Bakfile), 
@@ -281,7 +281,7 @@ tables_to_record() ->
 	file:write_file(?RECORD_FILENAME, "%%%------------------------------------------------\t\n",[append]),
 	file:write_file(?RECORD_FILENAME, "%%% File    : table_to_record.erl\t\n",[append]),
 	file:write_file(?RECORD_FILENAME, "%%% Author  : ygzj\t\n",[append]),
-	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(now())])),
+	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(erlang:timestamp())])),
 	file:write_file(?RECORD_FILENAME, Bytes,[append]),
 	file:write_file(?RECORD_FILENAME, "%%% Description: 从mysql表生成的record\t\n",[append]),
 	file:write_file(?RECORD_FILENAME, "%%% Warning:  由程序自动生成，请不要随意修改！\t\n",[append]),	
@@ -488,7 +488,7 @@ get_date_box() ->
 get_data_box_career(Career) ->
 %% 	DataFileName = lists:concat(["../src/data/data_box_", Career, ".erl"]),
 %% 	Bakfile = re:replace(
-%% 		lists:flatten(lists:concat([DataFileName , "_", time_format(now())])),
+%% 		lists:flatten(lists:concat([DataFileName , "_", time_format(erlang:timestamp())])),
 %% 		"[ :]","_",[global,{return,list}]),
 %% 	
 %% 	file:rename(DataFileName, Bakfile), 
@@ -497,7 +497,7 @@ get_data_box_career(Career) ->
 %% 	file:write_file(DataFileName, "%%%------------------------------------------------\t\n",[append]),
 %% 	file:write_file(DataFileName, "%%% File    : data_box_X.erl\t\n",[append]),
 %% 	file:write_file(DataFileName, "%%% Author  : xiaomai\t\n",[append]),
-%% 	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(now())])),
+%% 	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(erlang:timestamp())])),
 %% 	file:write_file(DataFileName, Bytes,[append]),
 %% 	file:write_file(DataFileName, "%%% Description: 从mysql表生成的诛邪系统物品概率碰撞表\t\n",[append]),
 %% 	file:write_file(DataFileName, "%%% Warning:  由程序自动生成，请不要随意修改！\t\n",[append]),	
@@ -524,7 +524,7 @@ get_data_box_career(Career) ->
 handle_data_box_each(Career, Elem) ->
 	DataFileName = lists:concat(["../src/data/data_box_", Career, Elem, ".erl"]),
 	Bakfile = re:replace(
-		lists:flatten(lists:concat([DataFileName , "_", time_format(now())])),
+		lists:flatten(lists:concat([DataFileName , "_", time_format(erlang:timestamp())])),
 		"[ :]","_",[global,{return,list}]),
 	
 	file:rename(DataFileName, Bakfile), 	
@@ -532,7 +532,7 @@ handle_data_box_each(Career, Elem) ->
 	file:write_file(DataFileName, "%%%------------------------------------------------\t\n",[append]),
 	file:write_file(DataFileName, "%%% File    : data_box_XX.erl\t\n",[append]),
 	file:write_file(DataFileName, "%%% Author  : xiaomai\t\n",[append]),
-	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(now())])),
+	Bytes = list_to_binary(io_lib:format("%%% Created : ~s\t\n", [time_format(erlang:timestamp())])),
 	file:write_file(DataFileName, Bytes,[append]),
 	file:write_file(DataFileName, "%%% Description: 从mysql表生成的诛邪系统物品概率碰撞表\t\n",[append]),
 	file:write_file(DataFileName, "%%% Warning:  由程序自动生成，请不要随意修改！\t\n",[append]),	

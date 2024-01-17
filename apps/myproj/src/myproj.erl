@@ -27,7 +27,19 @@ start() ->
 
 
 stop_game_server() ->
-    case done of
+    Result =
+        case config:is_center(myproj) of
+            true ->
+                ok = yg:stop_applications([sasl, myproj]),
+                done;
+            false ->
+                catch gen_server:cast(mod_kernel, {set_load, 9999999999}),
+                ok = mod_login:stop_all(),
+                timer:sleep(30 * 1000),
+                ok = yg:stop_applications([sasl, myproj]),
+                done
+        end,
+    case Result of
         error ->
             stop_error;
         done ->

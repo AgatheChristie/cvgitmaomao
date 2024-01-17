@@ -71,7 +71,7 @@ check_dungeon_times(PlayerId, SceneId, MaxTimes) ->
 		end,
 	
 	T1 = misc:date_format({M, S, 0}),
-	T2 = misc:date_format(now()),
+	T2 = misc:date_format(erlang:timestamp()),
 	NowTime = util:unixtime(),
 	if 
 		T1 =/= T2 -> %%不同一天 ，数据重置
@@ -146,7 +146,7 @@ get_dungeon_times(PlayerId,Lv, Dungeon_id) ->
 							S = Log_dungeon#ets_dungeon.first_dungeon_time rem 1000000,
 							M = util:floor(Log_dungeon#ets_dungeon.first_dungeon_time / 1000000),
 							T1 = misc:date_format({M, S, 0}),
-							T2 = misc:date_format(now()),
+							T2 = misc:date_format(erlang:timestamp()),
 							if T1 =/= T2 ->
 								   NewDungeon = Log_dungeon#ets_dungeon{player_id={PlayerId,Dungeon_id},dungeon_counter=0},
 								   update_dungeon(NewDungeon),

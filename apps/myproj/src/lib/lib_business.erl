@@ -584,7 +584,7 @@ select_robbed(PlayerId) ->
 
 %%获取时间戳
 get_time()->
-	{M, S, MS} = now(),
+	{M, S, MS} = erlang:timestamp(),
     {_, Time} = calendar:now_to_local_time({M, S, MS}),
     TodaySec = M * 1000000 + S - calendar:time_to_seconds(Time),
     TomorrowSec = TodaySec + 86400,

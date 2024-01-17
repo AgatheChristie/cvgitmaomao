@@ -11,12 +11,12 @@
 
 
 -define(YG_SERVER_NODE_ID_1, 1).
--define(YG_SERVER_NODE_ID_2, 1).
+-define(YG_SERVER_NODE_ID_2, 2).
 
 
 start([Ip, Port, Node_id]) ->
     io:format("init start..\n"),
-    misc:write_system_info(self(), tcp_listener, {Ip, Port, now()}),
+    misc:write_system_info(self(), tcp_listener, {Ip, Port, erlang:timestamp()}),
 
     inets:start(),
 
@@ -35,7 +35,7 @@ start([Ip, Port, Node_id]) ->
 %%    ok = start_task(),                                %% 开启任务监控树
 %%    ok = start_mail(),                                %% 开启邮件监控树
 %%    ok = start_client(),                            %% 开启客户端连接监控树
-    ok = start_flash_843(),                            %% 开启 flash策略文件请求服务
+   %% ok = start_flash_843(),                            %% 开启 flash策略文件请求服务
     ok = start_tcp(Port),                            %% 开启tcp listener监控树
     ok = start_scene_agent(),                        %% 开启场景代理监控树
    %% ok = start_box(),                                %% 开启诛邪系统进程监控树,
@@ -56,7 +56,7 @@ start([Ip, Port, Node_id]) ->
 
     %%开启延时信息监控树
     start_node_application(start_delayer, [], ?YG_SERVER_NODE_ID_1, Node_id),
-    %%开启市场监控树	
+    %%开启市场监控树
     start_node_application(start_sale, [], ?YG_SERVER_NODE_ID_1, Node_id),
     %%开启商城监控树					
     start_node_application(start_shop, [], ?YG_SERVER_NODE_ID_1, Node_id),
@@ -91,8 +91,8 @@ start([Ip, Port, Node_id]) ->
     start_node_application(start_arena, [], ?YG_SERVER_NODE_ID_2, Node_id),
     %% 开启竞技场控制树
     start_node_application(start_coliseum, [], ?YG_SERVER_NODE_ID_2, Node_id),
-    %% 开启挖矿监控树				
-    start_node_application(start_ore_sup, [], ?YG_SERVER_NODE_ID_2, Node_id),
+    %% todo 开启挖矿监控树 停止的时候好多报错 先屏蔽了
+    %% start_node_application(start_ore_sup, [], ?YG_SERVER_NODE_ID_2, Node_id),
     %%开启答题监控树
     start_node_application(start_answer, [], ?YG_SERVER_NODE_ID_2, Node_id),
     %%开启跨服战场监控树

@@ -415,7 +415,7 @@ get_outside_scene(Player) ->
 	case lib_guild_manor:get_scene_Id_from_scene_unique_id(SceneId, GuildId) of
 		500 ->
 			%%产生种子
-			{MegaSecs, Secs, MicroSecs} = now(),
+			{MegaSecs, Secs, MicroSecs} = erlang:timestamp(),
 			random:seed({MegaSecs, Secs, MicroSecs}),
 			Num = random:uniform(4),
 			{X, Y} = lists:nth(Num, ?GUILD_MANOR_COORD), %%随机产生一对坐标

@@ -66,7 +66,7 @@ start_link() ->
 %% --------------------------------------------------------------------
 init([]) ->
 	ets:new(ets_timer, [set, protected, named_table ,?ETSRC, ?ETSWC]),
-	ets:insert(ets_timer, {timer, {erlang:now(), 0}}),
+	ets:insert(ets_timer, {timer, {erlang:timestamp(), 0}}),
 	erlang:send_after(?CLOCK, self(), {event, clock}),
 	misc:write_monitor_pid(self(),?MODULE, {}),	
 	{ok, []}.
@@ -104,7 +104,7 @@ handle_cast(_Msg, State) ->
 handle_info({event, clock}, State) ->
 %% 	{_Total_Wallclock_Time, Wallclock_Time_Since_Last_Call}= statistics(wall_clock),
  	{_Total_Run_Time, Time_Since_Last_Call} = statistics(runtime),
-	ets:insert(ets_timer, {timer, {erlang:now(), Time_Since_Last_Call}}),
+	ets:insert(ets_timer, {timer, {erlang:timestamp(), Time_Since_Last_Call}}),
 	erlang:send_after(?CLOCK, self(), {event, clock}),
 	{noreply, State};
 

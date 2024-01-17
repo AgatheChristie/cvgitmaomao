@@ -432,7 +432,7 @@ offline(PlayerId)->
 
 %%当天秒数
 zero_to_now_time()->
-	{M, S, MS} = now(),
+	{M, S, MS} = erlang:timestamp(),
     {_, Time} = calendar:now_to_local_time({M, S, MS}),
     calendar:time_to_seconds(Time).
 

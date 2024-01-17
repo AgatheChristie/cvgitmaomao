@@ -315,7 +315,7 @@ init([]) ->
 			lib_skyrush:init_guild_feats(),
 			erlang:send_after(?ENTER_SKY_RUSH_NOTICE_TIME, self(), {'ENTER_SKY_RUSH_NOTICE', 1}),
 			%%产生种子
-			{MegaSecs, Secs, MicroSecs} = now(),
+			{MegaSecs, Secs, MicroSecs} = erlang:timestamp(),
 %% 			?DEBUG("{~p, ~p,~p,~p}", [ProcessId, MegaSecs+ProcessId, Secs+ProcessId*10, MicroSecs+ProcessId*100]),
 			random:seed({MegaSecs, Secs, MicroSecs}),
 			%%开始结束战斗的定时器

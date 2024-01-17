@@ -22,7 +22,7 @@
 %%Node:节点
 %%Port:端口
 start_link(Port) ->
-	misc:write_system_info(self(), tcp_listener, {"", Port, now()}),	
+	misc:write_system_info(self(), tcp_listener, {"", Port, erlang:timestamp()}),	
     gen_server:start(?MODULE, [Port], []).
 
 init([Port]) ->

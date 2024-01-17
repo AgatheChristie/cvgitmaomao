@@ -7,25 +7,47 @@
 
 -behaviour(application).
 
--export([start/2, start_websocket/0, start_supervisor/1, start_mod/1,stop/1]).
+-export([start/2, start_websocket/0, start_supervisor/1, start_mod/1, stop/1]).
 -include("common.hrl").
 
 
 start(_StartType, _StartArgs) ->
     case yg_server_sup:start_link() of
         {ok, SupPid} ->
-            case false of
+            case config:is_center(myproj) of
                 true ->
-                    1;
+                    start_center_server();
                 false ->
                     start_game_server()
             end,
 
             {ok, SupPid};
         Err ->
-            ?DEBUG("Err:~p end",[Err]),
+            ?DEBUG("Err:~p end", [Err]),
             Err
     end.
+
+%% internal functions
+start_center_server() ->
+    awdawfqq(),
+    start_mod(reloader),
+    ok.
+
+awdawfqq() ->
+    ets:new(?ETS_SYSTEM_INFO, [set, public, named_table,?ETSRC, ?ETSWC]),
+    ets:new(?ETS_MONITOR_PID, [set, public, named_table,?ETSRC, ?ETSWC]),
+    ets:new(?ETS_STAT_SOCKET, [set, public, named_table,?ETSRC, ?ETSWC]),
+    ets:new(?ETS_STAT_DB, [set, public, named_table,?ETSRC, ?ETSWC]),
+
+    [Port, Node_id, _Acceptor_num, _Max_connections] = config:get_tcp_listener(myproj),
+    [Ip] = config:get_tcp_listener_ip(myproj),
+
+    yg:init_db(myproj),
+    %%gateway启动5秒后将所有玩家的在线标志为0
+    timer:apply_after(5000, db_agent, init_player_online_flag, []),
+    yg_gateway_sup:start_link([Ip, tool:to_integer(Port), tool:to_integer(Node_id)]),
+    yg_timer:start(yg_gateway_sup),
+    ok.
 
 start_game_server() ->
     awdawf(),
@@ -45,7 +67,7 @@ start_websocket() ->
     {ok, _} = cowboy:start_clear(websocket, [{port, Port}, {nodelay, false}], #{
         env => #{dispatch => Dispatch}
     }),
-    ?DEBUG("server listen on ~p,~n",[Port]),
+    ?DEBUG("server listen on ~p,~n", [Port]),
     ok.
 
 start_mod(ModName) ->

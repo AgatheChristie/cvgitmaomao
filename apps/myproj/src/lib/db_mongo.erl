@@ -783,7 +783,7 @@ stat_db_access(Table_name, Operation) ->
                 [[OldBeginTime, OldCount]] ->
                     [OldBeginTime, OldCount + 1];
                 _ ->
-                    [erlang:now(), 1]
+                    [erlang:timestamp(), 1]
             end,
 %%		io:format("-~p--- -~p   ~p ~n",[util:unixtime(),Key,NowCount]),  
         ets:insert(?ETS_STAT_DB, {Key, Table_name, Operation, NowBeginTime, NowCount}),

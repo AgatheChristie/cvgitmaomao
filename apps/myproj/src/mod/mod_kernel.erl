@@ -42,7 +42,7 @@ init([]) ->
     {ok, 1}.
 
 handle_cast({set_load, Load_value}, Status) ->
-	?DEBUG("~s Server stopping......~n",[misc:time_format(now())]),
+	?DEBUG("~s Server stopping....~n",[misc:time_format(erlang:timestamp())]),
 	misc:write_monitor_pid(self(),?MODULE, {Load_value}),
 	{noreply, Status};
 

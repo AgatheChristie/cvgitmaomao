@@ -463,7 +463,7 @@ get_devliver_coord(Type) ->
 			SceneId = 300,
 			Coords = [{61, 118}, {67, 123}, {71, 117}, {66, 111}, {67, 117}],
 			%%产生种子
-			{MegaSecs, Secs, MicroSecs} = now(),
+			{MegaSecs, Secs, MicroSecs} = erlang:timestamp(),
 			random:seed({MegaSecs, Secs, MicroSecs}),
 			Num = random:uniform(5),
 			{PX, PY} = lists:nth(Num, Coords),

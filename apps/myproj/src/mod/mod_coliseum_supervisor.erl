@@ -419,10 +419,10 @@ handle_info({'SET_AWARD_TIME', AwardTime}, State) ->
 handle_info(_Info, State) ->
     {noreply, State}.
 
-terminate(Reason, State) ->
+terminate(_Reason, _State) ->
 	misc:delete_monitor_pid(self()),
 	misc:delete_system_info(self()),
-?WARNING_MSG("MOD_COLISEUM_SUPERVISOR_TERMINATE: Reason ~p~n State ~p~n", [Reason, State]),
+ %% ?WARNING_MSG("MOD_COLISEUM_SUPERVISOR_TERMINATE: Reason ~p~n State ~p~n", [Reason, State]),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->

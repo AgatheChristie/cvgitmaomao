@@ -31,7 +31,7 @@ start() ->      %% 启动服务
 %% --------------------------------------------------------------------
 init([]) ->
 	%%初始化统计进程
-	{M, S, _} = erlang:now(),
+	{M, S, _} = erlang:timestamp(),
     Nowtime = M * 1000000 + S,
 	Bufftime = 60 - ((Nowtime+30) rem 60),
 	erlang:send_after(Bufftime*1000, self(), {event, statistics}),
