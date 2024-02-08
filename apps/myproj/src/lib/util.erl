@@ -568,3 +568,63 @@ check_apply_lock(OnlyId, LockTime, Code) ->
 	NowSec = unixtime(),
 	?ASSERT(NowSec >= LastLockTime, Code),
 	put(apply_lock, OldMap#{OnlyId => NowSec + LockTime}).
+
+%% 只允许使用汉字(不含标点符号)、字母、数字和下划线
+%% {4E00}-{9FA5} 中日韩统一汉字
+name_valid(Text) ->
+	StrKey = "[^a-zA-Z0-9\\x{4E00}-\\x{9FA5}_\\x{306E}\\x{2116}\\x{706c}\\x{4e36}\\x{4e28}\\x{4e3f}\\x{2573}\\x{256c}\\x{5350}\\x{2103}\\x{0021}\\x{002E}]",
+	case re:run(Text, StrKey, [{capture, none}, caseless, unicode]) of
+		match ->
+			false;
+		nomatch ->
+			true
+	end.
+
+%% 文本内容是否合法
+%% UTF-8编码：一个英文字符等于一个字节，一个中文（含繁体）等于三个字节。中文标点占三个字节，英文标点占一个字节
+%% ASCII码：一个英文字母（不分大小写）占一个字节的空间，一个中文汉字占两个字节的空间。
+%% Unicode编码：一个英文等于两个字节，一个中文（含繁体）等于两个字节。
+%% Content要求是字符串
+is_text_valid(Content, MinLen, MaxLen) ->
+	{AsciiNum, Utf8Num} = utf8_len(Content),
+	CLen = AsciiNum + Utf8Num div 3 * 2,
+	CLen >= MinLen andalso CLen =< MaxLen.
+
+%% 检查内容
+check_text([]) ->
+	false;
+check_text(Note) ->
+	NewNote = ?IF(is_list(Note), ?L2B(Note), Note),
+	StrKey = "[^a-zA-Z0-9\\x{4E00}-\\x{9FA5}_\\x{306E}\\x{2116}\\x{706c}\\x{4e36}\\x{4e28}\\x{4e3f}\\x{2573}\\x{256c}\\x{5350}\\x{2103}\\x{0021}\\x{002E}\\x{0020}-\\x{007E}\\x{FF01}-\\x{FF65}\\x{2026}\\x{3001}\\x{3002}\\x{000A}]",
+	case re:run(NewNote, StrKey, [{capture, none}, caseless, unicode]) of
+		match ->
+			false;
+		nomatch ->
+			true
+	end.
+
+%% utf8_len2(Str) -> {AsciiNum, Utf8Num}
+%% Str = list() | binary()
+%% AsciiNum = int()
+%% Utf8Num = int()
+%% utf8字符长度,分两部分返回ASCII和utf8
+utf8_len(Str) ->
+	BinStr = unicode:characters_to_binary(Str, utf8),
+	utf8_len2(BinStr, 0, 0).
+
+utf8_len2(<<>>, AsciiNum, Utf8Num) ->
+	{AsciiNum, Utf8Num};
+utf8_len2(<<H:8, Rest/binary>>, AsciiNum, Utf8Num) when H =< 127 ->
+	utf8_len2(Rest, AsciiNum + 1, Utf8Num);     %% ASCII
+utf8_len2(<<H:8, _B:1/binary, Rest/binary>>, AsciiNum, Utf8Num) when H >= 192, H =< 223 ->
+	utf8_len2(Rest, AsciiNum, Utf8Num + 1);   %% 2位
+utf8_len2(<<H:8, _B:2/binary, Rest/binary>>, AsciiNum, Utf8Num) when H >= 224, H =< 239 ->
+	utf8_len2(Rest, AsciiNum, Utf8Num + 1);   %% 3位
+utf8_len2(<<H:8, _B:3/binary, Rest/binary>>, AsciiNum, Utf8Num) when H >= 240, H =< 247 ->
+	utf8_len2(Rest, AsciiNum, Utf8Num + 1);   %% 4位
+utf8_len2(<<H:8, _B:4/binary, Rest/binary>>, AsciiNum, Utf8Num) when H >= 248, H =< 251 ->
+	utf8_len2(Rest, AsciiNum, Utf8Num + 1);   %% 5位
+utf8_len2(<<H:8, _B:5/binary, Rest/binary>>, AsciiNum, Utf8Num) when H >= 252, H =< 253 ->
+	utf8_len2(Rest, AsciiNum, Utf8Num + 1);   %% 6位
+utf8_len2(<<_H:8, Rest/binary>>, AsciiNum, Utf8Num) ->
+	utf8_len2(Rest, AsciiNum + 1, Utf8Num).   %% 正常的utf8字符是不会来的这里的

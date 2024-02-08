@@ -51,6 +51,15 @@ message friend_niu_huiy_s2c {
 }
 
 // ##begin##删除好友##end##
+message friend_niu_abandon_c2s {
+	optional uint32                   rec_id = 1;                 //
+}
+// ##begin##删除好友##end##
+message friend_niu_abandon_s2c {
+	optional uint32                   code = 1;                 //
+}
+
+// ##begin##删除好友##end##
 message friend_abandon_c2s {
 	optional uint32                   type = 1;                  // 类型 1.好友列表 2.黑名单列表 3.收到申请列表 4.发送申请列表
 	repeated uint32                   abandon_ids = 2;           // 删除id列表

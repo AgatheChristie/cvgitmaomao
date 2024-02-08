@@ -18,8 +18,9 @@ start() ->
     %% ok = start_application(ssl),     ssl 这个在erl参数里面加了
     %% ranch 依赖ssl
     start_application(ranch),
-    ok = start_application(cowlib),
+    start_application(cowlib),
     %%  ok = start_application(cowboy),
+%%    start_application(memcache),
     %% ok = start_application(sasl),
     start_application(?MODULE),
     ?DEBUG("game server:~p end", [start]),
@@ -35,7 +36,7 @@ stop_game_server() ->
             false ->
                 catch gen_server:cast(mod_kernel, {set_load, 9999999999}),
                 ok = mod_login:stop_all(),
-                timer:sleep(30 * 1000),
+                timer:sleep(10 * 1000),
                 ok = yg:stop_applications([sasl, myproj]),
                 done
         end,

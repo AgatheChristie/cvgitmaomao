@@ -47,7 +47,7 @@ Erl
 
 hot_reload() {
     erl_call -c "$COOKIE" -n "$NAME" -a 'reloader reload_all'
-    erl_call -c "$COOKIE" -n "$NAME2" -a 'reloader reload_all'
+#    erl_call -c "$COOKIE" -n "$NAME2" -a 'reloader reload_all'
 }
 
 start() {
@@ -80,6 +80,11 @@ remsh() {
     erl "$NAME_TYPE" "$id" -setcookie "$COOKIE" -remsh "$NAME" -hidden
 }
 
+remsh2() {
+    id="remsh$(relx_gen_id)-${NAME}"
+    erl "$NAME_TYPE" "$id" -setcookie "$COOKIE" -remsh "$NAME2" -hidden
+}
+
 make() {
     rebar3 compile
     cp -f "$TOOL_BEAM"  "./_build/default/lib/myproj/ebin"
@@ -89,6 +94,10 @@ mongodb() {
     mongod -f /data/mongodb.conf
 }
 
+mongodb_stop() {
+    mongod --shutdown -f /data/mongodb.conf
+}
+
 case "$ACTION" in
     start)
         start;;
@@ -96,6 +105,8 @@ case "$ACTION" in
         start2;;
     remsh)
         remsh;;
+    remsh2)
+        remsh2;;
     hot_reload)
         hot_reload
         ;;
@@ -120,6 +131,8 @@ case "$ACTION" in
         ;;
     mongodb)
         mongodb;;
+    mongodb_stop)
+        mongodb_stop;;
     make)
         make;;
     *)

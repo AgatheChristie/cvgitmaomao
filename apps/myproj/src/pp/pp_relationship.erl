@@ -153,6 +153,55 @@ handle(?FRIEND_NIU_HUIY_C2S, Status, #friend_niu_huiy_c2s{res = Res, id = Uid} =
 
 %%删除好友
 %%Rec_id 要删除的记录号
+handle(?FRIEND_NIU_ABANDON_C2S, Status, #friend_niu_abandon_c2s{rec_id = Rec_id} = _Req, _PlayerState) ->
+    case lib_relationship:is_exists_Rid(Rec_id, Status#player.id, 1) of
+        {ok, false} ->
+            throw(?E_FRIEND_NOT_EXIST);
+        {Id, true} ->
+%% 		IdB = lib_relationship:get_idB(Id, Status#player.id, 1),
+            Uid =
+                case lib_relationship:get_idB(Id, Status#player.id, 1) of
+                    [[L]] ->
+                        L;
+                    _ ->
+                        throw(?E_FRIEND_APPLY_NOT_EXIST)
+                end,
+            Close =
+                case ets:lookup(?ETS_RELA, {Id, Status#player.id, 1}) of
+                    [] -> 0;
+                    [Info] -> Info#ets_rela.close
+                end,
+            CloseLevel = lib_relationship:get_close_level(Close),
+            if CloseLevel >= 3 ->
+                case lib_relationship:add_rela_special(Status#player.id, Uid, 4, Close) of
+                    0 ->
+                        skip;
+                    NewRela ->%%对方内存ets也要改变
+                        case lib_player:get_player_pid(Uid) of
+                            [] -> skip;
+                            Pid -> gen_server:cast(Pid, {add_special, NewRela})
+                        end
+                end;
+                true ->
+                    skip
+            end,
+            lib_relationship:delete(Id, Status#player.id, 1),
+
+%%            {ok, BinData} = pt_14:write(14003, 1),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+
+            Msg = #friend_niu_abandon_s2c{code = 1},
+            lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?FRIEND_NIU_ABANDON_S2C, Msg),
+
+            response_friend_delete(Uid, Id, 1),
+            %%删除中秋活动的日志记录
+            lib_relationship:delete_midaward_data(Status#player.id, Uid)
+
+    end,
+    lib_relationship:get_friend_list(Status);
+
+%%删除好友
+%%Rec_id 要删除的记录号
 handle(14003, Status, Rec_id, _PlayerState) ->
     case lib_relationship:is_exists_Rid(Rec_id, Status#player.id, 1) of
         {ok, false} ->

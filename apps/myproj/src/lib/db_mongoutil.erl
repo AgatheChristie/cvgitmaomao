@@ -94,6 +94,8 @@ make_insert_opertion(TableName, FieldValueList) ->
 			 ?ERROR_MSG("make_insert_opertion error :~p/~p~n", [tool:to_list(TableName),FieldValueList])
 	end.
 
+%% "find_exp"/[{id,111},{pid,25},{name,[35797,28860,21103,26412]},{task_id,901},{type,4},{timestamp,1706976000},{times,1},{lv,100},{exp,7031250},{spt,4394812}]
+
 %%拼接插入语句
 %% make_insert_opertion(FieldList, ValueList) ->
 %% 	make_conn_opertion(FieldList, ValueList).

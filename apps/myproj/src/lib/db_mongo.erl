@@ -423,6 +423,7 @@ select_all_from_multtable(Tablefield_List, Where_List, UnionList, _Orderby_sql_L
             TableWhereList = get_table_whereList(Tab, Where_List, []),
             [WhereOpertion, FieldOpertion] = db_mongoutil:make_select_opertion(TabFieldList, TableWhereList, [], []),
             Result1 = emongo:find_all(tool:to_list(?MASTER_POOLID), tool:to_list(Tab), WhereOpertion, FieldOpertion),
+            ?DEBUG("Result1:~p end",[Result1]),
             L =
                 case Result1 of
                     [] -> [];

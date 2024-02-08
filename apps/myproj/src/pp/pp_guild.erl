@@ -8,6 +8,7 @@
 -export([handle/3]).
 -include("common.hrl").
 -include("record.hrl").
+-include("ecode.hrl").
 -include("qlc.hrl").
 -include("guild_info.hrl").
 
@@ -18,57 +19,103 @@
 %% 接口函数
 %%=========================================================================
 
+
+
+
+handle(?GUILD_CREATE_C2S, Status, #guild_create_c2s{guild_name = GuildName, use_item = UseItem} = _Req) ->
+    ?APPLY_LOCK(),
+    #{create_coin := BuildCoin} = ?ASSERT_MAP(base_guild:get(1), ?E_SYS_CONFIGH_ERR),
+    [Result, GuildId] = mod_guild:create_guild(Status, [GuildName, UseItem]),
+    ?ASSERT(Result =:= 1, Result),
+    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40001, [Result, GuildId]),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+    Msg = #guild_create_s2c{code = Result, guild_id = GuildId},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_CREATE_S2C, Msg),
+    %%扣钱
+    StatusCoin =
+        case UseItem of
+            0 ->
+                Status;
+            _ ->
+                lib_goods:cost_money(Status, BuildCoin, coin, 4001)
+        end,
+    % 返回新状态
+    Status1 = StatusCoin#player{guild_id = GuildId,
+        guild_name = tool:to_binary(GuildName),
+        guild_position = 1},
+    lib_player:send_player_attribute(Status1, 2),
+    %%做加入氏族的成就统计 todo 后面再开
+%%    lib_achieve:check_achieve_finish(Status#player.other#player_other.pid_send,
+%%        Status#player.id, 604, [1]),
+%%    case Status#player.lv >= 35 of
+%%        true ->%%加氏族
+%%            lib_guild_wish:join_guild(Status1#player.id, Status1#player.nickname, Status1#player.sex, Status1#player.career, Status1#player.guild_id);
+%%        false ->
+%%            skip
+%%    end,
+
+    %%传闻广播 todo 后面再开
+%%    RealmName = goods_util:get_realm_to_name(Status1#player.realm),
+%%     #{name := RealmName} = ?ASSERT_MAP(base_realm:get(Status1#player.realm), ?E_SYS_CONFIGH_ERR),
+%%    ConTent = io_lib:format("天地变色，风起云涌，<font color='#FFFF32'>~s</font>的玩家[<a href='event:1, ~p, ~s, ~p, ~p'><font color='#FFFF32'><u>~s</u></font></a>]创建了名为[<font color='#FFFF32'>~s</font>]的氏族，号召各路英雄豪杰火速响应！<a href='event:5,~p'><font color='#00FF33'><u>》》我要加入《《<<</u></font></a>",
+%%        [RealmName, Status1#player.id, Status1#player.nickname, Status1#player.career, Status1#player.sex, Status1#player.nickname,
+%%            Status1#player.guild_name, Status1#player.guild_id]),
+%%    lib_chat:broadcast_sys_msg(6, ConTent),
+    {ok, Status1};
+
+
 %% -----------------------------------------------------------------
 %% 40001 创建氏族  
 %% -----------------------------------------------------------------
-handle(40001, Status, [GuildName, BuildCoin]) ->
-    case tool:is_operate_ok(pp_40001, 2) of
-        true ->
-            [Result, GuildId] = mod_guild:create_guild(Status, [GuildName, BuildCoin]),
-%%	?DEBUG("****** handle create_guild Result[~p], GuildId[~p], MoneyLeft[~p] *******", [Result, GuildId, MoneyLeft]),
-            if  % 创建成功
-                Result == 1 ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40001, [Result, GuildId]),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    %%扣钱
-                    case BuildCoin of
-                        0 ->
-                            StatusCoin = Status;
-                        _ ->
-                            StatusCoin = lib_goods:cost_money(Status, BuildCoin, coin, 4001)
-                    end,
-                    % 返回新状态
-                    Status1 = StatusCoin#player{guild_id = GuildId,
-                        guild_name = tool:to_binary(GuildName),
-                        guild_position = 1},
-                    lib_player:send_player_attribute(Status1, 2),
-                    %%做加入氏族的成就统计
-                    lib_achieve:check_achieve_finish(Status#player.other#player_other.pid_send,
-                        Status#player.id, 604, [1]),
-                    case Status#player.lv >= 35 of
-                        true ->%%加氏族
-                            lib_guild_wish:join_guild(Status1#player.id, Status1#player.nickname, Status1#player.sex, Status1#player.career, Status1#player.guild_id);
-                        false ->
-                            skip
-                    end,
-                    %%传闻广播
-                    RealmName = goods_util:get_realm_to_name(Status1#player.realm),
-                    ConTent = io_lib:format("天地变色，风起云涌，<font color='#FFFF32'>~s</font>的玩家[<a href='event:1, ~p, ~s, ~p, ~p'><font color='#FFFF32'><u>~s</u></font></a>]创建了名为[<font color='#FFFF32'>~s</font>]的氏族，号召各路英雄豪杰火速响应！<a href='event:5,~p'><font color='#00FF33'><u>》》我要加入《《<<</u></font></a>",
-                        [RealmName, Status1#player.id, Status1#player.nickname, Status1#player.career, Status1#player.sex, Status1#player.nickname,
-                            Status1#player.guild_name, Status1#player.guild_id]),
-                    lib_chat:broadcast_sys_msg(6, ConTent),
-                    {ok, Status1};
-            % 创建失败
-                true ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40001, [Result, 0]),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    ok
-            end;
-        false ->
-            ok
-    end;
+%%handle(40001, Status, [GuildName, BuildCoin]) ->
+%%    case tool:is_operate_ok(pp_40001, 2) of
+%%        true ->
+%%            [Result, GuildId] = mod_guild:create_guild(Status, [GuildName, BuildCoin]),
+%%%%	?DEBUG("****** handle create_guild Result[~p], GuildId[~p], MoneyLeft[~p] *******", [Result, GuildId, MoneyLeft]),
+%%            if  % 创建成功
+%%                Result == 1 ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40001, [Result, GuildId]),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    %%扣钱
+%%                    case BuildCoin of
+%%                        0 ->
+%%                            StatusCoin = Status;
+%%                        _ ->
+%%                            StatusCoin = lib_goods:cost_money(Status, BuildCoin, coin, 4001)
+%%                    end,
+%%                    % 返回新状态
+%%                    Status1 = StatusCoin#player{guild_id = GuildId,
+%%                        guild_name = tool:to_binary(GuildName),
+%%                        guild_position = 1},
+%%                    lib_player:send_player_attribute(Status1, 2),
+%%                    %%做加入氏族的成就统计
+%%                    lib_achieve:check_achieve_finish(Status#player.other#player_other.pid_send,
+%%                        Status#player.id, 604, [1]),
+%%                    case Status#player.lv >= 35 of
+%%                        true ->%%加氏族
+%%                            lib_guild_wish:join_guild(Status1#player.id, Status1#player.nickname, Status1#player.sex, Status1#player.career, Status1#player.guild_id);
+%%                        false ->
+%%                            skip
+%%                    end,
+%%                    %%传闻广播
+%%                    RealmName = goods_util:get_realm_to_name(Status1#player.realm),
+%%                    ConTent = io_lib:format("天地变色，风起云涌，<font color='#FFFF32'>~s</font>的玩家[<a href='event:1, ~p, ~s, ~p, ~p'><font color='#FFFF32'><u>~s</u></font></a>]创建了名为[<font color='#FFFF32'>~s</font>]的氏族，号召各路英雄豪杰火速响应！<a href='event:5,~p'><font color='#00FF33'><u>》》我要加入《《<<</u></font></a>",
+%%                        [RealmName, Status1#player.id, Status1#player.nickname, Status1#player.career, Status1#player.sex, Status1#player.nickname,
+%%                            Status1#player.guild_name, Status1#player.guild_id]),
+%%                    lib_chat:broadcast_sys_msg(6, ConTent),
+%%                    {ok, Status1};
+%%            % 创建失败
+%%                true ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40001, [Result, 0]),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    ok
+%%            end;
+%%        false ->
+%%            ok
+%%    end;
 
 %% -----------------------------------------------------------------
 %% 40002 解散氏族  
@@ -126,38 +173,38 @@ handle(40002, Status, [GuildId]) ->
 %% -----------------------------------------------------------------
 %% 40004 申请加入 
 %% -----------------------------------------------------------------
-handle(40004, Status, [GuildId]) ->
-    [Result] = mod_guild:apply_join_guild(Status, [GuildId]),
-    if  % 申请成功
-        Result == 1 ->
-            % 发送回应
-            {ok, BinData} = pt_40:write(40004, Result),
-            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-            ok;
-    % 申请失败
-        true ->
-            % 发送回应
-            {ok, BinData} = pt_40:write(40004, Result),
-            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-            ok
-    end;
+%%handle(40004, Status, [GuildId]) ->
+%%    [Result] = mod_guild:apply_join_guild(Status, [GuildId]),
+%%    if  % 申请成功
+%%        Result == 1 ->
+%%            % 发送回应
+%%            {ok, BinData} = pt_40:write(40004, Result),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok;
+%%    % 申请失败
+%%        true ->
+%%            % 发送回应
+%%            {ok, BinData} = pt_40:write(40004, Result),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok
+%%    end;
 
 %% -----------------------------------------------------------------
 %% 40005 审批加入 
 %% -----------------------------------------------------------------
-handle(40005, Status, [HandleResult, ApplyList]) ->
-    if
-        Status#player.guild_id =:= 0 ->%%没氏族
-            [Result, Num] = [3, 0];
-        Status#player.guild_position > 7 ->%%没权限
-            [Result, Num] = [4, 0];
-        true ->
-            [Result, Num] = mod_guild:approve_guild_apply(Status, [HandleResult, ApplyList])
-    end,
-    %% 发送回应
-    {ok, BinData} = pt_40:write(40005, [Result, Num]),
-    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-    ok;
+%%handle(40005, Status, [HandleResult, ApplyList]) ->
+%%    if
+%%        Status#player.guild_id =:= 0 ->%%没氏族
+%%            [Result, Num] = [3, 0];
+%%        Status#player.guild_position > 7 ->%%没权限
+%%            [Result, Num] = [4, 0];
+%%        true ->
+%%            [Result, Num] = mod_guild:approve_guild_apply(Status, [HandleResult, ApplyList])
+%%    end,
+%%    %% 发送回应
+%%    {ok, BinData} = pt_40:write(40005, [Result, Num]),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%    ok;
 
 %% -----------------------------------------------------------------
 %% 40006 邀请加入
@@ -228,91 +275,176 @@ handle(40007, Status, [GuildId, ResponseResult]) ->
             ok
     end;
 
+
+%% -----------------------------------------------------------------
+%% 40010 被踢
+%% -----------------------------------------------------------------
+%%handle(?GUILD_INFO_C2S, Status, [Realm, Type, Page, GuildName, ChiefName]) ->
+handle(?GUILD_KICKOUT_C2S, Status, #guild_kickout_c2s{player_id = PlayerId} = _Req) ->
+    CheckEnter = lib_skyrush:check_sky_doornot(),
+    ?ASSERT(CheckEnter =:= false, ?T("空战中不可操作")),
+    [Result, PlayerName] = mod_guild:kickout_guild(Status, [PlayerId]),
+    ?ASSERT(Result =:= 1, ?T("踢出失败")),
+    % 发送回应
+%%    {ok, BinData} = pt_40:write(40008, Result),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+
+    Msg = #guild_kickout_s2c{result = Result},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_KICKOUT_S2C, Msg),
+
+
+    % 通知氏族成员
+    lib_guild_inner:send_msg_to_player(PlayerId, guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
+    %%如果在领地里面，则主动传出
+    mod_guild_manor:quit_guild_manor(0, {PlayerId, Status#player.guild_id, 1}),
+    % 邮件通知给被踢出人
+%%    lib_guild:send_guild_mail(guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
+    %%更新氏族聊天面板信息
+%%    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
+    ok;
+
+handle(?GUILD_QUIT_C2S, Status, #guild_quit_c2s{} = _Req) ->
+    %%检查是否能够进行一些在空战时不能执行的操作
+    CheckEnter = lib_skyrush:check_sky_doornot(),
+    ?ASSERT(CheckEnter =:= false, ?T("空战中不可操作")),
+
+    QuitTime = util:unixtime(),
+    Result = mod_guild:quit_guild(Status, [QuitTime]),
+    ?ASSERT(Result =:= 1, ?T("退出失败")),
+
+
+    % 发送回应
+%%    {ok, BinData} = pt_40:write(40009, Result),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+    Msg = #guild_quit_s2c{result = Result},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_QUIT_S2C, Msg),
+
+    % 返回新状态
+    Status1 = Status#player{guild_id = 0,
+        guild_name = <<>>,
+        guild_position = 0,
+        quit_guild_time = QuitTime,
+        other = Status#player.other#player_other{g_alliance = [],    %%联盟中的氏族Id清空
+            guild_feats = 0}%%氏族功勋变回0
+    },
+
+    %%如果在领地里面，则主动传出
+    mod_guild_manor:quit_guild_manor(1, {Status#player.other#player_other.pid_scene, Status#player.scene,
+        Status#player.id, Status#player.guild_id, 1}),
+
+
+    %%玩家退出帮派，处理帮派任务
+%% 			lib_task:abnegate_guild_task(Status1),
+    gen_server:cast(Status#player.other#player_other.pid_task, {'guild_task_del', Status1}),
+    %%处理氏族祝福数据
+    lib_guild_wish:leave_guild(Status#player.id),
+    %%更新氏族聊天面板信息
+%%    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
+    {ok, Status1};
+
+
+%% -----------------------------------------------------------------
+%% 40016 修改氏族公告
+%% -----------------------------------------------------------------
+%%handle(40016, Status, [GuildId, Announce]) ->
+handle(?GUILD_ANNOUNCE_C2S, Status, #guild_announce_c2s{guild_id = GuildId,announce = Announce} = _Req) ->
+    [Result] = mod_guild:modify_guild_announce(Status, [GuildId, Announce]),
+
+%%    {ok, BinData} = pt_40:write(40016, Result),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+    Msg = #guild_announce_s2c{result = Result},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_ANNOUNCE_S2C, Msg),
+
+    %%更新氏族聊天面板信息
+%%    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
+    ok;
+
+
 %% -----------------------------------------------------------------
 %% 40008 开除帮众
 %% PlayerId:指定的氏族成员
 %% -----------------------------------------------------------------
-handle(40008, Status, [PlayerId]) ->
-    %%%%检查是否能够进行一些在空战时不能执行的操作
-    CheckEnter = lib_skyrush:check_sky_doornot(),
-    case CheckEnter of
-        false ->
-            [Result, PlayerName] = mod_guild:kickout_guild(Status, [PlayerId]),
-            if  % 踢出成功
-                Result == 1 ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40008, Result),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    % 通知氏族成员
-                    lib_guild_inner:send_msg_to_player(PlayerId, guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
-                    %%如果在领地里面，则主动传出
-                    mod_guild_manor:quit_guild_manor(0, {PlayerId, Status#player.guild_id, 1}),
-                    % 邮件通知给被踢出人
-                    lib_guild:send_guild_mail(guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
-                    %%更新氏族聊天面板信息
-                    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
-                    ok;
-            % 踢出失败
-                true ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40008, Result),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    ok
-            end;
-        true ->
-            % 发送回应
-            {ok, BinData} = pt_40:write(40008, 10),
-            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-            ok
-    end;
+%%handle(40008, Status, [PlayerId]) ->
+%%    %%%%检查是否能够进行一些在空战时不能执行的操作
+%%    CheckEnter = lib_skyrush:check_sky_doornot(),
+%%    case CheckEnter of
+%%        false ->
+%%            [Result, PlayerName] = mod_guild:kickout_guild(Status, [PlayerId]),
+%%            if  % 踢出成功
+%%                Result == 1 ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40008, Result),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    % 通知氏族成员
+%%                    lib_guild_inner:send_msg_to_player(PlayerId, guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
+%%                    %%如果在领地里面，则主动传出
+%%                    mod_guild_manor:quit_guild_manor(0, {PlayerId, Status#player.guild_id, 1}),
+%%                    % 邮件通知给被踢出人
+%%                    lib_guild:send_guild_mail(guild_kickout, [PlayerId, PlayerName, Status#player.guild_id, Status#player.guild_name]),
+%%                    %%更新氏族聊天面板信息
+%%                    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
+%%                    ok;
+%%            % 踢出失败
+%%                true ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40008, Result),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    ok
+%%            end;
+%%        true ->
+%%            % 发送回应
+%%            {ok, BinData} = pt_40:write(40008, 10),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok
+%%    end;
 
 %% -----------------------------------------------------------------
 %% 40009 退出氏族 
 %% -----------------------------------------------------------------
-handle(40009, Status, []) ->
-    %%检查是否能够进行一些在空战时不能执行的操作
-    CheckEnter = lib_skyrush:check_sky_doornot(),
-    case CheckEnter of
-        false ->
-            QuitTime = util:unixtime(),
-            Result = mod_guild:quit_guild(Status, [QuitTime]),
-            if  % 退出成功
-                Result == 1 ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40009, Result),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    % 返回新状态
-                    Status1 = Status#player{guild_id = 0,
-                        guild_name = <<>>,
-                        guild_position = 0,
-                        quit_guild_time = QuitTime,
-                        other = Status#player.other#player_other{g_alliance = [],    %%联盟中的氏族Id清空
-                            guild_feats = 0}%%氏族功勋变回0
-                    },
-                    %%如果在领地里面，则主动传出
-                    mod_guild_manor:quit_guild_manor(1, {Status#player.other#player_other.pid_scene, Status#player.scene,
-                        Status#player.id, Status#player.guild_id, 1}),
-                    %%玩家退出帮派，处理帮派任务
-%% 			lib_task:abnegate_guild_task(Status1),
-                    gen_server:cast(Status#player.other#player_other.pid_task, {'guild_task_del', Status1}),
-                    %%处理氏族祝福数据
-                    lib_guild_wish:leave_guild(Status#player.id),
-                    %%更新氏族聊天面板信息
-                    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
-                    {ok, Status1};
-            % 退出失败
-                true ->
-                    % 发送回应
-                    {ok, BinData} = pt_40:write(40009, Result),
-                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-                    ok
-            end;
-        true ->
-            % 发送回应
-            {ok, BinData} = pt_40:write(40009, 5),
-            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
-            ok
-    end;
+%%handle(40009, Status, []) ->
+%%    %%检查是否能够进行一些在空战时不能执行的操作
+%%    CheckEnter = lib_skyrush:check_sky_doornot(),
+%%    case CheckEnter of
+%%        false ->
+%%            QuitTime = util:unixtime(),
+%%            Result = mod_guild:quit_guild(Status, [QuitTime]),
+%%            if  % 退出成功
+%%                Result == 1 ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40009, Result),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    % 返回新状态
+%%                    Status1 = Status#player{guild_id = 0,
+%%                        guild_name = <<>>,
+%%                        guild_position = 0,
+%%                        quit_guild_time = QuitTime,
+%%                        other = Status#player.other#player_other{g_alliance = [],    %%联盟中的氏族Id清空
+%%                            guild_feats = 0}%%氏族功勋变回0
+%%                    },
+%%                    %%如果在领地里面，则主动传出
+%%                    mod_guild_manor:quit_guild_manor(1, {Status#player.other#player_other.pid_scene, Status#player.scene,
+%%                        Status#player.id, Status#player.guild_id, 1}),
+%%                    %%玩家退出帮派，处理帮派任务
+%%%% 			lib_task:abnegate_guild_task(Status1),
+%%                    gen_server:cast(Status#player.other#player_other.pid_task, {'guild_task_del', Status1}),
+%%                    %%处理氏族祝福数据
+%%                    lib_guild_wish:leave_guild(Status#player.id),
+%%                    %%更新氏族聊天面板信息
+%%                    gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', Status#player.guild_id}),
+%%                    {ok, Status1};
+%%            % 退出失败
+%%                true ->
+%%                    % 发送回应
+%%                    {ok, BinData} = pt_40:write(40009, Result),
+%%                    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%                    ok
+%%            end;
+%%        true ->
+%%            % 发送回应
+%%            {ok, BinData} = pt_40:write(40009, 5),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok
+%%    end;
 
 %% -----------------------------------------------------------------
 %% 40010 获取氏族列表	
@@ -330,6 +462,64 @@ handle(?GUILD_LIST_INFO_C2S, Status, #guild_list_info_c2s{realm = Realm, page = 
             ok
     end;
 
+
+%% -----------------------------------------------------------------
+%% 40005 审批加入
+%% -----------------------------------------------------------------
+handle(?GUILD_APPLY_APPROVE_C2S, Status, #guild_apply_approve_c2s{result = HandleResult, approve_infos = ApplyList} = _Req) ->
+
+    ?ASSERT(Status#player.guild_id > 0, ?T("没氏族")),
+    ?ASSERT(Status#player.guild_position =< 7, ?T("没权限")),
+
+    [Result, Num] = mod_guild:approve_guild_apply(Status, [HandleResult, ApplyList]),
+    %% 发送回应
+%%    {ok, BinData} = pt_40:write(40005, [Result, Num]),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+    Msg = #guild_apply_approve_s2c{result = Result, num = Num},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_APPLY_APPROVE_S2C, Msg),
+
+
+    ok;
+
+%% 既然一直喜欢用cast那为什么这里又要用call
+handle(?GUILD_INFO_C2S, Status, #guild_info_c2s{guild_id = SGuildId} = _Req) ->
+    [Result, Data] = mod_guild:get_guild_qinfo(Status, [SGuildId]),
+    {GuildId, Name, Announce, Realm, Level, Exp, NeedExp, MemberNum,
+        MemberCapacity, ChiefId, ChiefName, Funds, NewRestUpGradeTime,
+        DepartNames, _LogsLen, _Logs, Alliances, PMembers} = Data,
+    Msg = #guild_info_s2c{result = Result, guild_id = GuildId, name = Name, announce = Announce,
+        realm = Realm, level = Level, exp = Exp, need_exp = NeedExp, member_num = MemberNum,
+        member_capacity = MemberCapacity, chief_id = ChiefId, chief_name = ChiefName,
+        funds = Funds, upgrade_need_time = NewRestUpGradeTime, depart_names = DepartNames,
+        logs = [], alliances = Alliances, guild_mem_infos = PMembers},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_INFO_S2C, Msg),
+%%    {ok, BinData} = pt_40:write(40014, [Result, Data]),
+%%    lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+    ok;
+
+handle(?GUILD_APPLY_LIST_C2S, Status, #guild_apply_list_c2s{guild_id = GuildId} = _Req) ->
+    mod_guild:list_guild_apply(Status, [GuildId]),
+    ok;
+
+handle(?GUILD_APPLY_C2S, Status, #guild_apply_c2s{guild_id = GuildId} = _Req) ->
+    [Result] = mod_guild:apply_join_guild(Status, [GuildId]),
+    ?ASSERT(Result =:= 1, Result),
+    Msg = #guild_apply_s2c{code = Result},
+    lib_send:protobuf_send(Status#player.other#player_other.pid_send, ?GUILD_APPLY_S2C, Msg),
+    ok;
+%%    if  % 申请成功
+%%        Result == 1 ->
+%%            % 发送回应
+%%            {ok, BinData} = pt_40:write(40004, Result),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok;
+%%        % 申请失败
+%%        true ->
+%%        % 发送回应
+%%            {ok, BinData} = pt_40:write(40004, Result),
+%%            lib_send:send_to_sid(Status#player.other#player_other.pid_send, BinData),
+%%            ok
+%%    end;
 
 %% -----------------------------------------------------------------
 %% 40011 获取氏族成员列表 
@@ -355,6 +545,7 @@ handle(40013, Status, []) ->
 %% -----------------------------------------------------------------
 %% 40014 查看氏族信息	
 %% -----------------------------------------------------------------
+
 handle(40014, Status, [GuildId]) ->
     [Result, Data] = mod_guild:get_guild_info(Status, [GuildId]),
     {ok, BinData} = pt_40:write(40014, [Result, Data]),

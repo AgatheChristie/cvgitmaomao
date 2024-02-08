@@ -12,8 +12,9 @@
 
 
 handle(?CHAT_NIU_WORLD_C2S, Status, #chat_niu_world_c2s{msg = Msg} = _Req) ->
-	Data_filtered = lib_words_ver:words_filter(Msg),
-	lib_chat:chat_world(Status, Data_filtered);
+%%	Data_filtered = lib_words_ver:words_filter(Msg),
+	lib_words_ver:check_chat_content(Msg),
+	lib_chat:chat_world(Status, Msg);
 
 
 %%世界聊天
@@ -86,7 +87,7 @@ handle(11070, Status, [Uid, Data]) when is_list(Data)->
 					lib_chat:chat_in_blacklist(Uid, Status#player.other#player_other.pid_send)
 			end;
 		true->skip
-	end;		   
+	end;
 
 handle(11073, Status, [Id]) ->
 	 case lib_chat:get_chat_info(Id) of

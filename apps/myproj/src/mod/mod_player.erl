@@ -2494,9 +2494,21 @@ handle_cast({'SOCKET_EVENT', Cmd, Bin}, PlayerState) ->
             ?DEBUG("_E:~p end", [_E]),
             {noreply, PlayerState}
     catch
-        throw : Code ->
-            {ok, BinData} = protobuf:s2c_pack(Cmd, Code, 0, Bin),
-            lib_send:send_one(Player#player.other#player_other.socket, BinData),
+        throw : {error, Code} ->
+            case is_integer(Code) of
+                true ->
+                    {ok, BinData} = protobuf:s2c_pack(Cmd, Code, 0, Bin),
+                    lib_send:send_one(Player#player.other#player_other.socket, BinData);
+                false ->
+                    %% 非int型的错误码只有在GM模式下才发给前端
+                    case config:get_can_gmcmd(myproj) =:= 1 of
+                        true ->
+                            {ok, BinData} = protobuf:s2c_pack(Cmd, Code, 0, Bin),
+                            lib_send:send_one(Player#player.other#player_other.socket, BinData);
+                        false ->
+                            ok
+                    end
+            end,
             {noreply, PlayerState};
         T:E:S ->
             ?ERROR("[~p]  handle cmd ~p msg ~p return error, ~p stacktrace ~p,~n",

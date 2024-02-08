@@ -245,12 +245,13 @@
 -define(FRIEND_NIU_INFO_S2S , 1371002). %% 好友信息
 -define(FRIEND_NIU_APPLY_S2S , 1371003). %% 申请好友
 -define(FRIEND_NIU_HUIY_S2S , 1371004). %% 申请好友
--define(FRIEND_ABANDON_S2S , 1371005). %% 删除好友
--define(FRIEND_SEARCH_S2S , 1371007). %% 好友信息查找
--define(FRIEND_AGREE_APPLY_S2S , 1371008). %% 同意好友申请
--define(FRIEND_REJECT_APPLY_S2S , 1371009). %% 拒绝好友申请
--define(FRIEND_BLACK_S2S , 1371010). %% 拉黑好友
--define(FRIEND_APPLY_S2S , 1371011). %% 申请好友
+-define(FRIEND_NIU_ABANDON_S2S , 1371005). %% 删除好友
+-define(FRIEND_ABANDON_S2S , 1371006). %% 删除好友
+-define(FRIEND_SEARCH_S2S , 1371008). %% 好友信息查找
+-define(FRIEND_AGREE_APPLY_S2S , 1371009). %% 同意好友申请
+-define(FRIEND_REJECT_APPLY_S2S , 1371010). %% 拒绝好友申请
+-define(FRIEND_BLACK_S2S , 1371011). %% 拉黑好友
+-define(FRIEND_APPLY_S2S , 1371012). %% 申请好友
 -define(ACHIEVE_INFO_S2S , 1381001). %% 成就信息
 -define(ACHIEVE_COMMIT_S2S , 1381002). %% 提交成就
 -define(ACHIEVE_POINT_AWARD_S2S , 1381003). %% 领取成就点奖励
@@ -359,4 +360,10 @@
 -define(GUILD_APPLY_S2S , 1571004). %% 工会申请加入
 -define(GUILD_INVITE_S2S , 1571005). %% 工会邀请加入
 -define(GUILD_INVITE_HUIY_S2S , 1571006). %% 工会邀请加入
+-define(GUILD_APPLY_LIST_S2S , 1571007). %% 工会申请列表
+-define(GUILD_CREATE_S2S , 1571008). %% 工会创建
+-define(GUILD_APPLY_APPROVE_S2S , 1571009). %% 工会审批
+-define(GUILD_KICKOUT_S2S , 1571013). %% 工会踢出
+-define(GUILD_QUIT_S2S , 1571014). %% 工会退出
+-define(GUILD_ANNOUNCE_S2S , 1571015). %% 工会宣言
 -endif. %% S2S_CONVERT_HRL

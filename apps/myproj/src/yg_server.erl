@@ -11,7 +11,7 @@
 
 
 -define(YG_SERVER_NODE_ID_1, 1).
--define(YG_SERVER_NODE_ID_2, 2).
+-define(YG_SERVER_NODE_ID_2, 1).
 
 
 start([Ip, Port, Node_id]) ->

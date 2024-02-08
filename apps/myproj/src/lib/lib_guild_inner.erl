@@ -7,6 +7,7 @@
 -module(lib_guild_inner).
 -include("common.hrl").
 -include("record.hrl").
+-include("ecode.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
 -include("guild_info.hrl").
 -compile(export_all).
@@ -306,14 +307,14 @@ create_guild(PlayerId, PlayerName, PlayerRealm, GuildName, LevelAdd, SkillsAdd) 
 %%     ?DEBUG("create_guild: PlayerId=[~p], PlayerName=[~s], PlayerRealm=[~p], GuildName=[~s]", [PlayerId, PlayerName, PlayerRealm, GuildName]),
 %%     [_MemberCapacityBase, MemberCapcity] = 
 %% 					data_guild:get_level_info(1),
-    MemberCapcity = data_guild:get_guild_config(guild_member_base, []),
-
+%%    MemberCapcity = data_guild:get_guild_config(guild_member_base, []),
+    #{guild_member_base := MemberCapcity} = ?ASSERT_MAP(base_guild:get(1), ?E_SYS_CONFIGH_ERR),
     CreateTime = util:unixtime(),
     ContributionGetNextTime = CreateTime + ?ONE_DAY_SECONDS,
     % 插入氏族
     %%获取默认的所有堂名
-    DepartmentNames = data_guild:get_departmemt_names(0, 0),
-
+%%    DepartmentNames = data_guild:get_departmemt_names(0, 0),
+    DepartmentNames2 = <<("大王吩咐")/utf8>>,
 
 %% 	name, = "",chief_id = 0,chief_name = "",deputy_chief1_id = 0,deputy_chief1_name = "",
 %% 	deputy_chief2_id = 0,deputy_chief2_name = "",deputy_chief_num = 0,member_num = 0,member_capacity = 0,
@@ -332,7 +333,8 @@ create_guild(PlayerId, PlayerName, PlayerRealm, GuildName, LevelAdd, SkillsAdd) 
         skills = ?GUILD_SKILL_INIT + SkillsAdd,
         consume_get_nexttime = ContributionGetNextTime,
         create_time = CreateTime,
-        depart_names = tool:to_binary(DepartmentNames),
+%%        depart_names = tool:to_binary(DepartmentNames),
+        depart_names = DepartmentNames2,
         lct_boss = util:term_to_string([0, 0, 0]),
         combat_num = 0,
         combat_victory_num = 0,
@@ -343,84 +345,85 @@ create_guild(PlayerId, PlayerName, PlayerRealm, GuildName, LevelAdd, SkillsAdd) 
         a_plist = util:term_to_string([]),
         convence = util:term_to_string([0, 0])
     },
-    case db_agent:guild_insert(New_guild) of
-        {mongo, NewGuildId} ->
-            Guild = New_guild#ets_guild{id = NewGuildId};
-        1 ->
-            % 获取刚插入的氏族
-            case db_agent:guild_select_create(GuildName) of
-                [] ->
-                    Guild = [];
-                GuildResult ->
-                    Guild = list_to_tuple([ets_guild] ++ GuildResult)
-            end;
-        _Other ->
-            Guild = []
-    end,
-    if Guild =:= [] ->
-        ?ERROR_MSG("create_guild: guild id is null, name=[~s]", [GuildName]),
-        error;
-        true ->
-            GuildId = Guild#ets_guild.id,
-            % 插入氏族成员			
-            Guild_member = #ets_insert_guild_member{
-                guild_id = GuildId,
-                guild_name = GuildName,
-                player_id = PlayerId,
-                player_name = PlayerName,
-                create_time = CreateTime,
-                guild_depart_id = 5
-            },
-            db_agent:guild_member_insert(Guild_member),
-            % 更新角色表 
-            ValueListNew = [{guild_id, GuildId},
-                {guild_name, GuildName},
-                {guild_position, 1},
-                {guild_depart_id, 5}],
-            WhereList = [{id, PlayerId}],
+    Guild =
+        case db_agent:guild_insert(New_guild) of
+            {mongo, NewGuildId} ->
+                New_guild#ets_guild{id = NewGuildId};
+            1 ->
+                % 获取刚插入的氏族
+                case db_agent:guild_select_create(GuildName) of
+                    [] ->
+                        [];
+                    GuildResult ->
+                        list_to_tuple([ets_guild] ++ GuildResult)
+                end;
+            _Other ->
+                []
+        end,
+    ?ASSERT(Guild =/= [], ?T("插入数据库出错")),
+    GuildId = Guild#ets_guild.id,
+    % 插入氏族成员
+    Guild_member = #ets_insert_guild_member{
+        guild_id = GuildId,
+        guild_name = GuildName,
+        player_id = PlayerId,
+        player_name = PlayerName,
+        create_time = CreateTime,
+        guild_depart_id = 5
+    },
+    db_agent:guild_member_insert(Guild_member),
+    % 更新角色表
+    ValueListNew = [{guild_id, GuildId},
+        {guild_name, GuildName},
+        {guild_position, 1},
+        {guild_depart_id, 5}],
+    WhereList = [{id, PlayerId}],
 
-            db_agent:guild_player_update_info(ValueListNew, WhereList),
-            %%初始化氏族技能信息
+    db_agent:guild_player_update_info(ValueListNew, WhereList),
+    %%初始化氏族技能信息
 %% 			lib_guild_weal:init_h_skill(GuildId),%%高级技能
-            case init_guild_skill_attribute(GuildId) of
-                ok ->
-                    % 更新缓存
-                    load_guild_into_ets(Guild),
+    case init_guild_skill_attribute(GuildId) of
+        ok ->
+            % 更新缓存
+            load_guild_into_ets(Guild),
 
-                    % 删除氏族申请
-                    remove_guild_apply_all(PlayerId),
-                    % 删除氏族邀请
-                    remove_guild_invite_all(PlayerId),
-
-                    %%以下更新氏族日志
-                    Content = lists:concat([?CREATE_GUILD_ONE, PlayerName, ?CREATE_GUILD_TWO, binary_to_list(GuildName), ?CREATE_GUILD_THREE]),
-                    Log_guild = #ets_log_guild{
-                        guild_id = GuildId,
-                        guild_name = tool:to_binary(GuildName),
-                        time = CreateTime,
-                        content = tool:to_binary(Content)
-                    },
-                    case db_agent:guild_log_insert(Log_guild) of
-                        {mongo, Ret} ->
-                            GuildLogEts = Log_guild#ets_log_guild{id = Ret},
-                            update_guild_log(GuildLogEts),
-                            {ok, GuildId};
-                        1 ->
-                            GuildLog = db_agent:guild_log_select_create(GuildId, GuildName),
-                            if GuildLog =:= [] ->
-                                error;
-                                true ->
-                                    GuildLogEts = list_to_tuple([ets_log_guild] ++ GuildLog),
-                                    update_guild_log(GuildLogEts),
-                                    {ok, GuildId}
-                            end;
-                        _OtherResult ->
-                            error
-                    end;
-                fail ->
-                    error
-            end
+            % 删除氏族申请
+            remove_guild_apply_all(PlayerId),
+            % 删除氏族邀请
+            remove_guild_invite_all(PlayerId),
+            %%添加成员加入氏族日志
+            Content = util:format(?T("恭喜，~s创建了名为~s的氏族！"), [PlayerName, GuildName]),
+            lib_guild_inner:jion_guild_logqqq(GuildId, GuildName, Content),
+            {ok, GuildId};
+        %%以下更新氏族日志
+%%            Content = lists:concat([?CREATE_GUILD_ONE, PlayerName, ?CREATE_GUILD_TWO, binary_to_list(GuildName), ?CREATE_GUILD_THREE]),
+%%            Log_guild = #ets_log_guild{
+%%                guild_id = GuildId,
+%%                guild_name = tool:to_binary(GuildName),
+%%                time = CreateTime,
+%%                content = tool:to_binary(Content)
+%%            },
+%%            case db_agent:guild_log_insert(Log_guild) of
+%%                {mongo, Ret} ->
+%%                    GuildLogEts = Log_guild#ets_log_guild{id = Ret},
+%%                    update_guild_log(GuildLogEts),
+%%                    {ok, GuildId};
+%%                1 ->
+%%                    GuildLog = db_agent:guild_log_select_create(GuildId, GuildName),
+%%                    if GuildLog =:= [] ->
+%%                        error;
+%%                        true ->
+%%                            GuildLogEts = list_to_tuple([ets_log_guild] ++ GuildLog),
+%%                            update_guild_log(GuildLogEts),
+%%                            {ok, GuildId}
+%%                    end;
+%%                _OtherResult ->
+%%                    throw(?T("插入日志出错"))
+%%            end;
+        fail ->
+            ?MYTHROW(?T("初始化氏族技能出错"))
     end.
+
 
 %% -----------------------------------------------------------------
 %% 确认解散氏族
@@ -484,39 +487,36 @@ add_guild_apply(PlayerId, PlayerName, PlayerLevel, PlayerSex, PlayerJobs, Player
     %%   db_agent:guild_apply_delete_player(PlayerId),
     % 插入氏族申请
     CreateTime = util:unixtime(),
-    case db_agent:guild_apply_insert(PlayerId, GuildId, CreateTime) of
-        {mongo, Ret} ->
-            Id = Ret,
-            GuildApply = #ets_guild_apply{
-                id = Id,
-                guild_id = GuildId,
-                player_id = PlayerId,
-                create_time = CreateTime,
-                nickname = PlayerName,
-                sex = PlayerSex,
-                jobs = PlayerJobs,
-                lv = PlayerLevel,
-                career = PlayerCareer,
-                online_flag = 1,
-                vip = PlayerVip
-            };
-        1 ->
-            case db_agent:guild_apply_select_new(PlayerId, GuildId) of
-                [] ->
-                    GuildApply = [];
-                GuildApplyList ->
-                    GuildApply = list_to_tuple([ets_guild_apply] ++ GuildApplyList)
-            end;
-        _Other ->
-            GuildApply = []
-    end,
-    if GuildApply =:= [] ->
-        fail;
-        true ->
-            % 更新缓存
-            load_guild_apply_into_ets(GuildApply),
-            ok
-    end.
+    GuildApply =
+        case db_agent:guild_apply_insert(PlayerId, GuildId, CreateTime) of
+            {mongo, Ret} ->
+                Id = Ret,
+                #ets_guild_apply{
+                    id = Id,
+                    guild_id = GuildId,
+                    player_id = PlayerId,
+                    create_time = CreateTime,
+                    nickname = PlayerName,
+                    sex = PlayerSex,
+                    jobs = PlayerJobs,
+                    lv = PlayerLevel,
+                    career = PlayerCareer,
+                    online_flag = 1,
+                    vip = PlayerVip
+                };
+            1 ->
+                case db_agent:guild_apply_select_new(PlayerId, GuildId) of
+                    [] ->
+                        [];
+                    GuildApplyList ->
+                        list_to_tuple([ets_guild_apply] ++ GuildApplyList)
+                end;
+            _Other ->
+                []
+        end,
+    ?ASSERT(GuildApply =/= [], ?E_LEAGUE_ID_NOT_MIN_MAX),
+    load_guild_apply_into_ets(GuildApply),
+    {ok, [?TRUE]}.
 
 %%初始化氏族技能信息
 init_guild_skill_attribute(GuildId) ->
@@ -534,21 +534,23 @@ insert_guild_skill_attributes(ok, [List | RestSkillsAttr], GuildId) ->
             skill_name = "",
             skill_level = 0
         },
-    case db_agent:init_guild_skill_attribute(Guild_skills_attribute) of
-        {mongo, Ret} ->
-            GuildSkillsAttrEts = Guild_skills_attribute#ets_guild_skills_attribute{id = Ret};
-        1 ->
-            case db_agent:get_guild_skill_attribute(GuildId, SkillId) of
-                [] ->
-                    GuildSkillsAttrEts = [];
-                GuildSkillsAttr ->
-                    GuildSkillsAttrEts = list_to_tuple([ets_guild_skills_attribute] ++ GuildSkillsAttr)
-            end;
-        _Other ->
-            GuildSkillsAttrEts = []
-    end,
-    if GuildSkillsAttrEts =:= [] ->
-        insert_guild_skill_attributes(fail, RestSkillsAttr, GuildId);
+    GuildSkillsAttrEts =
+        case db_agent:init_guild_skill_attribute(Guild_skills_attribute) of
+            {mongo, Ret} ->
+                Guild_skills_attribute#ets_guild_skills_attribute{id = Ret};
+            1 ->
+                case db_agent:get_guild_skill_attribute(GuildId, SkillId) of
+                    [] ->
+                        [];
+                    GuildSkillsAttr ->
+                        list_to_tuple([ets_guild_skills_attribute] ++ GuildSkillsAttr)
+                end;
+            _Other ->
+                []
+        end,
+    if
+        GuildSkillsAttrEts =:= [] ->
+            insert_guild_skill_attributes(fail, RestSkillsAttr, GuildId);
         true ->
             update_guild_skill_attribute(GuildSkillsAttrEts),
             insert_guild_skill_attributes(ok, RestSkillsAttr, GuildId)
@@ -607,7 +609,7 @@ remove_guild_apply(PlayerId, GuildId) ->
     delete_guild_apply_by_player_id(PlayerId, GuildId),
     ok.
 
-delete_remove_guild_apply(PlayerId, GuildId, GuildName, PlayerNameGet) ->
+delete_remove_guild_apply(PlayerId, GuildId, GuildName, _PlayerNameGet) ->
     case get_guild_apply_by_player_id(PlayerId, GuildId) of
         [] ->
             noaction;
@@ -617,9 +619,9 @@ delete_remove_guild_apply(PlayerId, GuildId, GuildName, PlayerNameGet) ->
             % 更新缓存
             delete_guild_apply_by_player_id(PlayerId, GuildId),
             % 广播氏族成员
-            lib_guild_inner:send_msg_to_player(PlayerId, guild_reject_apply, [GuildId, GuildName]),
-            % 邮件通知给被审批人
-            lib_guild:send_guild_mail(guild_reject_apply, [PlayerId, PlayerNameGet, GuildId, GuildName])
+            lib_guild_inner:send_msg_to_player(PlayerId, guild_reject_apply, [GuildId, GuildName])
+        % 邮件通知给被审批人 todo
+%%            lib_guild:send_guild_mail(guild_reject_apply, [PlayerId, PlayerNameGet, GuildId, GuildName])
     end.
 
 
@@ -658,11 +660,14 @@ remove_guild_invite_all(PlayerId) ->
 %%同意加入
 reply_apply_guild_each(Num, SendList, _GuildId, _GuildName, _GuildRealm, []) ->
     {Num, SendList};
-reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, [Apply | ApplyList]) ->
-    {PlayerId, _PlayerNameGet} = Apply,
+reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm,
+        [#p_guild_approve_info{player_id = PlayerId, player_name = _PlayerNameGet} | ApplyList]) ->
+
+%%    ?ASSERT(PlayerInfo =/= [], ?T("玩家~w不存在", [PlayerId])),
+
     case lib_guild_inner:get_player_guild_info(PlayerId) of
         [] ->%%玩家已经不存在
-            lib_guild_inner:remove_guild_apply(PlayerId),
+            lib_guild_inner:remove_guild_apply(PlayerId, GuildId),
             reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, ApplyList);
         PlayerInfo ->
             [PlayerNickname, PlayerRealm, PlayerGuildId, _PlayerGuildName,
@@ -687,14 +692,15 @@ reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, [Apply | A
                         PlayerRealm =/= GuildRealm ->%%阵营不一样
                             lib_guild_inner:remove_guild_apply(PlayerId, GuildId),
                             reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, ApplyList);
-                        PlayerLv < ?CREATE_GUILD_LV ->%%允许加入但对方等级不够
-                            lib_guild_inner:remove_guild_apply(PlayerId, GuildId),
-                            reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, ApplyList);
+%%                        PlayerLv < ?CREATE_GUILD_LV ->%%允许加入但对方等级不够
+%%                            lib_guild_inner:remove_guild_apply(PlayerId, GuildId),
+%%                            reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, ApplyList);
                         TimeRest =< 43200 ->%%允许加入但最近有加入并退出过氏族，间隔时间太短
                             lib_guild_inner:remove_guild_apply(PlayerId, GuildId),
                             reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, ApplyList);
                         true ->
-                            DefaultPosition = data_guild:get_guild_config(default_position, []),
+%%                            DefaultPosition = data_guild:get_guild_config(default_position, []),
+                            #{default_position := DefaultPosition} = ?ASSERT_MAP(base_guild:get(1), ?E_SYS_CONFIGH_ERR),
                             case lib_guild_inner:add_guild_member(PlayerId, PlayerNickname, GuildId, GuildName, DefaultPosition,
                                 PlayerSex, PlayerJobs, PlayerLv, PlayerLastLoginTime, PlayerOnlineFlag,
                                 PlayerCareer, PlayerCulture, PlayerVip) of
@@ -710,8 +716,7 @@ reply_apply_guild_each(Num, SendList, GuildId, GuildName, GuildRealm, [Apply | A
 
 %%拒绝加入		
 refuse_join_guild_inner(GuildId, GuildName, ApplyList) ->
-    lists:foreach(fun(Elem) ->
-        {PlayerId, PlayerNameGet} = Elem,
+    lists:foreach(fun(#p_guild_approve_info{player_id = PlayerId, player_name = PlayerNameGet}) ->
         delete_remove_guild_apply(PlayerId, GuildId, GuildName, PlayerNameGet)
                   end, ApplyList).
 % 发送通知/邮件通知
@@ -719,12 +724,14 @@ handle_msg_to_player_each([]) ->
     ok;
 handle_msg_to_player_each([SendElem | SendList]) ->
     {PlayerId, PlayerNickname, GuildId, GuildName, DefaultPosition} = SendElem,
-    % 发送通知/邮件通知
+    % 发送通知
     lib_guild_inner:send_msg_to_player(PlayerId, guild_new_member,
         [PlayerId, PlayerNickname, GuildId, GuildName, DefaultPosition]),
-    lib_guild:send_guild_mail(guild_new_member, [PlayerId, PlayerNickname, GuildId, GuildName]),
+    % 发送邮件
+%%    lib_guild:send_guild_mail(guild_new_member, [PlayerId, PlayerNickname, GuildId, GuildName]),
     %%添加成员加入氏族日志
-    lib_guild_inner:jion_guild_log(PlayerNickname, GuildId, GuildName),
+    Content = util:format(?T("欢迎~s加入氏族"), [PlayerNickname]),
+    lib_guild_inner:jion_guild_logqqq(GuildId, GuildName, Content),
     handle_msg_to_player_each(SendList).
 
 %% -----------------------------------------------------------------
@@ -803,9 +810,9 @@ add_guild_member(PlayerId, PlayerName, GuildId, GuildName, GuildPosition,
                 unions = 0},
             load_guild_member_into_ets(GuildMember),
             %%更新氏族聊天面板信息
-            gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', GuildId}),
+%%            gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_GUILD_GROUP', GuildId}),
             %%在群聊面板广播
-            gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_NEW_MEMBER', GuildId, PlayerName}),
+%%            gen_server:cast(mod_guild:get_mod_guild_pid(), {'BROADCAST_NEW_MEMBER', GuildId, PlayerName}),
             ok;
         1 ->
             ValueList = [{guild_id, GuildId},
@@ -833,6 +840,27 @@ add_guild_member(PlayerId, PlayerName, GuildId, GuildName, GuildPosition,
         _Other ->
             fail
     end.
+
+
+
+
+
+jion_guild_logqqq(GuildId, GuildName, Content) ->
+    CreateTime = util:unixtime(),
+    Log_guild = #ets_log_guild{
+        guild_id = GuildId,
+        guild_name = GuildName,
+        time = CreateTime,
+        content = Content
+    },
+    case db_agent:guild_log_insert(Log_guild) of
+        {mongo, Ret} ->
+            GuildLogEts = Log_guild#ets_log_guild{id = Ret},
+            lib_guild_inner:update_guild_log(GuildLogEts);
+        _Other ->
+            noaction
+    end.
+
 
 %% -----------------------------------------------------------------
 %% 添加成员氏族日志
@@ -916,17 +944,18 @@ remove_guild_member(QuitTime, PlayerId, GuildId, DeputyChielfId1, DeputyChielfId
     WhereList = [{id, PlayerId}],
     db_agent:guild_player_update_info(ValueList, WhereList),
     % 更新氏族表
-    case PlayerId =:= DeputyChielfId1 of
-        true ->
-            db_agent:guild_update_remove_deputy1(GuildId),
-            MemberType = 1;
-        false when PlayerId =:= DeputyChielfId2 ->
-            db_agent:guild_update_remove_deputy2(GuildId),
-            MemberType = 2;
-        false ->
-            db_agent:guild_update_member_num_deduct(GuildId),
-            MemberType = 0
-    end,
+    MemberType =
+        case PlayerId =:= DeputyChielfId1 of
+            true ->
+                db_agent:guild_update_remove_deputy1(GuildId),
+                1;
+            false when PlayerId =:= DeputyChielfId2 ->
+                db_agent:guild_update_remove_deputy2(GuildId),
+                2;
+            false ->
+                db_agent:guild_update_member_num_deduct(GuildId),
+                0
+        end,
     % 删除氏族成员表
     db_agent:guild_member_delete_one(PlayerId, GuildId),
     % 更新缓存
@@ -1075,8 +1104,7 @@ to_p_guild_list_infos(Infos) ->
 
 to_p_guild_list_info(#ets_guild{id = GuildId, name = GuildName, chief_id = ChiefId, chief_name = ChiefName,
     member_num = MemberNum, level = Level, realm = Realm, announce = Announce, exp = Exp, funds = Funds}) ->
-    PopulationLevel = lib_guild:get_guild_skill_level(GuildId, 3),
-    MemberCapacity = data_guild:get_guild_config(guild_member_base, []) + PopulationLevel * 5,
+    MemberCapacity = lib_guild:calc_member_max_num(GuildId),
     #p_guild_info{guild_id = GuildId, guild_name = GuildName, announce = Announce, realm = Realm, level = Level,
         exp = Exp, member_num = MemberNum, member_capacity = MemberCapacity, chief_id = ChiefId,
         chief_name = ChiefName, funds = Funds}.
@@ -1097,8 +1125,7 @@ handle_guild_page(#ets_guild{id = GuildId, name = GuildName, chief_id = ChiefId,
     exp = Exp,
     funds = Funds}) ->
     %%计算氏族人数上限
-    PopulationLevel = lib_guild:get_guild_skill_level(GuildId, 3),
-    MemberCapacity = data_guild:get_guild_config(guild_member_base, []) + PopulationLevel * 5,
+    MemberCapacity = lib_guild:calc_member_max_num(GuildId),
     {GuildId, GuildName, Announce, Realm, Level, Exp, MemberNum, MemberCapacity, ChiefId, ChiefName, Funds}.
 
 
@@ -1156,12 +1183,24 @@ handle_member_page(GuildMember) ->
 get_guild_apply_page(PidSend, GuildId) ->
     % 获取总记录数
     GuildApplys = get_guild_apply_by_guild_id(GuildId),
-    RecordTotal = length(GuildApplys),
+%%    RecordTotal = length(GuildApplys),
     %%处理返回数据
-    Records = lists:map(fun handle_apply_page/1, GuildApplys),
+%%    Records = lists:map(fun handle_apply_page/1, GuildApplys),
     % 发送回应
-    {ok, BinData} = pt_40:write(40012, [RecordTotal, list_to_binary(Records)]),
-    lib_send:send_to_sid(PidSend, BinData).
+    Msg = #guild_apply_list_s2c{apply_infos = to_p_guild_apply_infos(GuildApplys)},
+    lib_send:protobuf_send(PidSend, ?GUILD_APPLY_LIST_S2C, Msg),
+    ok.
+%%    {ok, BinData} = pt_40:write(40012, [RecordTotal, list_to_binary(Records)]),
+%%    lib_send:send_to_sid(PidSend, BinData).
+
+to_p_guild_apply_infos(Infos) ->
+    [to_p_guild_apply_info(X) || X <- Infos].
+
+to_p_guild_apply_info(#ets_guild_apply{player_id = PlayerId, nickname = PlayerName, sex = PlayerSex, lv = PlayerLevel,
+    create_time = ApplyTime, career = PlayerCareer, online_flag = OnLineFlag, vip = PlayerVip}) ->
+    #p_guild_apply_info{player_id = PlayerId, player_name = PlayerName,
+        player_sex = PlayerSex, player_career = PlayerCareer, player_level = PlayerLevel, apply_time = ApplyTime,
+        online_flag = OnLineFlag, member_vip = PlayerVip}.
 
 handle_apply_page(GuildApply) ->
     #ets_guild_apply{player_id = PlayerId,
@@ -1213,8 +1252,7 @@ handle_invite_page([GuildInvite | ResGuildInvite], Result) ->
                 realm = Realm,
                 upgrade_last_time = UpGradeLastTime} = Guild,
             %%计算氏族人数上限
-            PopulationLevel = lib_guild:get_guild_skill_level(GuildId, 3),
-            MemberCapacity = data_guild:get_guild_config(guild_member_base, []) + PopulationLevel * 5,
+            MemberCapacity = lib_guild:calc_member_max_num(GuildId),
 
             %%判断氏族的等级和升级时间
             case UpGradeLastTime == 0 of
@@ -1259,8 +1297,7 @@ get_guild_info(GuildId) ->
                 upgrade_last_time = UpGradeLastTime,
                 depart_names = DepartNames} = Guild,
             %%计算氏族人数上限
-            PopulationLevel = lib_guild:get_guild_skill_level(GuildId, 3),
-            MemberCapacity = data_guild:get_guild_config(guild_member_base, []) + PopulationLevel * 5,
+            MemberCapacity = lib_guild:calc_member_max_num(GuildId),
 
             [_NeedFunds, NeedExp, UpGradeNeedTime, _AddSkills] = data_guild:get_guild_upgrade_info(Level + 1),
 
@@ -1287,6 +1324,78 @@ get_guild_info(GuildId) ->
                 DepartNames, LogsLen, Logs, Alliances},
             [1, Data]
     end.
+
+get_guild_qinfo(GuildId) ->
+    case get_guild(GuildId) of
+        [] ->
+            throw(?T("没有~w氏族", [GuildId]));
+        Guild ->
+            #ets_guild{id = GuildId,
+                name = Name,
+                announce = Announce,
+                chief_id = ChiefId,
+                chief_name = ChiefName,
+                member_num = MemberNum,
+                realm = Realm,
+                exp = Exp,
+                level = Level,
+                funds = Funds,
+                upgrade_last_time = UpGradeLastTime,
+                depart_names = DepartNames} = Guild,
+
+            %%计算氏族人数上限
+            MemberCapacity = lib_guild:calc_member_max_num(GuildId),
+            [_NeedFunds, NeedExp, UpGradeNeedTime, _AddSkills] = data_guild:get_guild_upgrade_info(Level + 1),
+            NowTime = util:unixtime(),
+            %%获取升级剩余时间
+            NewRestUpGradeTime =
+                case UpGradeLastTime =:= 0 of
+                    true ->
+                        0;
+                    false ->
+                        RestTime = UpGradeLastTime + UpGradeNeedTime - NowTime,
+                        case RestTime >= 0 of
+                            true ->
+                                RestTime;
+                            false ->%%7秒的延时
+                                7
+                        end
+                end,
+            %%获取氏族日志
+%%            [LogsLen, Logs] = get_log_guild(GuildId),
+            [LogsLen, Logs] = [30, []],
+            %% 获取成员列表
+            GuildMembers = get_guild_member_by_guild_id(GuildId),
+            %%获取当前氏族的联盟氏族信息
+            Alliances = lib_guild_alliance:get_guild_alliances(GuildId),
+            Data = {GuildId, Name, Announce, Realm, Level, Exp, NeedExp, MemberNum,
+                MemberCapacity, ChiefId, ChiefName, Funds, NewRestUpGradeTime,
+                DepartNames, LogsLen, Logs, Alliances, to_p_guild_mem_infos(GuildMembers)},
+            {ok, [1, Data]}
+    end.
+
+
+to_p_guild_mem_infos(Infos) ->
+    [to_p_guild_mem_info(X) || X <- Infos].
+
+to_p_guild_mem_info(#ets_guild_member{player_id = PlayerId,
+    player_name = PlayerName,
+    sex = PlayerSex,
+    lv = PlayerLevel,
+    last_login_time = LastLoginTime,
+    guild_position = GuildPosition,
+    donate_funds = DonateFunds,
+    donate_total = DonateTotal,
+    online_flag = OnlineFlag,
+    career = PlayerCareer,
+    title = Title,
+    guild_depart_name = DepartmentName,
+    vip = MemberVip}) ->
+    #p_guild_mem_info{player_id = PlayerId, player_name = PlayerName,
+        player_sex = PlayerSex, player_career = PlayerCareer, player_level = PlayerLevel,
+        last_login_time = LastLoginTime, guild_position = GuildPosition,
+        donate_total = DonateTotal, online_flag = OnlineFlag, donate_funds = DonateFunds,
+        title = Title, department_name = DepartmentName, member_vip = MemberVip}.
 
 %% -----------------------------------------------------------------
 %% 修改氏族公告
@@ -2754,23 +2863,22 @@ get_log_guild(GuildId) ->
         {T#ets_log_guild.time, T#ets_log_guild.content}
                     end),
     Data = ets:select(?ETS_LOG_GUILD, MS),
-    if Data =:= [] ->
-        Len = 0,
-        [Len, <<>>];
+    if
+        Data =:= [] ->
+            [0, <<>>];
         true ->
             LenInit = length(Data),
             case LenInit =< 30 of
                 true ->
-                    DataSorted = lists:sort(fun sort_logs_by_time/2,
-                        Data),
-                    BinData = lists:map(fun(X) -> {Time, Content} = X,
+                    DataSorted = lists:sort(fun sort_logs_by_time/2, Data),
+                    BinData = lists:map(fun(X) ->
+                        {Time, Content} = X,
                         {ContentLen, ContentBin} = string_to_binary_and_len(Content),
                         <<Time:32, ContentLen:16, ContentBin/binary>>
                                         end, DataSorted),
                     [LenInit, list_to_binary(BinData)];
                 false ->
-                    DataSorted = lists:sort(fun sort_logs_by_time/2,
-                        Data),
+                    DataSorted = lists:sort(fun sort_logs_by_time/2, Data),
                     DataList = lists:sublist(DataSorted, 1, 30),
                     BinData = lists:map(fun(Y) -> {Time, Content} = Y,
                         {ContentLen, ContentBin} = string_to_binary_and_len(Content),

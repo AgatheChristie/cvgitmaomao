@@ -8,10 +8,11 @@
 -behaviour(gen_server).
 -include("common.hrl").
 -include("record.hrl").
+-include("ecode.hrl").
 -include("guild_info.hrl").
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
- -compile(export_all).
- -compile(nowarn_export_all).
+-compile(export_all).
+-compile(nowarn_export_all).
 
 %%=========================================================================
 %% 一些定义
@@ -428,9 +429,7 @@ handle_timer_action() ->
 %% 40001 创建氏族
 %% -----------------------------------------------------------------
 create_guild(Status, [GuildName, BuildCoin]) ->
-    %%%% ?DEBUG("********* mod_guild:create_guld begin *******",[]),
-    try
-        case gen_server:call(mod_guild:get_mod_guild_pid(),
+    case catch gen_server:call(mod_guild:get_mod_guild_pid(),
             {apply_call, lib_guild, create_guild,
                 [
                     Status#player.guild_id,
@@ -444,17 +443,10 @@ create_guild(Status, [GuildName, BuildCoin]) ->
                     Status#player.other#player_other.pid,
                     [GuildName, BuildCoin]
                 ]}) of
-            error ->
-                %% ?DEBUG("40001 create_guild error",[]),
-                [0, 0];
-            Data ->
-                %% ?DEBUG("40001 create_guild succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40001 create_guild for the reason:[~p]",[_Reason]),
-            [0, 0]
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
 
 %% -----------------------------------------------------------------
@@ -487,33 +479,26 @@ confirm_disband_guild(Status, [GuildId]) ->
 %% 40004 申请加入氏族
 %% -----------------------------------------------------------------
 apply_join_guild(Status, [GuildId]) ->
-    try
-        case gen_server:call(mod_guild:get_mod_guild_pid(),
-            {apply_call, lib_guild, apply_join_guild,
-                [Status#player.id,
-                    Status#player.nickname,
-                    Status#player.guild_id,
-                    Status#player.realm,
-                    Status#player.lv,
-                    Status#player.quit_guild_time,
-                    Status#player.other#player_other.pid,
-                    Status#player.sex,
-                    Status#player.jobs,
-                    Status#player.career,
-                    Status#player.vip,
-                    [GuildId]]}) of
-            error ->
-                %% ?DEBUG("40004 apply_join_guild error",[]),
-                [2];
-            Data ->
-                %% ?DEBUG("40004 apply_join_guild succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40004 apply_join_guild fail for the reason:[~p]",[_Reason]),
-            [2]
+    case catch gen_server:call(mod_guild:get_mod_guild_pid(),
+        {apply_call, lib_guild, apply_join_guild,
+            [Status#player.id,
+                Status#player.nickname,
+                Status#player.guild_id,
+                Status#player.realm,
+                Status#player.lv,
+                Status#player.quit_guild_time,
+                Status#player.other#player_other.pid,
+                Status#player.sex,
+                Status#player.jobs,
+                Status#player.career,
+                Status#player.vip,
+                [GuildId]]}) of
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
+
 
 %% -----------------------------------------------------------------
 %% 40005 审批加入氏族
@@ -533,25 +518,19 @@ approve_guild_apply(Status, [HandleResult, ApplyList]) ->
             _ ->
                 start_mod_guild(ProcessName)
         end,
-    try
-        case gen_server:call(GuildPid,
-            {apply_call, lib_guild, approve_guild_apply,
-                [Status#player.guild_id,
-                    Status#player.guild_name,
-                    Status#player.guild_position,
-                    [HandleResult, ApplyList]]}) of
-            error ->
-                %% ?DEBUG("40005 approve_guild_apply error",[]),
-                [0, 0];
-            Data ->
-                %% ?DEBUG("40005 approve_guild_apply succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40005 approve_guild_apply fail for the reason:[~p]",[_Reason]),
-            [0, 0]
+    case catch gen_server:call(GuildPid,
+        {apply_call, lib_guild, approve_guild_apply,
+            [Status#player.guild_id,
+                Status#player.guild_name,
+                Status#player.guild_position,
+                [HandleResult, ApplyList]]}) of
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            %% ?DEBUG("40005 approve_guild_apply succeed:[~p]",[Data]),
+            Data
     end.
+
 
 %% -----------------------------------------------------------------
 %% 40006 邀请加入氏族
@@ -620,8 +599,7 @@ response_invite_guild(Status, [GuildId, ResponseResult]) ->
 %% PlayerId:指定的氏族成员
 %% -----------------------------------------------------------------
 kickout_guild(Status, [PlayerId]) ->
-    try
-        case gen_server:call(mod_guild:get_mod_guild_pid(),
+    case catch gen_server:call(mod_guild:get_mod_guild_pid(),
             {apply_call, lib_guild, kickout_guild,
                 [Status#player.id,
                     Status#player.nickname,
@@ -629,42 +607,27 @@ kickout_guild(Status, [PlayerId]) ->
                     Status#player.guild_position,
                     Status#player.guild_depart_id,
                     [PlayerId]]}) of
-            error ->
-                %% ?DEBUG("40008 kickout_guild error",[]),
-                [2, <<>>];
-            Data ->
-                %% ?DEBUG("40008 kickout_guild succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40008 kickout_guild fail for the reason:[~p]",[_Reason]),
-            [2, <<>>]
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
 
 %% -----------------------------------------------------------------
 %% 40009 退出氏族
 %% -----------------------------------------------------------------
 quit_guild(Status, [QuitTime]) ->
-    try
-        case gen_server:call(mod_guild:get_mod_guild_pid(),
+    case catch gen_server:call(mod_guild:get_mod_guild_pid(),
             {apply_call, lib_guild, quit_guild,
                 [Status#player.id,
                     Status#player.nickname,
                     Status#player.guild_id,
                     Status#player.guild_position,
                     [QuitTime]]}) of
-            error ->
-                %% ?DEBUG("40009 quit_guil error",[]),
-                2;
-            Data ->
-                %% ?DEBUG("40009 quit_guild succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40009 quit_guild fail for the reason:[~p]",[_Reason]),
-            2
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
 
 %% -----------------------------------------------------------------
@@ -722,31 +685,32 @@ get_guild_info(_Status, [GuildId]) ->
         end
     catch
         _:_Reason ->
-            %% ?DEBUG("40014 get_guild_info fail for the reason:[~p]",[_Reason]),
+            ?DEBUG("40014 get_guild_info fail for the reason:[~p]", [_Reason]),
             [2, {}]
+    end.
+
+get_guild_qinfo(_Status, [GuildId]) ->
+    case catch  gen_server:call(mod_guild:get_mod_guild_pid(),
+        {apply_call, lib_guild_inner, get_guild_qinfo, [GuildId]}) of
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
 
 %% -----------------------------------------------------------------
 %% 40016 修改氏族公告
 %% -----------------------------------------------------------------
 modify_guild_announce(Status, [GuildId, Announce]) ->
-    try
-        case gen_server:call(mod_guild:get_mod_guild_pid(),
+    case catch gen_server:call(mod_guild:get_mod_guild_pid(),
             {apply_call, lib_guild, modify_guild_announce,
                 [Status#player.guild_id,
                     Status#player.guild_position,
                     [GuildId, Announce]]}) of
-            error ->
-                %% ?DEBUG("40016 modify_guild_announce error",[]),
-                [0];
-            Data ->
-                %% ?DEBUG("40016 modify_guild_announce succeed:[~p]",[Data]),
-                Data
-        end
-    catch
-        _:_Reason ->
-            %% ?DEBUG("40016 modify_guild_announce fail for the reason:[~p]", [_Reason]),
-            [0]
+        {error, Code} ->
+            ?C2SERR(Code);
+        {ok, Data} ->
+            Data
     end.
 
 %% -----------------------------------------------------------------

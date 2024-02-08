@@ -83,13 +83,15 @@ check_content(Content) ->
 
 %% 长度合法性检查
 check_length(Item, LenLimit) ->
-    case asn1rt:utf8_binary_to_list(list_to_binary(Item)) of
-        {ok, UnicodeList} ->
-            Len = string_width(UnicodeList),   
-            Len =< LenLimit andalso Len >= 1;
-        {error, _Reason} ->
-            error
-    end.
+    Len = byte_size(util:term_to_bitstring(Item)),
+    Len =< LenLimit andalso Len >= 1.
+%%    case asn1rt:utf8_binary_to_list(list_to_binary(Item)) of
+%%        {ok, UnicodeList} ->
+%%            Len = string_width(UnicodeList),
+%%            Len =< LenLimit andalso Len >= 1;
+%%        {error, _Reason} ->
+%%            error
+%%    end.
 
 %% 检查邮件是否已满
 check_mail_full(PlayerId) ->

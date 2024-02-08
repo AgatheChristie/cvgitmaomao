@@ -2061,8 +2061,8 @@ message p_guild_info {
     optional uint32                        member_num = 7;               //
     optional uint32                        member_capacity = 8;               //
     optional uint32                        chief_id = 9;               //
-    optional uint32                        chief_name = 10;               //
-    optional uint32                        funds = 11;               //
+    optional string                        chief_name = 10;               //
+    optional int32                         funds = 11;               //
 }
 
 // 工会成员信息
@@ -2076,8 +2076,24 @@ message p_guild_mem_info {
     optional uint32                        guild_position = 7;               //
     optional uint32                        donate_total = 8;               //
     optional uint32                        online_flag = 9;               //
-    optional uint32                        donate_funds = 10;               //
+    optional int32                         donate_funds = 10;               //
     optional string                        title = 11;               //
     optional string                        department_name = 12;               //
     optional uint32                        member_vip = 13;               //
+}
+// 工会申请信息
+message p_guild_apply_info {
+    optional uint32                        player_id = 1;                //  id
+    optional string                        player_name = 2;               // 名字
+    optional uint32                        player_sex = 3;               //  性别
+    optional uint32                        player_career = 4;               // 职业
+    optional uint32                        player_level = 5;               // 等级
+    optional uint32                        apply_time = 6;               // 申请时间
+    optional uint32                        online_flag = 7;               // 是否在线
+    optional uint32                        member_vip = 8;               // VIP
+}
+// 工会申请审批信息
+message p_guild_approve_info {
+    optional uint32                        player_id = 1;                //  id
+    optional string                        player_name = 2;               // 名字
 }

@@ -58,24 +58,6 @@
     pb_record = none                                                      %% 对应record
 }).
 
-%% 整形错误协议
--record(failure_msg_int, {
-    code = 0,                                                             %% 错误码
-    int_values = []                                                       %% 整形值数组
-}).
-
-%% 字符串错误协议
--record(failure_msg_string, {
-    code = 0,                                                             %% 错误码
-    string_values = []                                                    %% 字符串值数组
-}).
-
-%% 混合错误协议
--record(failure_msg_mix, {
-    code = 0,                                                             %% 错误码
-    int_values = [],                                                      %% 整形值数组
-    string_values = []                                                    %% 字符串值数组
-}).
 
 %% 加密信息
 -record(encrypt_info, {

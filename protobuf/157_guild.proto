@@ -18,11 +18,12 @@ message guild_info_s2c {
     optional uint32                     member_capacity = 10;                     //
     optional uint32                     chief_id = 11;                     //
     optional string                     chief_name = 12;                     //
-    optional uint32                     funds = 13;                   //
+    optional int32                      funds = 13;                   //
     optional uint32                     upgrade_need_time = 14;                           //
     optional string                     depart_names = 15;                         //
     optional string                     logs = 16;                          //
     optional string                     alliances = 17;                          //
+    repeated p_guild_mem_info           guild_mem_infos = 18;                  //
 }
 // ##begin##工会列表信息##end##
 message guild_list_info_c2s {
@@ -76,7 +77,77 @@ message guild_invite_huiy_s2c {
     optional string                     guild_name = 4;                     //
     optional uint32                     guild_position = 5;                     //
 }
+// ##begin##工会申请列表##end##
+message guild_apply_list_c2s {
+    optional uint32                     guild_id = 1;                     //
+}
+// ##begin##工会申请加入##end##
+message guild_apply_list_s2c {
+    repeated p_guild_apply_info           apply_infos = 1;                  //
+}
+// ##begin##工会创建##end##
+message guild_create_c2s {
+    optional string                     guild_name = 1;                     // 工会名字
+    optional uint32                     use_item = 2;                       // 是否使用道具 1使用 2不使用
+}
+// ##begin##工会创建##end##
+message guild_create_s2c {
+    optional uint32                     code = 1;                       //
+    optional uint32                     guild_id = 2;                       //
+}
+// ##begin##工会审批##end##
+message guild_apply_approve_c2s {
+    optional uint32                      result = 1;                       //
+    repeated p_guild_approve_info        approve_infos = 2;                  //
+}
+// ##begin##工会审批##end##
+message guild_apply_approve_s2c {
+    optional uint32                     result = 1;                       //
+    optional uint32                     num = 2;                       //
+}
+// ##begin##工会加入##end##
+message guild_notice_join_s2c {
+    optional uint32                     player_id = 1;                       //
+    optional string                     player_name = 2;                       //
+    optional uint32                     guild_id = 3;                       //
+    optional string                     guild_name = 4;                       //
+}
+// ##begin##工会拒绝##end##
+message guild_notice_reject_s2c {
+    optional uint32                     guild_id = 1;                       //
+    optional string                     guild_name = 2;                       //
+}
+// ##begin##工会被踢出##end##
+message guild_notice_kickout_s2c {
+    optional uint32                     player_id = 1;                       //
+    optional string                     player_name = 2;                       //
+    optional uint32                     guild_id = 3;                       //
+    optional string                     guild_name = 4;                       //
+}
+// ##begin##工会踢出##end##
+message guild_kickout_c2s {
+    optional uint32                      player_id = 1;                       //
+}
+// ##begin##工会踢出##end##
+message guild_kickout_s2c {
+    optional uint32                     result = 1;                       //
+}
+// ##begin##工会退出##end##
+message guild_quit_c2s {
 
-
+}
+// ##begin##工会退出##end##
+message guild_quit_s2c {
+    optional uint32                     result = 1;                       //
+}
+// ##begin##工会宣言##end##
+message guild_announce_c2s {
+    optional uint32                     guild_id = 1;                       //
+    optional string                     announce = 2;                       //
+}
+// ##begin##工会宣言##end##
+message guild_announce_s2c {
+    optional uint32                     result = 1;                       //
+}
 
 
